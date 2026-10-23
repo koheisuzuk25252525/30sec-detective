@@ -38,7 +38,7 @@ function btn(text,action,extra=''){return `<button type="button" class="primary"
 function pageTop(code,title,label='FILE'){return `<div class="page-top"><div><div class="eyebrow">${label} 0${code} / 03</div><h2>${title}</h2></div><span class="pill gold">CASE ${code}</span></div>`}
 function home(){
  phase='home';
- setScreen(`<div class="eyebrow">THIRTY SECOND DETECTIVE · QUICK EDITION</div><h1>その嘘、<br><em>30秒</em>で暴け。</h1><p class="lead">3つの嘘。1つの真実。<br>証拠を2つ選んで、矛盾を叩きつけろ。</p><div class="intro-art" style="height:155px;margin:17px 0"><div class="disc"></div><div class="emblem" style="font-size:77px">⌕</div><div class="micro">THE LAST RECORD · v3</div></div><div class="note" style="margin:12px 0"><div class="from">差出人不明のメッセージ</div><div class="line" style="font-size:14px">「明日、父の記録が消される。<br>３つの嘘を暴いて。」</div></div>${btn(unlocked===3?'最後の真相へ ⚡':unlocked>0?'続きから捜査 ⚡':'捜査を開始 ⚡','home-next')}<p class="footnote">証拠を選ぶと30秒スタート。クリアした記録は自動保存。</p>`)
+ setScreen(`<div class="eyebrow">THIRTY SECOND DETECTIVE · QUICK EDITION</div><h1>その嘘、<br><em>30秒</em>で暴け。</h1><p class="lead">3つの嘘。1つの真実。<br>証拠を2つ選んで、矛盾を叩きつけろ。</p><div class="intro-art" style="height:155px;margin:17px 0"><div class="disc"></div><div class="emblem" style="font-size:77px">⌕</div><div class="micro">THE LAST RECORD · v3</div></div><div class="note" style="margin:12px 0"><div class="from">差出人不明のメッセージ</div><div class="line" style="font-size:14px">「明日、20年前の声が消される。<br>３つの嘘を暴いて。」</div></div>${btn(unlocked===3?'最後の真相へ ⚡':unlocked>0?'続きから捜査 ⚡':'捜査を開始 ⚡','home-next')}<p class="footnote">証拠を選ぶと30秒スタート。クリアした記録は自動保存。</p>`)
 }
 function intro(){caseIntro()}
 function caseIntro(){investigate()}
