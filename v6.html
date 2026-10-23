@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0c1729">
+<title>30秒探偵 v5 | 一文推理 改訂版</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1628;--panel:#152b42;--line:#3e617b;--cream:#f2f5f2;--muted:#adc2d3;--gold:#ffdc83;--mint:#87f5d0;--red:#ff9b92}
+*{box-sizing:border-box}body{margin:0;min-height:100svh;background:radial-gradient(ellipse at 50% -20%,#29445f,var(--bg) 64%);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:var(--cream);font-size:14px;-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}button:focus-visible{outline:3px solid var(--mint);outline-offset:3px}button:disabled{cursor:default;opacity:.6}
+.shell{max-width:440px;min-height:100svh;margin:0 auto;padding:12px 16px max(24px,env(safe-area-inset-bottom));display:flex;flex-direction:column;position:relative}
+header{display:flex;justify-content:space-between;align-items:center;gap:9px;padding:6px 0 14px}.brand{font-size:16px;font-weight:950;letter-spacing:-.04em;white-space:nowrap}.brand b{color:var(--mint)}.tools{display:flex;gap:7px;align-items:center}.ghost{border:1px solid #52718a;border-radius:25px;padding:7px 10px;background:#172c43;color:#d5e6eb;font-size:11px;font-weight:750}
+#app{flex:1}.kicker{font-size:11px;font-weight:850;color:var(--mint);letter-spacing:.15em}.hero{font-size:clamp(41px,12vw,57px);line-height:1.13;letter-spacing:-.075em;font-weight:950;margin:20px 0}.hero em{font-style:normal;color:var(--gold)}.intro{color:#d4e0e4;font-size:15px;line-height:1.8}.hero-icon{height:168px;display:flex;align-items:center;justify-content:center;font-size:96px;filter:drop-shadow(0 0 25px #75f5dd58)}.pillrow{display:flex;gap:7px;flex-wrap:wrap;margin:16px 0 22px}.pill{font-size:11px;border:1px solid #466f82;color:#c9e6e8;padding:5px 8px;border-radius:20px}
+.cta{display:block;width:100%;border:0;border-radius:15px;background:linear-gradient(110deg,#ffe4a1,#f9ba71);box-shadow:0 6px 0 #a46b39;color:#14233a;padding:16px;font-weight:950;font-size:17px;margin-top:16px;min-height:55px}.cta:active{transform:translateY(4px);box-shadow:0 2px 0 #a46b39}.secondary{display:block;width:100%;padding:13px;border-radius:13px;border:1px solid #56718c;background:#1d3349;color:#dfecf3;margin-top:10px;font-weight:750}
+.tiny{color:#aabec8;font-size:11px;text-align:center;margin-top:14px;line-height:1.6}.meter{height:5px;background:#294156;overflow:hidden;border-radius:12px;margin:7px 0 16px}.meter i{display:block;height:100%;background:linear-gradient(90deg,#72e4bb,#f9d17d);transition:width .25s}
+.qtop{display:flex;align-items:center;justify-content:space-between}.qnum{font-size:12px;font-weight:900;color:#b7e8dc}.streak{font-size:12px;font-weight:900;color:#ffda89;border:1px solid #866d46;border-radius:25px;padding:5px 10px}
+.scene{border-radius:16px;border:1px solid #4e6d84;background:linear-gradient(145deg,#1f3b54,#102539);padding:15px 15px 13px;box-shadow:0 13px 30px #02091148}.scene-head{display:flex;align-items:center;gap:11px}.scene-icon{font-size:42px;line-height:1}.scene h1{font-size:24px;line-height:1.35;letter-spacing:-.04em;margin:0}.scene .tag{font-size:10px;color:#9edaca;font-weight:850;letter-spacing:.09em}.clues{display:grid;gap:7px;margin-top:14px}.clue{background:#0e2436;border:1px solid #3a5b6f;border-radius:10px;padding:10px 11px;display:flex;gap:8px;align-items:flex-start}.clue .number{flex:none;background:#2d5263;color:#aef4dc;border-radius:6px;padding:2px 5px;font-size:10px;font-weight:900}.clue .line{font-size:13px;line-height:1.6;color:#e3eef0;font-weight:650}
+.quote{margin:14px 0 8px;padding:14px;background:#253e59;border-radius:13px;position:relative}.quote::before{content:"“";position:absolute;top:-14px;left:9px;color:#84e1c7;font-size:40px}.speaker{font-size:11px;color:#b5dbd7;margin:0 0 5px;font-weight:850}.quote-text{font-size:15px;font-weight:760;line-height:1.6}
+.ask{font-weight:900;font-size:15px;margin:15px 0 10px;display:flex;align-items:center;gap:6px}.ask i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--mint)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:9px}.answer{background:#24425e;border:1px solid #51708b;border-bottom:4px solid #395675;border-radius:12px;padding:12px 8px;min-height:58px;font-size:14px;font-weight:900;color:#f5f9f8;line-height:1.45}.answer:active{transform:translateY(3px);border-bottom-width:1px}.answer.wrong{background:#663c49;border-color:#ff999a}.feedback{min-height:52px;margin:12px 0 0;color:#ffb6a7;font-size:12px;line-height:1.5;font-weight:700}.feedback:empty{min-height:30px}
+.bottom{display:flex;justify-content:space-between;align-items:center;gap:8px;padding-top:10px}.bottom small{font-size:10px;color:#a3b9c5}.skip{border:0;background:transparent;text-decoration:underline;color:#b7c8d1;padding:8px;font-size:11px}
+.shake{animation:shake .3s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:#0b1629e8;overflow:hidden;text-align:center;padding:24px}.flash{position:absolute;inset:0;background:white;animation:flash .7s forwards}.ring{position:absolute;border:6px solid #ffda8c;border-radius:50%;height:240px;width:240px;animation:ring .9s ease-out both;box-shadow:0 0 100px #ffb453}.burst-bg{position:absolute;inset:-50%;background:conic-gradient(transparent 0deg,#ffe08e22 8deg,transparent 15deg,#ffffff20 25deg,transparent 40deg);animation:spin .9s linear both}.wincontent{position:relative;z-index:3;animation:punch .35s cubic-bezier(.15,1.5,.4,1) both}.winlabel{font-size:13px;font-weight:950;letter-spacing:.25em;color:var(--mint)}.wintitle{font-size:clamp(55px,14vw,80px);line-height:1.1;font-weight:1000;color:var(--gold);text-shadow:0 7px 0 #944a26,0 0 34px #ef9f49;letter-spacing:-.07em;margin:14px 0}.explain{font-weight:800;color:#f5f9fa;line-height:1.7;font-size:15px;max-width:340px;margin:auto}.nextcount{font-size:11px;color:#a8d5cf;margin-top:24px}
+@keyframes punch{from{transform:scale(2.2) rotate(-7deg);opacity:.1}to{transform:scale(1) rotate(0);opacity:1}}@keyframes ring{from{transform:scale(.3);opacity:1}to{transform:scale(4);opacity:0}}@keyframes flash{0%{opacity:1}25%{opacity:.25}100%{opacity:0}}@keyframes spin{to{transform:rotate(100deg)}}
+.result{text-align:center;padding-top:19px}.trophy{font-size:85px;margin:22px 0 12px}.result h1{font-size:34px;letter-spacing:-.055em;margin:10px 0}.result .value{color:var(--mint);font-size:42px;font-weight:950}.statrow{display:flex;gap:8px;margin:25px 0}.stat{flex:1;border:1px solid #476981;border-radius:12px;background:#193049;padding:15px 4px}.stat b{font-size:25px;color:var(--gold);display:block}.stat small{font-size:10px;color:#b1c7d2}
+@media(max-height:720px){.shell{padding-top:4px}.scene{padding:11px}.scene h1{font-size:22px}.clue{padding:8px}.quote{margin:8px 0;padding:10px}.answer{min-height:51px}.feedback{margin-top:7px;min-height:20px}.meter{margin:4px 0 8px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}.flash,.ring,.burst-bg{display:none}}
+
+/* v5 simplified: one compact card, tap directly on the spoken words */
+.v5-card{background:linear-gradient(150deg,#1d3852,#152941);border:1px solid #58768c;border-radius:19px;padding:18px 16px;box-shadow:0 15px 45px #0005;margin:12px 0 12px}
+.v5-title{display:flex;align-items:center;gap:10px;border-bottom:1px solid #48647c;padding-bottom:15px}
+.v5-title span{font-size:42px;line-height:1}.v5-title b{font-size:23px;line-height:1.3;letter-spacing:-.03em}
+.v5-situation{font-size:16px;font-weight:750;line-height:1.75;color:#e9f2f1;padding:20px 2px}
+.v5-speaker{color:#8ce9c9;font-size:12px;font-weight:900;letter-spacing:.03em;margin:4px 0 13px}
+.v5-quote{font-size:20px;font-weight:800;line-height:2.55;color:#f6f7f6}
+.v5-word{display:inline;color:#fff1d3;border:0;border-bottom:2px dashed #b7caa8;padding:4px 2px;margin:0 1px;min-height:42px;background:#36516b;border-radius:6px 6px 2px 2px;font-size:19px;line-height:1.6;font-weight:850;vertical-align:baseline;letter-spacing:-.03em}
+.v5-word:active{transform:scale(.95);background:#517894}.v5-word.wrong{background:#6c3540;color:#ffe8e8;text-decoration:line-through}.v5-word:disabled{opacity:.6}
+.v5-prompt{text-align:center;font-size:15px;font-weight:950;color:#95f0d1;margin:19px 0 9px}
+.v5-feedback{min-height:33px;font-size:13px;color:#ffada4;font-weight:850;text-align:center}.v5-win .explain{max-width:305px}.v5-win .wintitle{margin:8px 0}.v5-win .nextcount{margin-top:13px}
+@media(max-height:740px){.v5-card{padding:13px}.v5-situation{padding:13px 2px}.v5-quote{font-size:18px;line-height:2.15}.v5-word{font-size:17px;min-height:40px}.v5-prompt{margin-top:12px}}
+
+.v5-fact{color:#96eccf;font-size:11px;font-weight:900;margin-top:15px;letter-spacing:.04em}
+.v5-situation{padding:5px 2px 14px;font-size:16px;line-height:1.6}
+.v5-plain{font-size:19px;line-height:1.6;color:#f8f4ed;display:inline;padding:4px 2px}
+@media(max-height:740px){.v5-fact{margin-top:9px}.v5-situation{padding-bottom:10px}.v5-plain{font-size:17px}}
+
+/* v6 difficulty selector & supersized success presentation */
+.v6-top{padding:2px 0}.v6-top .kicker{letter-spacing:.1em}.v6-top .hero{font-size:clamp(40px,11vw,53px);margin:14px 0}.v6-subtitle{font-size:14px;color:#d3e0e5;line-height:1.65;margin:0 0 14px}
+.course-list{display:grid;gap:9px}.course{width:100%;display:flex;gap:11px;align-items:center;border:1px solid #456a83;border-radius:14px;background:linear-gradient(110deg,#244057,#142a42);padding:13px 13px;text-align:left;color:#eef7f6;min-height:74px}.course:active{transform:scale(.98);background:#2f5270}
+.course.featured{border-color:#e6b973;background:linear-gradient(110deg,#504534,#243a4f)}.course .emoji{font-size:30px;width:40px;text-align:center}.course .course-name{display:block;font-size:17px;font-weight:950}.course .desc{font-size:11px;color:#c6d9df;line-height:1.4;display:block}.course .prog{margin-left:auto;color:var(--gold);font-size:11px;white-space:nowrap;font-weight:900}
+.v6-qhead{display:flex;align-items:center;justify-content:space-between;gap:7px;margin-bottom:6px}.v6-brow{font-size:11px;font-weight:900;color:#9cebd4;letter-spacing:.05em}
+.v6-card{border:1px solid #54738a;border-radius:17px;background:linear-gradient(145deg,#1e3c55,#13283e);padding:17px;margin:11px 0}.v6-title{display:flex;align-items:center;gap:12px;padding:0 0 13px;border-bottom:1px solid #4d6b83}.v6-title .pico{font-size:39px}.v6-title b{font-size:23px;letter-spacing:-.04em;line-height:1.3}
+.v6-fact-label{color:#93ead1;font-weight:900;font-size:11px;margin:14px 0 4px}.v6-fact{font-size:16px;line-height:1.7;font-weight:725;color:#eef4f2;min-height:43px}
+.v6-speaker{color:#a7d9df;font-size:11px;font-weight:900;margin:15px 0 7px}
+.v6-quote{font-size:18px;font-weight:850;line-height:2.4}
+.v6-word{display:inline;min-height:40px;padding:4px 3px;margin:0 1px;border-radius:6px 6px 3px 3px;background:#324e6b;color:#ffeac2;border:0;border-bottom:2px dashed #aebd9d;vertical-align:baseline;line-height:1.65;font-size:18px;font-weight:850}.v6-word:active{background:#5f7596;transform:scale(.96)}.v6-word.wrong{background:#632e3a;color:#ffe5e5;text-decoration:line-through}.v6-tail{display:inline;padding:4px 2px;font-size:18px;line-height:1.65}
+.v6-prompt{text-align:center;color:#9df9d5;font-size:15px;font-weight:950;margin:17px 0 9px}.v6-feedback{text-align:center;color:#ffafa4;font-size:12px;font-weight:850;min-height:25px}.v6-bottom{display:flex;align-items:center;justify-content:space-between;gap:9px;color:#acbfd0;font-size:11px;margin-top:12px}.v6-bottom button{border:0;background:transparent;color:#c0d1da;font-size:11px;text-decoration:underline;padding:8px}
+.v6-footer{color:#afc3d0;font-size:11px;line-height:1.6;margin-top:16px;text-align:center}
+.v6-win{isolation:isolate;background:radial-gradient(circle,#64391d 0,#121d30 60%);animation:impactShake .42s ease-out}
+.v6-win .flash{background:radial-gradient(circle,#fff 0%,#ffc77e 38%,#fa5f39 80%);animation:bigFlash .6s ease-out forwards}
+.v6-win .ring{width:150px;height:150px;box-shadow:0 0 100px #ffc65f,0 0 160px #ff7245;border-width:10px;animation:bigRing .85s ease-out forwards}
+.v6-win .spark{position:absolute;z-index:1;left:50%;top:48%;width:9px;height:34px;background:linear-gradient(#fff,#fdb55c);border-radius:6px;box-shadow:0 0 15px #ffda6c;animation:spark .85s cubic-bezier(.13,.7,.2,1) both;animation-delay:var(--delay)}
+.v6-win .cracks{position:absolute;z-index:1;inset:0;width:100%;height:100%;stroke:#fbe8ad;stroke-width:2.5;fill:none;opacity:.75;animation:crack .75s ease-out forwards}
+.v6-win .wincontent{position:relative;z-index:5;animation:megaPunch .36s cubic-bezier(.1,1.8,.3,1) both}
+.v6-win .winlabel{font-size:13px;color:#95f5d5;letter-spacing:.16em;text-shadow:0 0 10px #48ffd7}
+.v6-win .wintitle{font-size:clamp(52px,15vw,76px);line-height:1.05;text-shadow:0 6px 0 #853523,0 0 25px #ff7c23,0 0 65px #ffc66e}
+.v6-win .explain{font-size:14px;color:#ffffff;max-width:335px;text-shadow:0 1px 7px #000;line-height:1.6}
+.v6-win .hit-tag{font-size:22px;font-weight:950;color:#ffefba;margin:10px auto 5px;filter:drop-shadow(0 0 10px #ff8928)}
+.v6-win .combo-bonus{font-size:17px;color:#97ffe1;font-weight:950;margin-top:12px}
+.v6-win .nextcount{margin-top:9px}
+.v6-win.mega .wintitle{color:#fff0af;text-shadow:0 6px 0 #8c2d29,0 0 30px #ffb631,0 0 80px #fe7e48}
+@keyframes bigFlash{0%{opacity:1}20%{opacity:.66}100%{opacity:0}}
+@keyframes bigRing{0%{transform:scale(.25);opacity:1}100%{transform:scale(7);opacity:0}}
+@keyframes spark{0%{transform:rotate(var(--a)) translateY(0) scale(.2);opacity:0}10%{opacity:1}100%{transform:rotate(var(--a)) translateY(calc(-1 * var(--r))) scale(.1);opacity:0}}
+@keyframes crack{0%,15%{transform:scale(.1);opacity:0}28%{opacity:1}100%{transform:scale(1.5);opacity:0}}
+@keyframes impactShake{0%{transform:scale(.98)}15%{transform:translate(9px,-8px)}30%{transform:translate(-7px,5px)}45%{transform:translate(5px,-3px)}70%,100%{transform:none}}
+@keyframes megaPunch{0%{transform:scale(2.5) rotate(-10deg);opacity:.05}55%{transform:scale(.92) rotate(2deg);opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}
+@media(max-height:730px){.v6-card{padding:12px}.v6-fact-label{margin-top:8px}.v6-fact{font-size:14px;line-height:1.55}.v6-speaker{margin-top:8px}.v6-quote{font-size:17px;line-height:2.1}.v6-word,.v6-tail{font-size:17px;min-height:38px}.v6-prompt{margin-top:9px}}
+@media(prefers-reduced-motion:reduce){.v6-win{animation:none!important}.v6-win .spark,.v6-win .ring,.v6-win .flash,.v6-win .cracks{display:none}.v6-win .wincontent{animation:none!important}}
+</style>
+</head>
+<body><div class="shell"><header><span class="brand">⌕ <b>30秒</b>探偵</span><div class="tools"><button class="ghost" id="menuBtn" type="button">難易度</button><button class="ghost" id="soundBtn" type="button">♪ ON</button></div></header><main id="app"></main></div>
+<script>
+
+(function(){
+"use strict";
+const data=[{"id":"easy","label":"やさしい","icon":"🌱","desc":"小学生から楽しめる、身近な矛盾","items":[{"title":"消えた終電","icon":"🚉","fact":"青葉駅の終電は23:14。それ以降の列車はゼロ。","who":"乗客","parts":["私は","青葉駅から","23:26発の","電車で帰った。"],"a":2,"why":"23:14が終電。23:26発の列車は存在しない！"},{"title":"存在しない日","icon":"📅","fact":"2025年の2月は28日まで。社長との会議は2月28日だった。","who":"秘書","parts":["2025年の","2月29日に","社長と","会議した。"],"a":1,"why":"2025年の2月29日は存在しない！"},{"title":"おつりの嘘","icon":"💴","fact":"2,600円の品を買い、5,000円札1枚で支払った。","who":"買い物客","parts":["5,000円を払い","2,600円の品を買い","3,400円の","おつりを受け取った。"],"a":2,"why":"正しいおつりは2,400円。1,000円多い！"},{"title":"閉ざされた門","icon":"🚧","fact":"6月5日の本人の入場記録はある。東門は開放、西門は閉鎖中。","who":"来場者","parts":["6月5日に","西門から","受付へ","行った。"],"a":1,"why":"会場には来た。でも閉鎖中の西門からは入れない！"},{"title":"白黒の監視映像","icon":"📹","fact":"警備員が見た映像は白黒。人の姿は映るが色は分からない。","who":"警備員","parts":["私は","監視映像から","赤い服だと","分かった。"],"a":2,"why":"白黒映像だけでは服が赤色だと判断できない！"},{"title":"通話の端末","icon":"📱","fact":"18:10に兄への通話あり。使ったのはタブレット。スマホは電源OFF。","who":"関係者","parts":["18:10に","スマホで","兄と","話した。"],"a":1,"why":"通話はしたが、スマホではなくタブレットからだった！"},{"title":"司書の休日","icon":"📚","fact":"4月4日は休館日。司書は全員不在、本は屋外ポストで返却済み。","who":"利用者","parts":["4月4日に","司書に直接","本を","返した。"],"a":1,"why":"司書は全員不在。直接手渡しできない！"},{"title":"消えた出口","icon":"🚘","fact":"21:17に本人の車の出庫記録あり。西出口は21:05から閉鎖。","who":"運転手","parts":["21:17に","西出口から","車で","帰った。"],"a":1,"why":"出庫はした。でも閉鎖された西出口は使えない！"}]},{"id":"standard","label":"ふつう","icon":"🔎","desc":"時間・順序・計算を組み合わせる","items":[{"title":"進んだ時計","icon":"🕰️","fact":"本人が青い傘で映る。映像の表示は20:12だが、時計は7分進んでいる。","who":"本人","parts":["私は","実際の20:12に","青い傘で","映っていた。"],"a":1,"why":"カメラは7分進む。実際に映ったのは20:05！"},{"title":"5分の移動","icon":"🚶","fact":"A室を10:20に退出、B室へ10:25に入室。徒歩なら最短8分かかる。","who":"入室者","parts":["10:20に","A室を出て","歩いて","B室に着いた。"],"a":2,"why":"5分で到着している。徒歩の最短8分では間に合わない！"},{"title":"3人の順位","icon":"🏁","fact":"ゴール順は、CがAより先。AがBより先。3人とも完走した。","who":"選手B","parts":["私は","Aより前で","Cより後に","ゴールした。"],"a":1,"why":"C→A→Bの順。BはAより後ろだ！"},{"title":"3個セット","icon":"🥐","fact":"パン3個を各240円で購入。会計から100円引き、1,000円払った。","who":"購入者","parts":["パンを3個買い","100円引きを使い","おつり480円を","もらった。"],"a":2,"why":"240×3−100＝620円。おつりは380円だ！"},{"title":"3桁の暗証番号","icon":"🔢","fact":"3桁の数。百の位は3、十の位はその2倍、一の位は十の位−2。","who":"管理者","parts":["先頭は3で、","真ん中は6、","最後は5の","番号だ。"],"a":2,"why":"3→6→4。末尾は5ではなく4だ！"},{"title":"逆転した到着順","icon":"🚄","fact":"列車Aは9:10発・20分。列車Bは9:16発・10分。同じ駅に着く。","who":"乗客","parts":["列車Bは","Aより遅く発車し、","Aより遅く到着した","列車だ。"],"a":2,"why":"Aは9:30、Bは9:26に到着。Bのほうが先！"},{"title":"重さの順番","icon":"⚖️","fact":"赤は青より重い。緑は赤より重い。3箱の重さはすべて異なる。","who":"検査員","parts":["緑が一番重く、","青が二番目、","赤は青より重い","という結果だ。"],"a":1,"why":"重い順は緑→赤→青。青は最も軽い！"},{"title":"3つの席","icon":"🪑","fact":"AはBの右。CはBの右かつAの左。3人は横一列に座る。","who":"目撃者","parts":["Bは左端、","Cは中央で、","Aは左端に","座っていた。"],"a":2,"why":"左からB→C→A。Aは右端だ！"}]},{"id":"expert","label":"難問","icon":"🔥","desc":"大人も考える条件整理・論理推理","items":[{"title":"誰が鍵を持つ？","icon":"🗝️","fact":"鍵はA・B・Cの1人だけ。A「Bだ」B「Cだ」C「Bではない」。嘘は1人だけ。","who":"鑑識","parts":["鍵を持つのは","Bで、","3人のうち","1人だけだ。"],"a":1,"why":"鍵がCならAだけが嘘。Bでは嘘が2人になる！"},{"title":"本物の条件","icon":"📜","fact":"本物なら赤い封印。赤い封印なら必ず金庫保管。資料は机で発見され、金庫にはない。","who":"調査員","parts":["その資料は","本物で、","机の上に","置かれていた。"],"a":1,"why":"金庫にない→赤い封印なし→本物ではない！"},{"title":"最後の一桁","icon":"🔐","fact":"3桁の暗証番号。百の位5、数字の和15。一の位は十の位より2大きい。","who":"管理者","parts":["先頭は5、","真ん中が4、","最後が7の","番号だ。"],"a":2,"why":"5＋4＋6＝15。末尾は6だ！"},{"title":"2つの袋","icon":"🎒","fact":"袋AとBは同じ重さ。CはBより2kg重い。A＋C＝14kg。","who":"測定者","parts":["Aは6kg、","Bは7kg、","Cは8kg","だった。"],"a":1,"why":"A＝B＝6kg、C＝8kg。Bの7kgが間違い！"},{"title":"乗り換えの壁","icon":"🚇","fact":"A→B最短12分、乗換最低4分、B→C最短10分。他の経路なし。","who":"旅客","parts":["8:40に","A駅を出て","9:02までに","C駅に着いた。"],"a":2,"why":"12＋4＋10＝26分。最速でもC駅到着は9:06！"},{"title":"兄弟の年齢","icon":"👬","fact":"兄Aと弟B。現在AはBの2倍の年齢。10年前はAがBの3倍だった。","who":"親戚","parts":["兄Aは40歳、","弟Bは30歳、","2人とも成人した","兄弟だ。"],"a":1,"why":"Bを20歳とするとA40歳。10年前は30歳と10歳で3倍！"},{"title":"深夜の8分差","icon":"🌙","fact":"23:58と映る本人の入室記録。カメラの時計は実際より8分遅い。","who":"入室者","parts":["私は","23:58に","研究室へ","入った。"],"a":1,"why":"表示23:58＋8分＝実際は翌日の00:06！"},{"title":"封筒の割り当て","icon":"✉️","fact":"A・B・Cに赤・青・緑を1つずつ。Aは赤でない。Bは青でも赤でもない。Cは緑でない。","who":"管理人","parts":["Aは青で、","Bは緑、","Cも青を","持っている。"],"a":2,"why":"Bが緑→Aは青→Cは赤。Cが青はあり得ない！"}]}];
+const byId=Object.fromEntries(data.map(x=>[x.id,x]));
+const mixed=data.flatMap(x=>x.items.map(p=>({...p,difficulty:x.label,difficultyId:x.id})));
+const courses=[{id:"mix",label:"おまかせ",icon:"🎯",desc:"やさしい→ふつう→難問、全24問",items:mixed},...data.map(x=>({...x,items:x.items.map(p=>({...p,difficulty:x.label,difficultyId:x.id}))}))];
+const courseById=Object.fromEntries(courses.map(c=>[c.id,c]));
+const app=document.getElementById("app"),mute=document.getElementById("soundBtn"),menu=document.getElementById("menuBtn");
+const saveKey="detective_v6_difficulty_20261023";
+let saved={};try{saved=JSON.parse(localStorage.getItem(saveKey)||"{}")||{}}catch(e){}
+let soundOn=saved.sound!==false,chosen=courseById[saved.course]?saved.course:"mix",runs=(saved.runs&&typeof saved.runs==="object")?saved.runs:{},screen="home",busy=false,wrongSet=new Set(),fxTimer=null,ctx=null,master=null;
+function run(id){if(!runs[id])runs[id]={index:0,solved:0,misses:0,streak:0,best:0};const r=runs[id];for(const key of ["index","solved","misses","streak","best"]){if(!Number.isFinite(r[key])||r[key]<0)r[key]=0}r.index=Math.min(r.index,courseById[id].items.length);return r}
+function store(){try{localStorage.setItem(saveKey,JSON.stringify({course:chosen,sound:soundOn,runs}))}catch(e){}}
+function label(){const r=run(chosen);menu.textContent=screen==="home"?"難易度":"← コース";mute.textContent=soundOn?"♪ ON":"♪ OFF"}
+function initAudio(){if(!soundOn)return false;try{if(!ctx){ctx=new(window.AudioContext||window.webkitAudioContext)();master=ctx.createDynamicsCompressor();master.threshold.value=-22;master.ratio.value=5;master.connect(ctx.destination)}if(ctx.state==="suspended")ctx.resume();return true}catch(e){return false}}
+function tone(hz,at,duration,wave,vol,to){if(!initAudio())return;const t=ctx.currentTime+at,o=ctx.createOscillator(),g=ctx.createGain();o.type=wave||"sine";o.frequency.setValueAtTime(hz,t);if(to)o.frequency.exponentialRampToValueAtTime(Math.max(20,to),t+duration);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol||.07,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+duration);o.connect(g);g.connect(master);o.start(t);o.stop(t+duration+.025)}
+function noise(){if(!initAudio())return;const duration=.23,frames=Math.floor(ctx.sampleRate*duration),buffer=ctx.createBuffer(1,frames,ctx.sampleRate),ch=buffer.getChannelData(0);for(let i=0;i<frames;i++)ch[i]=(Math.random()*2-1)*Math.pow(1-i/frames,1.6);const source=ctx.createBufferSource(),filter=ctx.createBiquadFilter(),g=ctx.createGain();source.buffer=buffer;filter.type="highpass";filter.frequency.value=800;g.gain.setValueAtTime(.18,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+duration);source.connect(filter);filter.connect(g);g.connect(master);source.start()}
+function sfx(kind,combo){if(!soundOn)return;if(kind==="win"){tone(80,0,.26,"sawtooth",.17,38);tone(220,0,.14,"square",.09,70);noise();tone(560,.08,.14,"triangle",.10,900);tone(740,.22,.14,"sine",.12);tone(980,.32,.18,"triangle",.11);if(combo>=3){tone(1240,.43,.2,"sine",.12);tone(1480,.54,.21,"triangle",.12)}}else if(kind==="wrong"){tone(165,0,.11,"triangle",.085);tone(122,.1,.16,"triangle",.09)}else{tone(640,0,.075,"sine",.045)}}
+function buzz(seq){try{navigator.vibrate&&navigator.vibrate(seq)}catch(e){}}
+function home(){clearFx();screen="home";busy=false;label();const buttons=courses.map(c=>{const r=run(c.id),done=r.index===c.items.length;return '<button class="course'+(c.id==="mix"?' featured':'')+'" type="button" data-act="choose" data-id="'+c.id+'"><span class="emoji">'+c.icon+'</span><span style="flex:1"><b class="course-name">'+c.label+'</b><small class="desc">'+c.desc+'</small></span><span class="prog">'+(done?'CLEAR ✓':r.index+'/'+c.items.length)+'</span></button>'}).join("");
+app.innerHTML='<div class="v6-top"><div class="kicker">ONE TAP MYSTERY · VERSION 6</div><div class="hero">嘘を暴く、<br><em>快感を。</em></div><p class="v6-subtitle">証拠を読んで、矛盾する言葉を1タップ。<br>正解すると、ド派手に粉砕！</p><div class="course-list">'+buttons+'</div><p class="v6-footer">時間制限なし。難問でもじっくり考えてOK。<br>進行はコースごとに保存されます。</p></div>'}
+function choose(id){if(!courseById[id])return;chosen=id;let r=run(id);if(r.index>=courseById[id].items.length){r.index=0;r.solved=0;r.misses=0;r.streak=0}store();question()}
+function current(){return courseById[chosen].items[run(chosen).index]}
+function question(){
+ clearFx();const c=courseById[chosen],r=run(chosen);if(r.index>=c.items.length){end();return}
+ screen="question";busy=false;wrongSet=new Set();label();const p=current();
+ const words=p.parts.map((w,i)=>i===3?'<span class="v6-tail">'+w+'</span>':'<button type="button" data-act="answer" data-i="'+i+'" class="v6-word">'+w+'</button>').join("");
+ app.innerHTML='<div class="v6-qhead"><span class="v6-brow">'+c.icon+' '+(chosen==="mix"?p.difficulty:c.label)+' · '+(r.index+1)+' / '+c.items.length+'</span><span class="streak">🔥 '+r.streak+' COMBO</span></div><div class="meter"><i style="width:'+(r.index/c.items.length*100)+'%"></i></div><section class="v6-card"><div class="v6-title"><span class="pico">'+p.icon+'</span><b>'+p.title+'</b></div><div class="v6-fact-label">確定している事実</div><div class="v6-fact">'+p.fact+'</div><div class="v6-speaker">🗣 '+p.who+'の証言</div><div class="v6-quote">「'+words+'」</div></section><div class="v6-prompt">☝ 矛盾する言葉を直接タップ！</div><div class="v6-feedback" id="feedback" role="status"></div><div class="v6-bottom"><span>正解で自動的に次へ</span><button type="button" data-act="skip">スキップ ›</button></div>';
+}
+function answer(n){
+ if(screen!=="question"||busy)return;const p=current(),r=run(chosen);
+ if(n===p.a){
+  busy=true;screen="win";r.solved++;r.streak++;r.best=Math.max(r.best,r.streak);r.index++;store();sfx("win",r.streak);buzz([50,25,100,25,60]);showWin(p,r.streak);
+ }else{
+  if(wrongSet.has(n))return;wrongSet.add(n);r.misses++;r.streak=0;store();sfx("wrong");buzz(40);
+  const b=app.querySelector('[data-i="'+n+'"]');if(b){b.classList.add("wrong");b.disabled=true}
+  const card=app.querySelector(".v6-card");if(card){card.classList.remove("shake");void card.offsetWidth;card.classList.add("shake")}
+  document.getElementById("feedback").textContent="そこじゃない！ もう一度。";
+  const counter=app.querySelector(".streak");if(counter)counter.textContent="🔥 0 COMBO";
+ }
+}
+function showWin(p,combo){
+ const layer=document.createElement("div");layer.className="overlay v6-win"+(combo>=3?" mega":"");layer.id="v6-fx";layer.setAttribute("role","status");layer.setAttribute("aria-label","正解。"+p.why);
+ let sparks="";for(let i=0;i<28;i++){sparks+='<i class="spark" style="--a:'+(i*360/28)+'deg;--r:'+(110+(i%5)*35)+'px;--delay:'+(i%4*22)+'ms"></i>'}
+ layer.innerHTML='<div class="burst-bg"></div><div class="ring"></div><div class="flash"></div>'+sparks+'<svg class="cracks" viewBox="0 0 350 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path d="M175 300L80 195 30 171 M175 300L286 182 330 142 M175 300L314 343 346 392 M175 300L251 487 274 583 M175 300L86 469 30 522 M175 300L119 294 0 279"/></svg><div class="wincontent"><div class="winlabel">CONTRADICTION BREAK!</div><div class="wintitle">矛盾、<br>粉砕ッ！</div><div class="hit-tag">「'+p.parts[p.a]+'」⚡</div><div class="explain">'+p.why+'</div>'+(combo>=2?'<div class="combo-bonus">🔥 '+combo+'連続！ '+(combo>=5?'SUPER COMBO!!':'COMBO!!')+'</div>':'')+'<div class="nextcount">タップで即・次へ ▶</div></div>';
+ layer.addEventListener("click",next);document.body.appendChild(layer);
+ fxTimer=setTimeout(next,1350);
+}
+function clearFx(){if(fxTimer!==null){clearTimeout(fxTimer);fxTimer=null}const fx=document.getElementById("v6-fx");if(fx)fx.remove()}
+function next(){if(screen!=="win")return;clearFx();question()}
+function skip(){if(screen!=="question"||busy)return;const r=run(chosen);r.index++;r.streak=0;store();question()}
+function end(){clearFx();screen="end";busy=false;label();const c=courseById[chosen],r=run(chosen);const flawless=r.solved===c.items.length&&r.misses===0;
+app.innerHTML='<div class="result"><div class="kicker">'+c.icon+' '+c.label+' COMPLETE</div><div class="trophy">'+(flawless?'🏆':'🎖️')+'</div><h1>'+(flawless?'全問一撃、達成！':'推理、終了！')+'</h1><p class="intro">'+c.items.length+'問の捜査完了。もっと上の難度にも挑戦してみよう。</p><div class="value">'+r.solved+' / '+c.items.length+'</div><div class="statrow"><div class="stat"><b>'+r.best+'</b><small>最高コンボ</small></div><div class="stat"><b>'+r.misses+'</b><small>ミスタップ</small></div><div class="stat"><b>'+c.items.length+'</b><small>問題数</small></div></div><button class="cta" data-act="again">同じ難易度をもう一度 ⚡</button><button class="secondary" data-act="home">別の難易度で遊ぶ</button><p class="tiny">スコアが高くても低くても、すべての問題を見直せます。</p></div>';
+}
+function again(){const r=run(chosen);r.index=0;r.solved=0;r.misses=0;r.streak=0;store();question()}
+app.addEventListener("click",function(e){const b=e.target.closest("button[data-act]");if(!b||b.disabled)return;const a=b.dataset.act;if(a==="choose")choose(b.dataset.id);else if(a==="answer")answer(Number(b.dataset.i));else if(a==="skip")skip();else if(a==="again")again();else if(a==="home")home()});
+menu.addEventListener("click",home);
+mute.addEventListener("click",function(){soundOn=!soundOn;store();label();if(soundOn)sfx("tap")});
+document.addEventListener("visibilitychange",function(){if(document.hidden&&screen==="win"){clearFx();question()}});
+home();
+})();
+</script></body></html>
