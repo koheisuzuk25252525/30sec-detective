@@ -28,11 +28,11 @@ const app=document.getElementById("app"),soundEl=document.getElementById("sound"
 const storeKey="rule_thief_prototype_v1";
 let saved={};try{saved=JSON.parse(localStorage.getItem(storeKey)||"{}")||{}}catch(e){}
 let stage=Math.max(0,Math.min(5,Number(saved.stage)||0)),unlocked=Math.max(0,Math.min(5,Number(saved.unlocked)||0)),solved=saved.solved&&typeof saved.solved==="object"?saved.solved:{},discovered=saved.discovered&&typeof saved.discovered==="object"?saved.discovered:{},soundOn=saved.sound!==false;
-let toys=[],holding=null,undoStack=[],moves=0,screen="home",notice="",fxTimer=null,fx=null,help=null,audio=null,stagesWon=new Set(Object.keys(solved)),hintOpen=false;
+let toys=[],holding=null,undoStack=[],lastMoves={},moves=0,screen="home",notice="",fxTimer=null,fx=null,help=null,audio=null,stagesWon=new Set(Object.keys(solved)),hintOpen=false;
 function save(){try{localStorage.setItem(storeKey,JSON.stringify({stage,unlocked,solved,discovered,sound:soundOn}))}catch(e){}}
 function clone(objects){return objects.map(o=>({...o,traits:[...o.traits]}))}
 function source(){return levelDefs[stage]}
-function initStage(n){stage=Math.max(0,Math.min(levelDefs.length-1,n));toys=clone(source().items);holding=null;undoStack=[];moves=0;notice="下のルールをタップして、別の物に貼ろう";screen="level";hintOpen=false;save();render()}
+function initStage(n){stage=Math.max(0,Math.min(levelDefs.length-1,n));toys=clone(source().items);holding=null;undoStack=[];lastMoves={};moves=0;notice="下のルールをタップして、別の物に貼ろう";screen="level";hintOpen=false;save();render()}
 function isUp(o){return o.traits.includes("float")||(o.kind==="balloon"&&o.traits.includes("hot"))}
 function isHot(o){return o.traits.includes("hot")}
 function isGlow(o){return o.traits.includes("glow")}
@@ -99,7 +99,7 @@ function next(){stopFx();if(stage===4){initStage(5)}else initStage(Math.min(stag
 function stopFx(){if(fxTimer!==null){clearTimeout(fxTimer);fxTimer=null}if(fx){fx.remove();fx=null}}
 function showFx(){
  stopFx();const overlay=document.createElement("div");overlay.className="success-overlay";overlay.id="successOverlay";let bits="";for(let i=0;i<18;i++)bits+='<i class="spark" style="--rot:'+(i*20)+'deg;--delay:'+(i%5*17)+'ms"></i>';
- overlay.innerHTML='<div class="flash"></div><div class="ring"></div>'+bits+'<div class="inside"><div class="eyebrow">WORLD CHANGED!</div><h2>ルール、<br>いただき！</h2><p>'+source().goal.replace("よう","た")+'<br>自分の手で法則を変えた！</p><p style="font-size:11px;color:#b9e5db">'+moves+' 回の移動でクリア</p><button class="cta" id="nextLevel" type="button">'+(stage===4?"自由実験室へ ⚗️":"次のステージ ▶")+'</button><button class="try-more" id="tryAgain" type="button">同じステージを別の方法で試す</button></div>';
+ overlay.innerHTML='<div class="flash"></div><div class="ring"></div>'+bits+'<div class="inside"><div class="eyebrow">WORLD CHANGED!</div><h2>ルール、<br>いただき！</h2><p>'+source().title+' を突破！<br>自分の手で法則を変えた！</p><p style="font-size:11px;color:#b9e5db">'+moves+' 回の移動でクリア</p><button class="cta" id="nextLevel" type="button">'+(stage===4?"自由実験室へ ⚗️":"次のステージ ▶")+'</button><button class="try-more" id="tryAgain" type="button">同じステージを別の方法で試す</button></div>';
  document.body.appendChild(overlay);fx=overlay;
  overlay.querySelector("#nextLevel").addEventListener("click",next);
  overlay.querySelector("#tryAgain").addEventListener("click",()=>{stopFx();initStage(stage)});
@@ -125,11 +125,14 @@ function render(){
  soundEl.textContent=soundOn?"♪ ON":"♪ OFF";
  const def=source(),done=!!solved[def.id];const progress=Math.min(stage,5)/5*100;
  const device=def.device?'<div class="device '+(status()?"success":"")+'" style="left:'+def.device.x+'%;top:'+def.device.y+'%"><span class="emoji">'+(status()?def.device.on:def.device.icon)+'</span><span class="caption">'+def.device.label+'</span></div>':'';
- const toyHTML=toys.map(o=>{const v=stateInfo(o);return '<button class="toy '+v.cls+(holding?" selected-target":"")+'" type="button" data-act="object" data-id="'+o.id+'" style="left:'+o.x+'%;top:'+o.y+'%;--move:'+v.move+'"><span class="sprite">'+v.icon+'</span><span class="name">'+o.name+'</span></button>'}).join("");
+ const animated=toys.map(o=>({id:o.id,...stateInfo(o)}));const toyHTML=toys.map(o=>{const v=animated.find(v=>v.id===o.id);const oldMove=lastMoves[o.id]??v.move;return '<button class="toy '+v.cls+(holding?" selected-target":"")+'" type="button" data-act="object" data-id="'+o.id+'" style="left:'+o.x+'%;top:'+o.y+'%;--move:'+oldMove+'"><span class="sprite">'+v.icon+'</span><span class="name">'+o.name+'</span></button>'}).join("");
  const cards=toys.map(o=>'<section class="object-card '+(holding?"target":"")+'"><div class="name-row"><span><span class="emoji">'+o.icon+'</span> '+o.name+'</span><span style="color:#aec6d0;font-size:10px">'+(isUp(o)?"↑浮遊":"")+'</span></div><div class="properties">'+(o.traits.length?o.traits.map(t=>'<button class="trait" data-act="take" data-id="'+o.id+'" data-trait="'+t+'" type="button" '+(holding?"disabled":"")+'>'+names[t]+' ↗</button>').join(""):'<span class="trait empty">ルールなし</span>')+'</div>'+(holding?'<button class="target-button" data-act="object" data-id="'+o.id+'" type="button">ここに貼る ↓</button>':'')+'</section>').join("");
  const badges=stage===5?'<div class="panel-title"><span>✦ 発見ノート</span><span class="sub">'+Object.keys(discovered).length+'/5</span></div>'+Object.entries(badgeNames).map(([id,label])=>'<div class="lab-badge '+(discovered[id]?"done":"")+'"><span>'+(discovered[id]?'✨ '+label:'🔒 ？？？')+'</span><span class="symbol">'+(discovered[id]?'✓':'')+'</span></div>').join(""):'';
  const hold=holding?'<div class="holding active"><span class="chip">'+names[holding.trait]+'</span><span>貼り先を選ぼう！</span><button class="cancel" data-act="cancel">戻す ×</button></div>':'<div class="holding"><span>👆</span><span>ルールを盗んでから、別の物をタップ</span></div>';
  app.innerHTML='<div class="topline"><span class="chapter">'+(stage===5?"⚗️ SANDBOX":"LEVEL "+(stage+1)+" / 5")+'</span><span class="chapter-info">'+moves+' MOVE'+(done?" · ✓ CLEAR":"")+'</span></div><div class="progress"><i style="width:'+progress+'%"></i></div><h1 class="level-title">'+def.title+'</h1><p class="level-goal">'+def.scene+'<br><strong>目標：'+def.goal+'</strong></p><div class="world">'+(def.water?'<div class="pond"></div>':'')+'<div class="ground"></div>'+(stage===4&&status()?'<div class="beam"></div>':'')+device+toyHTML+'<span class="sticker">✦ EXPERIMENT</span><div class="world-message pop">'+notice+'</div></div>'+hold+'<div class="panel-title"><span>ルールを盗む</span><span class="sub">選ぶ → 貼る</span></div><div class="object-grid">'+cards+'</div><div class="controls"><button class="textbutton" data-act="undo" '+(!holding&&!undoStack.length?"disabled":"")+'>↶ 1手戻す</button><button class="textbutton" data-act="reset">↻ やり直す</button><button class="textbutton" data-act="levels">☰ ステージ</button></div>'+(hintOpen?'<div class="tips">💡 '+def.hint+'</div>':'<button class="textbutton" style="width:100%" data-act="hint">💡 ヒントを見る</button>')+badges;
+ const changed=animated.filter(v=>lastMoves[v.id]!==undefined&&lastMoves[v.id]!==v.move);
+ lastMoves=Object.fromEntries(animated.map(v=>[v.id,v.move]));
+ if(changed.length&&typeof requestAnimationFrame==='function'){requestAnimationFrame(()=>{if(screen!=='level')return;for(const v of changed){const toy=app.querySelector('[data-act="object"][data-id="'+v.id+'"]');if(toy&&toy.style)toy.style.setProperty('--move',v.move)}})}
 }
 function levelMenu(){
  stopFx();screen="levels";let html='<div class="eyebrow">WORLD SELECT</div><h1 class="title" style="font-size:32px">実験する世界を選ぶ</h1><p class="intro-lead">いつでも前のステージに戻れます。</p>';
