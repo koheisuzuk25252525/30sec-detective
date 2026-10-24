@@ -105,7 +105,7 @@ function showFx(){
  overlay.querySelector("#tryAgain").addEventListener("click",()=>{stopFx();initStage(stage)});
 }
 function initial(){stopFx();screen="home";soundEl.textContent=soundOn?"♪ ON":"♪ OFF";const completed=Object.keys(solved).length;
- app.innerHTML='<div class="eyebrow">RULE THIEF · INTERACTIVE PROTOTYPE</div><h1 class="title">盗んで、貼って、<br><em>世界を変えろ。</em></h1><p class="intro-lead">風船の「浮く」を岩に。炎の「熱い」を氷に。<br>ものが持つルールを引っ越しさせる、発想のパズル。</p><div class="hero-burst"><div class="row"><span>🎈</span><span class="arrow">「浮く」→</span><span>🪨</span></div><div class="hero-note">能力を盗まれた側は、ちゃんと能力を失う。</div></div><div class="pill-list"><span class="pill">👆 タップ2回で操作</span><span class="pill">🧩 全5ステージ</span><span class="pill">⚗️ 自由実験室</span></div><button class="primary" data-act="start">'+(completed?"続きから実験する ⚡":"実験をはじめる ⚡")+'</button><p class="smallhelp">失敗しても何度でもやり直せる。<br>時間制限なし。答えを暗記する必要なし。</p>';
+ app.innerHTML='<div class="eyebrow">RULE THIEF · INTERACTIVE PROTOTYPE</div><h1 class="title">盗んで、貼って、<br><em>世界を変えろ。</em></h1><p class="intro-lead">風船の「浮く」を岩に。炎の「熱い」を氷に。<br>ものが持つルールを引っ越しさせる、発想のパズル。</p><div class="hero-burst"><div class="row"><span>🎈</span><span class="arrow">「浮く」→</span><span>🪨</span></div><div class="hero-note">能力を盗まれた側は、ちゃんと能力を失う。</div></div><div class="pill-list"><span class="pill">👆 タップ2回で操作</span><span class="pill">🧩 全5ステージ</span><span class="pill">⚗️ 自由実験室</span></div><button class="primary" data-act="start">'+(completed?"続きから実験する ⚡":"実験をはじめる ⚡")+'</button><button class="textbutton" style="width:100%;margin-top:11px" data-act="lab">⚗️ 自由実験から遊ぶ</button><p class="smallhelp">失敗しても何度でもやり直せる。<br>時間制限なし。答えを暗記する必要なし。</p>';
 }
 function stateInfo(o){
  let move="";
@@ -136,7 +136,7 @@ function render(){
 }
 function levelMenu(){
  stopFx();screen="levels";let html='<div class="eyebrow">WORLD SELECT</div><h1 class="title" style="font-size:32px">実験する世界を選ぶ</h1><p class="intro-lead">いつでも前のステージに戻れます。</p>';
- for(let i=0;i<levelDefs.length;i++){const d=levelDefs[i],isLocked=i>unlocked;
+ for(let i=0;i<levelDefs.length;i++){const d=levelDefs[i],isLocked=i>unlocked&&i!==5;
  html+='<button class="textbutton" style="display:flex;align-items:center;gap:14px;width:100%;text-align:left;margin:8px 0;min-height:66px" data-act="choose" data-i="'+i+'" '+(isLocked?"disabled":"")+'> <span style="font-size:25px">'+(isLocked?'🔒':i===5?'⚗️':'🧩')+'</span><span style="flex:1"><b>'+(i===5?"自由実験室":"LEVEL "+(i+1))+'　'+d.title+'</b><br><small style="color:#b7cede">'+(isLocked?'前のステージをクリアで解放':solved[d.id]?'最少 '+solved[d.id]+' 手でクリア':'未クリア')+'</small></span></button>'}
  html+='<button class="primary" style="margin-top:16px" data-act="back">今の実験に戻る</button>';
  app.innerHTML=html;
@@ -150,6 +150,7 @@ app.addEventListener("click",e=>{
  const b=e.target.closest("button[data-act]");if(!b||b.disabled)return;
  switch(b.dataset.act){
  case "start":initStage(Math.min(stage,unlocked));break;
+ case "lab":initStage(5);break;
  case "take":take(b.dataset.id,b.dataset.trait);break;
  case "object":paste(b.dataset.id);break;
  case "cancel":cancelHold();break;
