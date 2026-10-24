@@ -1,0 +1,254 @@
+<!doctype html><html lang="ja"><head><title>30秒探偵 — LIE BREAKER</title><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" type="image/svg+xml" href="./detective-icon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="30秒探偵"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#091424"><meta name="description" content="30秒探偵：1行の事実から嘘を見抜く。毎日の5問チャレンジ、難易度別の推理、爽快な正解演出。"><style>
+:root{color-scheme:dark;--bg:#0b1628;--panel:#152b42;--line:#3e617b;--cream:#f2f5f2;--muted:#adc2d3;--gold:#ffdc83;--mint:#87f5d0;--red:#ff9b92}
+*{box-sizing:border-box}body{margin:0;min-height:100svh;background:radial-gradient(ellipse at 50% -20%,#29445f,var(--bg) 64%);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;color:var(--cream);font-size:14px;-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}button:focus-visible{outline:3px solid var(--mint);outline-offset:3px}button:disabled{cursor:default;opacity:.6}
+.shell{max-width:440px;min-height:100svh;margin:0 auto;padding:12px 16px max(24px,env(safe-area-inset-bottom));display:flex;flex-direction:column;position:relative}
+header{display:flex;justify-content:space-between;align-items:center;gap:9px;padding:6px 0 14px}.brand{font-size:16px;font-weight:950;letter-spacing:-.04em;white-space:nowrap}.brand b{color:var(--mint)}.tools{display:flex;gap:7px;align-items:center}.ghost{border:1px solid #52718a;border-radius:25px;padding:7px 10px;background:#172c43;color:#d5e6eb;font-size:11px;font-weight:750}
+#app{flex:1}.kicker{font-size:11px;font-weight:850;color:var(--mint);letter-spacing:.15em}.hero{font-size:clamp(41px,12vw,57px);line-height:1.13;letter-spacing:-.075em;font-weight:950;margin:20px 0}.hero em{font-style:normal;color:var(--gold)}.intro{color:#d4e0e4;font-size:15px;line-height:1.8}.hero-icon{height:168px;display:flex;align-items:center;justify-content:center;font-size:96px;filter:drop-shadow(0 0 25px #75f5dd58)}.pillrow{display:flex;gap:7px;flex-wrap:wrap;margin:16px 0 22px}.pill{font-size:11px;border:1px solid #466f82;color:#c9e6e8;padding:5px 8px;border-radius:20px}
+.cta{display:block;width:100%;border:0;border-radius:15px;background:linear-gradient(110deg,#ffe4a1,#f9ba71);box-shadow:0 6px 0 #a46b39;color:#14233a;padding:16px;font-weight:950;font-size:17px;margin-top:16px;min-height:55px}.cta:active{transform:translateY(4px);box-shadow:0 2px 0 #a46b39}.secondary{display:block;width:100%;padding:13px;border-radius:13px;border:1px solid #56718c;background:#1d3349;color:#dfecf3;margin-top:10px;font-weight:750}
+.tiny{color:#aabec8;font-size:11px;text-align:center;margin-top:14px;line-height:1.6}.meter{height:5px;background:#294156;overflow:hidden;border-radius:12px;margin:7px 0 16px}.meter i{display:block;height:100%;background:linear-gradient(90deg,#72e4bb,#f9d17d);transition:width .25s}
+.qtop{display:flex;align-items:center;justify-content:space-between}.qnum{font-size:12px;font-weight:900;color:#b7e8dc}.streak{font-size:12px;font-weight:900;color:#ffda89;border:1px solid #866d46;border-radius:25px;padding:5px 10px}
+.scene{border-radius:16px;border:1px solid #4e6d84;background:linear-gradient(145deg,#1f3b54,#102539);padding:15px 15px 13px;box-shadow:0 13px 30px #02091148}.scene-head{display:flex;align-items:center;gap:11px}.scene-icon{font-size:42px;line-height:1}.scene h1{font-size:24px;line-height:1.35;letter-spacing:-.04em;margin:0}.scene .tag{font-size:10px;color:#9edaca;font-weight:850;letter-spacing:.09em}.clues{display:grid;gap:7px;margin-top:14px}.clue{background:#0e2436;border:1px solid #3a5b6f;border-radius:10px;padding:10px 11px;display:flex;gap:8px;align-items:flex-start}.clue .number{flex:none;background:#2d5263;color:#aef4dc;border-radius:6px;padding:2px 5px;font-size:10px;font-weight:900}.clue .line{font-size:13px;line-height:1.6;color:#e3eef0;font-weight:650}
+.quote{margin:14px 0 8px;padding:14px;background:#253e59;border-radius:13px;position:relative}.quote::before{content:"“";position:absolute;top:-14px;left:9px;color:#84e1c7;font-size:40px}.speaker{font-size:11px;color:#b5dbd7;margin:0 0 5px;font-weight:850}.quote-text{font-size:15px;font-weight:760;line-height:1.6}
+.ask{font-weight:900;font-size:15px;margin:15px 0 10px;display:flex;align-items:center;gap:6px}.ask i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--mint)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:9px}.answer{background:#24425e;border:1px solid #51708b;border-bottom:4px solid #395675;border-radius:12px;padding:12px 8px;min-height:58px;font-size:14px;font-weight:900;color:#f5f9f8;line-height:1.45}.answer:active{transform:translateY(3px);border-bottom-width:1px}.answer.wrong{background:#663c49;border-color:#ff999a}.feedback{min-height:52px;margin:12px 0 0;color:#ffb6a7;font-size:12px;line-height:1.5;font-weight:700}.feedback:empty{min-height:30px}
+.bottom{display:flex;justify-content:space-between;align-items:center;gap:8px;padding-top:10px}.bottom small{font-size:10px;color:#a3b9c5}.skip{border:0;background:transparent;text-decoration:underline;color:#b7c8d1;padding:8px;font-size:11px}
+.shake{animation:shake .3s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:#0b1629e8;overflow:hidden;text-align:center;padding:24px}.flash{position:absolute;inset:0;background:white;animation:flash .7s forwards}.ring{position:absolute;border:6px solid #ffda8c;border-radius:50%;height:240px;width:240px;animation:ring .9s ease-out both;box-shadow:0 0 100px #ffb453}.burst-bg{position:absolute;inset:-50%;background:conic-gradient(transparent 0deg,#ffe08e22 8deg,transparent 15deg,#ffffff20 25deg,transparent 40deg);animation:spin .9s linear both}.wincontent{position:relative;z-index:3;animation:punch .35s cubic-bezier(.15,1.5,.4,1) both}.winlabel{font-size:13px;font-weight:950;letter-spacing:.25em;color:var(--mint)}.wintitle{font-size:clamp(55px,14vw,80px);line-height:1.1;font-weight:1000;color:var(--gold);text-shadow:0 7px 0 #944a26,0 0 34px #ef9f49;letter-spacing:-.07em;margin:14px 0}.explain{font-weight:800;color:#f5f9fa;line-height:1.7;font-size:15px;max-width:340px;margin:auto}.nextcount{font-size:11px;color:#a8d5cf;margin-top:24px}
+@keyframes punch{from{transform:scale(2.2) rotate(-7deg);opacity:.1}to{transform:scale(1) rotate(0);opacity:1}}@keyframes ring{from{transform:scale(.3);opacity:1}to{transform:scale(4);opacity:0}}@keyframes flash{0%{opacity:1}25%{opacity:.25}100%{opacity:0}}@keyframes spin{to{transform:rotate(100deg)}}
+.result{text-align:center;padding-top:19px}.trophy{font-size:85px;margin:22px 0 12px}.result h1{font-size:34px;letter-spacing:-.055em;margin:10px 0}.result .value{color:var(--mint);font-size:42px;font-weight:950}.statrow{display:flex;gap:8px;margin:25px 0}.stat{flex:1;border:1px solid #476981;border-radius:12px;background:#193049;padding:15px 4px}.stat b{font-size:25px;color:var(--gold);display:block}.stat small{font-size:10px;color:#b1c7d2}
+@media(max-height:720px){.shell{padding-top:4px}.scene{padding:11px}.scene h1{font-size:22px}.clue{padding:8px}.quote{margin:8px 0;padding:10px}.answer{min-height:51px}.feedback{margin-top:7px;min-height:20px}.meter{margin:4px 0 8px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}.flash,.ring,.burst-bg{display:none}}
+
+/* v5 simplified: one compact card, tap directly on the spoken words */
+.v5-card{background:linear-gradient(150deg,#1d3852,#152941);border:1px solid #58768c;border-radius:19px;padding:18px 16px;box-shadow:0 15px 45px #0005;margin:12px 0 12px}
+.v5-title{display:flex;align-items:center;gap:10px;border-bottom:1px solid #48647c;padding-bottom:15px}
+.v5-title span{font-size:42px;line-height:1}.v5-title b{font-size:23px;line-height:1.3;letter-spacing:-.03em}
+.v5-situation{font-size:16px;font-weight:750;line-height:1.75;color:#e9f2f1;padding:20px 2px}
+.v5-speaker{color:#8ce9c9;font-size:12px;font-weight:900;letter-spacing:.03em;margin:4px 0 13px}
+.v5-quote{font-size:20px;font-weight:800;line-height:2.55;color:#f6f7f6}
+.v5-word{display:inline;color:#fff1d3;border:0;border-bottom:2px dashed #b7caa8;padding:4px 2px;margin:0 1px;min-height:42px;background:#36516b;border-radius:6px 6px 2px 2px;font-size:19px;line-height:1.6;font-weight:850;vertical-align:baseline;letter-spacing:-.03em}
+.v5-word:active{transform:scale(.95);background:#517894}.v5-word.wrong{background:#6c3540;color:#ffe8e8;text-decoration:line-through}.v5-word:disabled{opacity:.6}
+.v5-prompt{text-align:center;font-size:15px;font-weight:950;color:#95f0d1;margin:19px 0 9px}
+.v5-feedback{min-height:33px;font-size:13px;color:#ffada4;font-weight:850;text-align:center}.v5-win .explain{max-width:305px}.v5-win .wintitle{margin:8px 0}.v5-win .nextcount{margin-top:13px}
+@media(max-height:740px){.v5-card{padding:13px}.v5-situation{padding:13px 2px}.v5-quote{font-size:18px;line-height:2.15}.v5-word{font-size:17px;min-height:40px}.v5-prompt{margin-top:12px}}
+
+.v5-fact{color:#96eccf;font-size:11px;font-weight:900;margin-top:15px;letter-spacing:.04em}
+.v5-situation{padding:5px 2px 14px;font-size:16px;line-height:1.6}
+.v5-plain{font-size:19px;line-height:1.6;color:#f8f4ed;display:inline;padding:4px 2px}
+@media(max-height:740px){.v5-fact{margin-top:9px}.v5-situation{padding-bottom:10px}.v5-plain{font-size:17px}}
+
+/* v6 difficulty selector & supersized success presentation */
+.v6-top{padding:2px 0}.v6-top .kicker{letter-spacing:.1em}.v6-top .hero{font-size:clamp(40px,11vw,53px);margin:14px 0}.v6-subtitle{font-size:14px;color:#d3e0e5;line-height:1.65;margin:0 0 14px}
+.course-list{display:grid;gap:9px}.course{width:100%;display:flex;gap:11px;align-items:center;border:1px solid #456a83;border-radius:14px;background:linear-gradient(110deg,#244057,#142a42);padding:13px 13px;text-align:left;color:#eef7f6;min-height:74px}.course:active{transform:scale(.98);background:#2f5270}
+.course.featured{border-color:#e6b973;background:linear-gradient(110deg,#504534,#243a4f)}.course .emoji{font-size:30px;width:40px;text-align:center}.course .course-name{display:block;font-size:17px;font-weight:950}.course .desc{font-size:11px;color:#c6d9df;line-height:1.4;display:block}.course .prog{margin-left:auto;color:var(--gold);font-size:11px;white-space:nowrap;font-weight:900}
+.v6-qhead{display:flex;align-items:center;justify-content:space-between;gap:7px;margin-bottom:6px}.v6-brow{font-size:11px;font-weight:900;color:#9cebd4;letter-spacing:.05em}
+.v6-card{border:1px solid #54738a;border-radius:17px;background:linear-gradient(145deg,#1e3c55,#13283e);padding:17px;margin:11px 0}.v6-title{display:flex;align-items:center;gap:12px;padding:0 0 13px;border-bottom:1px solid #4d6b83}.v6-title .pico{font-size:39px}.v6-title b{font-size:23px;letter-spacing:-.04em;line-height:1.3}
+.v6-fact-label{color:#93ead1;font-weight:900;font-size:11px;margin:14px 0 4px}.v6-fact{font-size:16px;line-height:1.7;font-weight:725;color:#eef4f2;min-height:43px}
+.v6-speaker{color:#a7d9df;font-size:11px;font-weight:900;margin:15px 0 7px}
+.v6-quote{font-size:18px;font-weight:850;line-height:2.4}
+.v6-word{display:inline;min-height:40px;padding:4px 3px;margin:0 1px;border-radius:6px 6px 3px 3px;background:#324e6b;color:#ffeac2;border:0;border-bottom:2px dashed #aebd9d;vertical-align:baseline;line-height:1.65;font-size:18px;font-weight:850}.v6-word:active{background:#5f7596;transform:scale(.96)}.v6-word.wrong{background:#632e3a;color:#ffe5e5;text-decoration:line-through}.v6-tail{display:inline;padding:4px 2px;font-size:18px;line-height:1.65}
+.v6-prompt{text-align:center;color:#9df9d5;font-size:15px;font-weight:950;margin:17px 0 9px}.v6-feedback{text-align:center;color:#ffafa4;font-size:12px;font-weight:850;min-height:25px}.v6-bottom{display:flex;align-items:center;justify-content:space-between;gap:9px;color:#acbfd0;font-size:11px;margin-top:12px}.v6-bottom button{border:0;background:transparent;color:#c0d1da;font-size:11px;text-decoration:underline;padding:8px}
+.v6-footer{color:#afc3d0;font-size:11px;line-height:1.6;margin-top:16px;text-align:center}
+.v6-win{isolation:isolate;background:radial-gradient(circle,#64391d 0,#121d30 60%);animation:impactShake .42s ease-out}
+.v6-win .flash{background:radial-gradient(circle,#fff 0%,#ffc77e 38%,#fa5f39 80%);animation:bigFlash .6s ease-out forwards}
+.v6-win .ring{width:150px;height:150px;box-shadow:0 0 100px #ffc65f,0 0 160px #ff7245;border-width:10px;animation:bigRing .85s ease-out forwards}
+.v6-win .spark{position:absolute;z-index:1;left:50%;top:48%;width:9px;height:34px;background:linear-gradient(#fff,#fdb55c);border-radius:6px;box-shadow:0 0 15px #ffda6c;animation:spark .85s cubic-bezier(.13,.7,.2,1) both;animation-delay:var(--delay)}
+.v6-win .cracks{position:absolute;z-index:1;inset:0;width:100%;height:100%;stroke:#fbe8ad;stroke-width:2.5;fill:none;opacity:.75;animation:crack .75s ease-out forwards}
+.v6-win .wincontent{position:relative;z-index:5;animation:megaPunch .36s cubic-bezier(.1,1.8,.3,1) both}
+.v6-win .winlabel{font-size:13px;color:#95f5d5;letter-spacing:.16em;text-shadow:0 0 10px #48ffd7}
+.v6-win .wintitle{font-size:clamp(52px,15vw,76px);line-height:1.05;text-shadow:0 6px 0 #853523,0 0 25px #ff7c23,0 0 65px #ffc66e}
+.v6-win .explain{font-size:14px;color:#ffffff;max-width:335px;text-shadow:0 1px 7px #000;line-height:1.6}
+.v6-win .hit-tag{font-size:22px;font-weight:950;color:#ffefba;margin:10px auto 5px;filter:drop-shadow(0 0 10px #ff8928)}
+.v6-win .combo-bonus{font-size:17px;color:#97ffe1;font-weight:950;margin-top:12px}
+.v6-win .nextcount{margin-top:9px}
+.v6-win.mega .wintitle{color:#fff0af;text-shadow:0 6px 0 #8c2d29,0 0 30px #ffb631,0 0 80px #fe7e48}
+@keyframes bigFlash{0%{opacity:1}20%{opacity:.66}100%{opacity:0}}
+@keyframes bigRing{0%{transform:scale(.25);opacity:1}100%{transform:scale(7);opacity:0}}
+@keyframes spark{0%{transform:rotate(var(--a)) translateY(0) scale(.2);opacity:0}10%{opacity:1}100%{transform:rotate(var(--a)) translateY(calc(-1 * var(--r))) scale(.1);opacity:0}}
+@keyframes crack{0%,15%{transform:scale(.1);opacity:0}28%{opacity:1}100%{transform:scale(1.5);opacity:0}}
+@keyframes impactShake{0%{transform:scale(.98)}15%{transform:translate(9px,-8px)}30%{transform:translate(-7px,5px)}45%{transform:translate(5px,-3px)}70%,100%{transform:none}}
+@keyframes megaPunch{0%{transform:scale(2.5) rotate(-10deg);opacity:.05}55%{transform:scale(.92) rotate(2deg);opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}
+@media(max-height:730px){.v6-card{padding:12px}.v6-fact-label{margin-top:8px}.v6-fact{font-size:14px;line-height:1.55}.v6-speaker{margin-top:8px}.v6-quote{font-size:17px;line-height:2.1}.v6-word,.v6-tail{font-size:17px;min-height:38px}.v6-prompt{margin-top:9px}}
+@media(prefers-reduced-motion:reduce){.v6-win{animation:none!important}.v6-win .spark,.v6-win .ring,.v6-win .flash,.v6-win .cracks{display:none}.v6-win .wincontent{animation:none!important}}
+
+
+:root{--electric:#a5ffe3;--deep:#091220;--hot:#ffd887}
+body{background:radial-gradient(ellipse at 50% -15%,#34546b 0%,#0b182c 57%,#080f1b 100%);background-attachment:fixed}
+.shell{max-width:470px;min-height:100svh;padding:12px 17px max(18px,env(safe-area-inset-bottom));}
+header{border-bottom:1px solid #4b678057;margin:0 -2px 11px;padding:3px 2px 13px;gap:6px}
+.brand{font-size:17px;letter-spacing:-.05em}.brand b{color:#a5ffe3}.tools{gap:6px}.ghost{padding:7px 10px;min-height:34px;font-size:11px;background:#183149}
+h1,h2,h3,p{overflow-wrap:anywhere}button{user-select:none}
+.version{font-size:10px;letter-spacing:.15em;color:#90ddcd;font-weight:900}
+.hero-title{font-size:clamp(40px,12vw,57px);letter-spacing:-.09em;line-height:1.08;font-weight:1000;margin:13px 0 12px}.hero-title em{color:var(--hot);font-style:normal}
+.hero-sub{color:#d2e3e8;line-height:1.6;margin:6px 0 18px;font-size:14px}
+.home-spot{background:linear-gradient(135deg,#344657,#28394f 56%,#1c3448);position:relative;overflow:hidden;border:1px solid #ba9874;border-radius:18px;padding:17px 16px 16px;box-shadow:inset 0 1px 0 #ffffff20,0 8px 32px #0004}
+.home-spot::after{content:"⚡";position:absolute;right:-19px;bottom:-43px;font-size:145px;color:#ffd27719;transform:rotate(-18deg);pointer-events:none}
+.mode-tag{display:inline-block;color:#ffdfa3;border:1px solid #aa926b;border-radius:20px;padding:4px 9px;font-size:10px;font-weight:900;letter-spacing:.05em}
+.spot-title{font-size:25px;font-weight:950;letter-spacing:-.05em;margin:9px 0 3px;position:relative;z-index:1}
+.spot-sub{font-size:12px;line-height:1.55;color:#e2e7e7;max-width:255px;margin:6px 0 10px}
+.spot-btn{display:block;width:100%;background:linear-gradient(105deg,#ffebb8,#ffc273);border:0;border-radius:12px;padding:13px 12px;color:#15283c;font-weight:1000;font-size:15px;position:relative;z-index:1;box-shadow:0 4px 0 #916334}
+.home-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:11px 0 18px}
+.mode-card{min-height:95px;text-align:left;color:#eef5f5;border:1px solid #466882;border-radius:14px;background:linear-gradient(130deg,#1d374e,#122538);padding:12px;display:flex;flex-direction:column;gap:5px}
+.mode-card b{font-size:15px}.mode-card span{font-size:11px;line-height:1.35;color:#b8cfd8}
+.section-title{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:900;color:#9cd9cf;letter-spacing:.08em;margin:12px 0 8px}
+.section-title small{font-size:10px;font-weight:650;color:#a9bbc8;letter-spacing:0}
+.level-list{display:grid;gap:8px}.level-row{display:flex;align-items:center;gap:12px;text-align:left;min-height:65px;width:100%;border:1px solid #46657c;border-radius:12px;background:#152e44;color:#f1f5f2;padding:11px 12px}
+.level-icon{font-size:27px}.level-content{flex:1}.level-content b{font-size:14px;display:block}.level-content small{font-size:11px;color:#afcbd2;display:block;margin-top:2px}.level-progress{font-size:11px;color:#ffdf9a;font-weight:900}
+.slim-footer{font-size:10px;text-align:center;color:#90a7ba;margin:12px 0 4px}
+.q-meta{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#9aebd5;font-weight:850;gap:10px}.q-meta .n{font-size:12px;letter-spacing:.07em}
+.progress-track{height:4px;background:#284054;border-radius:8px;margin:9px 0 12px;overflow:hidden}.progress-track i{height:100%;display:block;background:linear-gradient(90deg,#7feccc,#ffe08e);transition:width .25s}
+.caseboard{border:1px solid #57758b;border-radius:18px;background:linear-gradient(147deg,#1e3b53,#11253a);box-shadow:inset 0 1px 0 #ffffff13,0 13px 25px #03080e40;padding:14px 15px 16px;position:relative;overflow:hidden}
+.caseboard:before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#82efce,#ffd58f,#80bcec)}
+.case-heading{display:flex;gap:10px;align-items:center;border-bottom:1px solid #5d768566;padding-bottom:12px}
+.case-heading .picture{font-size:40px;line-height:1}.case-heading b{font-size:23px;line-height:1.25;font-weight:950;letter-spacing:-.05em}.case-heading small{display:block;color:#9bd9cc;font-size:10px;font-weight:850;letter-spacing:.12em;margin-bottom:3px}
+.fact-label{font-size:10px;font-weight:950;color:#a2e6d0;letter-spacing:.09em;margin:14px 0 4px}
+.fact-line{font-size:15px;line-height:1.65;font-weight:750;color:#f0f6f1;min-height:43px}
+.person-label{margin:15px 0 7px;font-size:11px;color:#abcbd8;font-weight:900}
+.speech{font-size:19px;font-weight:850;line-height:2.3;color:#fff6db}
+.tapword{display:inline;border:0;border-bottom:2px dashed #abcbbd;background:#34536f;color:#fff5d6;font-size:18px;line-height:1.65;font-weight:900;min-height:41px;border-radius:5px 5px 2px 2px;padding:5px 3px;margin:1px;vertical-align:baseline;transition:transform .11s,background-color .11s}
+.tapword:active{background:#6c8fa9;transform:scale(.92)}.tapword.wrong{background:#672e3b;color:#ffdedb;text-decoration:line-through}
+.speech-tail{font-size:18px;white-space:normal}
+.tap-instruction{text-align:center;color:#a1f5d5;font-weight:950;font-size:14px;margin:16px 0 7px}
+.instruction-feedback{min-height:34px;font-size:12px;font-weight:900;text-align:center;color:#ffc5b5}
+.game-footer{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-top:7px;color:#a7bfd0;font-size:10px}.small-link{border:0;background:none;color:#bbcbd4;padding:8px;font-size:11px;text-decoration:underline}
+.result-main{text-align:center;padding:22px 0 6px}.result-seal{font-size:69px;line-height:1.2;filter:drop-shadow(0 0 19px #f5d18e55)}.result-grade{font-size:65px;font-weight:1000;line-height:1.1;color:#ffde90;text-shadow:0 5px 0 #8e5d34,0 0 25px #ffc36870}.result-hero{font-size:25px;font-weight:950;margin:10px 0}.result-sub{font-size:13px;color:#bed4d8;margin:9px 0 18px}
+.score-panels{display:flex;gap:8px;margin:15px 0}.score-panel{flex:1;border:1px solid #4a6b80;border-radius:12px;background:#192e44;padding:12px 3px}.score-panel b{display:block;color:#ffe3a0;font-size:22px}.score-panel small{font-size:10px;color:#aec7cc}
+.fill-btn{display:block;width:100%;background:linear-gradient(100deg,#ffdfa1,#f5b76c);color:#172b40;border:0;border-radius:13px;padding:14px 8px;margin-top:12px;font-size:15px;font-weight:950;box-shadow:0 4px 0 #8d6736}
+.fill-btn.secondary{background:#1c384f;box-shadow:none;border:1px solid #57788a;color:#e1f0ec}
+.archive-head{display:flex;justify-content:space-between;align-items:center}.archive-level{font-size:12px;color:#92e4cf;font-weight:850;margin:18px 0 8px}
+.archive-card{border:1px solid #4c6c81;border-radius:10px;background:#172d42;margin:6px 0;overflow:hidden}.archive-card summary{list-style:none;cursor:pointer;display:flex;gap:10px;padding:11px 12px;align-items:center;font-size:13px;font-weight:800}.archive-card summary::-webkit-details-marker{display:none}.archive-card summary .id{color:#ffe3a7;font-size:11px}.archive-card summary .arrow{margin-left:auto;color:#9db7c1}
+.archive-card .archive-detail{border-top:1px solid #39586e;padding:13px;font-size:12px;line-height:1.8;color:#d1e0e3}.archive-card .archive-detail b{color:#ffda97}
+.archive-locked{border:1px dashed #435468;border-radius:10px;margin:5px 0;padding:12px;color:#849aac;font-size:12px}
+.impact-overlay{position:fixed;inset:0;background:radial-gradient(circle at center,#664027,#141b2b 60%,#070e1b);display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:20px;z-index:100;isolation:isolate;animation:hitshake .42s ease-out}
+.impact-light{position:absolute;inset:0;background:radial-gradient(circle,#fffefa 0%,#ffcd76 35%,#fb693d 65%,transparent 90%);animation:flashbang .72s forwards}
+.impact-ring{position:absolute;inset:0;margin:auto;width:160px;height:160px;border:10px solid #fff2b1;border-radius:50%;box-shadow:0 0 90px #ffa746;animation:expandblast .85s forwards}
+.impact-rays{position:absolute;inset:-70%;background:repeating-conic-gradient(from 5deg,transparent 0deg 9deg,#ffe6ad33 10deg 12deg,transparent 13deg 22deg);animation:spinray 1.1s ease-out}
+.impact-bit{position:absolute;top:50%;left:50%;height:38px;width:7px;border-radius:8px;background:linear-gradient(#fff,#ffb15c);box-shadow:0 0 18px #ffbd61;transform-origin:50% 0;animation:blastbit 1.02s ease-out forwards;animation-delay:var(--d)}
+.impact-inner{position:relative;z-index:3;max-width:380px;animation:impacttitle .35s cubic-bezier(.1,1.6,.3,1) both}
+.impact-kicker{font-size:12px;font-weight:950;letter-spacing:.24em;color:#9df6d8}
+.impact-title{font-size:clamp(52px,15vw,82px);line-height:1.06;font-weight:1000;letter-spacing:-.075em;color:#ffe39c;text-shadow:0 6px 0 #ad4c2e,0 0 35px #ffac48;margin:8px 0}
+.impact-word{display:inline-block;color:#fff0b4;border:1px solid #e6ae75;background:#483125;padding:5px 14px;border-radius:10px;font-size:20px;font-weight:950;animation:shred .75s .12s ease-out both}
+.impact-reason{font-size:13px;color:#fff;line-height:1.6;font-weight:850;margin:12px 0 4px;text-shadow:0 1px 8px #050409}
+.impact-bonus{color:#91ffe0;font-size:18px;font-weight:1000;text-shadow:0 0 20px #21e3b5}
+.impact-foot{font-size:10px;color:#bdd7d4;margin-top:9px}
+@keyframes flashbang{0%{opacity:1}20%{opacity:.65}100%{opacity:0}}
+@keyframes expandblast{0%{transform:scale(.1);opacity:1}100%{transform:scale(6);opacity:0}}
+@keyframes spinray{to{transform:rotate(70deg)}}
+@keyframes blastbit{0%{transform:rotate(var(--deg)) translateY(0) scale(.15);opacity:.4}20%{opacity:1}100%{transform:rotate(var(--deg)) translateY(calc(-1 * var(--dist))) scale(.1);opacity:0}}
+@keyframes hitshake{0%{transform:scale(.96)}10%{transform:translate(9px,-9px)}23%{transform:translate(-9px,7px)}36%{transform:translate(5px,-3px)}60%,100%{transform:none}}
+@keyframes impacttitle{0%{transform:scale(2.2) rotate(-9deg);opacity:0}70%{transform:scale(.93) rotate(2deg);opacity:1}100%{transform:none;opacity:1}}
+@keyframes shred{0%{transform:scale(2.4);filter:blur(8px);opacity:0}35%{opacity:1}100%{transform:scale(1);filter:none;opacity:1}}
+@media(max-height:720px){.caseboard{padding:11px}.fact-line{min-height:30px;font-size:14px}.person-label{margin-top:9px}.speech{font-size:17px;line-height:2}.tapword{font-size:16px;padding:4px 2px;min-height:37px}.speech-tail{font-size:16px}.tap-instruction{margin-top:10px}}
+@media(prefers-reduced-motion:reduce){.impact-overlay,.impact-light,.impact-ring,.impact-rays,.impact-bit,.impact-inner,.impact-word{animation:none!important}.impact-light,.impact-ring,.impact-rays,.impact-bit{display:none}.impact-overlay{background:#1b3046}}
+
+.quality-spot{border:1px solid #79a3a1;border-radius:16px;background:linear-gradient(125deg,#1a4248,#172a42 75%);padding:14px 16px;margin:0 0 18px;box-shadow:0 7px 20px #0003}.quality-spot .spot-btn{background:linear-gradient(110deg,#a9f7d9,#7dc4e4);box-shadow:0 4px 0 #3d6f74}.quality-spot .spot-sub{margin:7px 0 12px}.quality-spot .mode-tag{display:inline-block}</style></head><body><div class="shell"><header><span class="brand">⌕ <b>30秒</b>探偵 <span style="font-size:9px;color:#95bbbd">LIE BREAKER</span></span><div class="tools"><button id="paceBtn" class="ghost" type="button">⚡高速</button><button id="archiveBtn" class="ghost" type="button">📂 0/36</button><button id="soundBtn" class="ghost" type="button">♪ ON</button></div></header><main id="app"></main></div><script>
+(()=>{
+"use strict";
+const levels=[{"id":"easy","label":"やさしい","icon":"🌱","desc":"小学生から楽しめる、身近な矛盾","items":[{"title":"消えた終電","icon":"🚉","fact":"青葉駅の終電は23:14。それ以降の列車はゼロ。","who":"乗客","parts":["私は","青葉駅から","23:26発の","電車で帰った。"],"a":2,"why":"23:14が終電。23:26発の列車は存在しない！","id":"easy-01","kind":"観察"},{"title":"存在しない日","icon":"📅","fact":"2025年の2月は28日まで。社長との会議は2月28日だった。","who":"秘書","parts":["2025年の","2月29日に","社長と","会議した。"],"a":1,"why":"2025年の2月29日は存在しない！","id":"easy-02","kind":"観察"},{"title":"おつりの嘘","icon":"💴","fact":"2,600円の品を買い、5,000円札1枚で支払った。","who":"買い物客","parts":["5,000円を払い","2,600円の品を買い","3,400円の","おつりを受け取った。"],"a":2,"why":"正しいおつりは2,400円。1,000円多い！","id":"easy-03","kind":"観察"},{"title":"閉ざされた門","icon":"🚧","fact":"6月5日の本人の入場記録はある。東門は開放、西門は閉鎖中。","who":"来場者","parts":["6月5日に","西門から","受付へ","行った。"],"a":1,"why":"会場には来た。でも閉鎖中の西門からは入れない！","id":"easy-04","kind":"観察"},{"title":"白黒の監視映像","icon":"📹","fact":"警備員が見た映像は白黒。人の姿は映るが色は分からない。","who":"警備員","parts":["私は","監視映像から","赤い服だと","分かった。"],"a":2,"why":"白黒映像だけでは服が赤色だと判断できない！","id":"easy-05","kind":"観察"},{"title":"通話の端末","icon":"📱","fact":"18:10に兄への通話あり。使ったのはタブレット。スマホは電源OFF。","who":"関係者","parts":["18:10に","スマホで","兄と","話した。"],"a":1,"why":"通話はしたが、スマホではなくタブレットからだった！","id":"easy-06","kind":"観察"},{"title":"司書の休日","icon":"📚","fact":"4月4日は休館日。司書は全員不在、本は屋外ポストで返却済み。","who":"利用者","parts":["4月4日に","司書に直接","本を","返した。"],"a":1,"why":"司書は全員不在。直接手渡しできない！","id":"easy-07","kind":"観察"},{"title":"消えた出口","icon":"🚘","fact":"21:17に本人の車の出庫記録あり。西出口は21:05から閉鎖。","who":"運転手","parts":["21:17に","西出口から","車で","帰った。"],"a":1,"why":"出庫はした。でも閉鎖された西出口は使えない！","id":"easy-08","kind":"観察"},{"title":"2日遅れの写真","icon":"📸","fact":"駅前の写真には『8月15日』と表示。カメラの日付は実際より2日遅れていた。","who":"撮影者","parts":["駅前で","8月15日に","写真を","撮った。"],"a":1,"why":"カメラの日付が2日遅れ。本当の撮影日は8月17日！","kind":"時刻","id":"easy-09"},{"title":"鏡の腕時計","icon":"🪞","fact":"鏡に映った写真では、腕時計が右側に見える。写真は左右反転している。","who":"目撃者","parts":["あの人は","右手に","腕時計を","着けていた。"],"a":1,"why":"鏡は左右が逆。実際は左手に時計を着けていた！","kind":"視点","id":"easy-10"},{"title":"消えた一個","icon":"🍎","fact":"袋にはリンゴ3個とミカン2個。それ以外は何も入っていない。","who":"持ち主","parts":["リンゴは3個、","ミカンは2個、","全部で6個","入っている。"],"a":2,"why":"リンゴ3個＋ミカン2個＝全部で5個！","kind":"計算","id":"easy-11"},{"title":"消えた足し算","icon":"🎟️","fact":"入場券は大人2枚・子ども3枚。券はすべて1人につき1枚使用。","who":"受付係","parts":["大人2人、","子ども3人、","合計6人が","入場した。"],"a":2,"why":"入場者は2＋3＝5人。6人にはならない！","kind":"計算","id":"easy-12"}]},{"id":"standard","label":"ふつう","icon":"🔎","desc":"時間・順序・計算を組み合わせる","items":[{"title":"進んだ時計","icon":"🕰️","fact":"本人が青い傘で映る。映像の表示は20:12だが、時計は7分進んでいる。","who":"本人","parts":["私は","実際の20:12に","青い傘で","映っていた。"],"a":1,"why":"カメラは7分進む。実際に映ったのは20:05！","id":"standard-01","kind":"比較"},{"title":"5分の移動","icon":"🚶","fact":"A室を10:20に退出、B室へ10:25に入室。徒歩なら最短8分かかる。","who":"入室者","parts":["10:20に","A室を出て","歩いて","B室に着いた。"],"a":2,"why":"5分で到着している。徒歩の最短8分では間に合わない！","id":"standard-02","kind":"比較"},{"title":"3人の順位","icon":"🏁","fact":"ゴール順は、CがAより先。AがBより先。3人とも完走した。","who":"選手B","parts":["私は","Aより前で","Cより後に","ゴールした。"],"a":1,"why":"C→A→Bの順。BはAより後ろだ！","id":"standard-03","kind":"比較"},{"title":"3個セット","icon":"🥐","fact":"パン3個を各240円で購入。会計から100円引き、1,000円払った。","who":"購入者","parts":["パンを3個買い","100円引きを使い","おつり480円を","もらった。"],"a":2,"why":"240×3−100＝620円。おつりは380円だ！","id":"standard-04","kind":"比較"},{"title":"3桁の暗証番号","icon":"🔢","fact":"3桁の数。百の位は3、十の位はその2倍、一の位は十の位−2。","who":"管理者","parts":["先頭は3で、","真ん中は6、","最後は5の","番号だ。"],"a":2,"why":"3→6→4。末尾は5ではなく4だ！","id":"standard-05","kind":"比較"},{"title":"逆転した到着順","icon":"🚄","fact":"列車Aは9:10発・20分。列車Bは9:16発・10分。同じ駅に着く。","who":"乗客","parts":["列車Bは","Aより遅く発車し、","Aより遅く到着した","列車だ。"],"a":2,"why":"Aは9:30、Bは9:26に到着。Bのほうが先！","id":"standard-06","kind":"比較"},{"title":"重さの順番","icon":"⚖️","fact":"赤は青より重い。緑は赤より重い。3箱の重さはすべて異なる。","who":"検査員","parts":["緑が一番重く、","青が二番目、","赤は青より重い","という結果だ。"],"a":1,"why":"重い順は緑→赤→青。青は最も軽い！","id":"standard-07","kind":"比較"},{"title":"3つの席","icon":"🪑","fact":"AはBの右。CはBの右かつAの左。3人は横一列に座る。","who":"目撃者","parts":["Bは左端、","Cは中央で、","Aは左端に","座っていた。"],"a":2,"why":"左からB→C→A。Aは右端だ！","id":"standard-08","kind":"比較"},{"title":"2台の時計","icon":"🕰️","fact":"Aカメラは6分進み、10:08を表示。Bカメラは5分遅れ、10:11を表示。","who":"警備員","parts":["Aの映像は","Bの映像より","14分遅く","撮られた。"],"a":2,"why":"Aは実際10:02、Bは10:16。Aのほうが14分早い！","kind":"時刻","id":"standard-09"},{"title":"橋の近道","icon":"🌉","fact":"A→Bは7分、B→Cは6分。A→Cの直通橋は9分。道はこの2経路だけ。","who":"旅行者","parts":["AからCへ","直通橋を使って","最短13分で","着いた。"],"a":2,"why":"直通橋なら9分。経由13分より4分早く着く！","kind":"経路","id":"standard-10"},{"title":"入れ替わった袋","icon":"🎒","fact":"A袋に赤玉2個、B袋に青玉3個。両方の袋の中身を全部入れ替えた。","who":"係員","parts":["交換後、","A袋には","赤玉2個が","残っていた。"],"a":2,"why":"交換後のA袋には青玉3個。赤玉はB袋に移った！","kind":"手順","id":"standard-11"},{"title":"逆転した表彰台","icon":"🏅","fact":"美咲が葵より先、葵が凛より先にゴール。出場者はこの3人だけ。","who":"凛","parts":["美咲は私より前、","葵も私より前、","私は2位だった","レースです。"],"a":2,"why":"順番は美咲→葵→凛。凛は3位！","kind":"順序","id":"standard-12"}]},{"id":"expert","label":"難問","icon":"🔥","desc":"大人も考える条件整理・論理推理","items":[{"title":"誰が鍵を持つ？","icon":"🗝️","fact":"鍵はA・B・Cの1人だけ。A「Bだ」B「Cだ」C「Bではない」。嘘は1人だけ。","who":"鑑識","parts":["鍵を持つのは","Bで、","3人のうち","1人だけだ。"],"a":1,"why":"鍵がCならAだけが嘘。Bでは嘘が2人になる！","id":"expert-01","kind":"論理"},{"title":"本物の条件","icon":"📜","fact":"本物の資料は必ず赤い封印が付き、常に金庫で保管される。問題の資料は封印のない状態で机に置かれていた。","who":"調査員","parts":["その資料は","本物で、","机の上に","置かれていた。"],"a":1,"why":"本物なら必ず赤い封印付き。封印のない資料は本物ではない！","id":"expert-02","kind":"論理"},{"title":"最後の一桁","icon":"🔐","fact":"3桁の暗証番号。百の位5、数字の和15。一の位は十の位より2大きい。","who":"管理者","parts":["先頭は5、","真ん中が4、","最後が7の","番号だ。"],"a":2,"why":"5＋4＋6＝15。末尾は6だ！","id":"expert-03","kind":"論理"},{"title":"2つの袋","icon":"🎒","fact":"袋AとBは同じ重さ。CはBより2kg重い。A＋C＝14kg。","who":"測定者","parts":["Aは6kg、","Bは7kg、","Cは8kg","だった。"],"a":1,"why":"A＝B＝6kg、C＝8kg。Bの7kgが間違い！","id":"expert-04","kind":"論理"},{"title":"乗り換えの壁","icon":"🚇","fact":"A→B最短12分、乗換最低4分、B→C最短10分。他の経路なし。","who":"旅客","parts":["8:40に","A駅を出て","9:02までに","C駅に着いた。"],"a":2,"why":"12＋4＋10＝26分。最速でもC駅到着は9:06！","id":"expert-05","kind":"論理"},{"title":"兄弟の年齢","icon":"👬","fact":"兄Aと弟Bは現在A＝Bの2倍。10年前はAの年齢がBの3倍だった。","who":"親戚","parts":["兄Aは40歳、","弟Bは30歳、","2人とも成人した","兄弟だ。"],"a":1,"why":"Bを20歳とするとA40歳。10年前は30歳と10歳で3倍！","id":"expert-06","kind":"論理"},{"title":"深夜の8分差","icon":"🌙","fact":"23:58と映る本人の入室記録。カメラの時計は実際より8分遅い。","who":"入室者","parts":["私は","23:58に","研究室へ","入った。"],"a":1,"why":"表示23:58＋8分＝実際は翌日の00:06！","id":"expert-07","kind":"論理"},{"title":"封筒の割り当て","icon":"✉️","fact":"A・B・Cに赤・青・緑を1つずつ。Aは赤でない。Bは青でも赤でもない。Cは緑でない。","who":"管理人","parts":["Aは青で、","Bは緑、","Cも青を","持っている。"],"a":2,"why":"Bが緑→Aは青→Cは赤。Cが青はあり得ない！","id":"expert-08","kind":"論理"},{"title":"全部ウソの札","icon":"🎁","fact":"赤だけ・青だけ・混合の3箱。札『赤』『青』『混合』は全部間違い。『混合』札の箱から赤玉を引いた。","who":"検品員","parts":["『混合』札は赤だけ、","『青』札は","青だけの箱、","『赤』札は青だけ。"],"a":2,"why":"『混合』札＝赤だけ。『青』札＝混合、『赤』札＝青だけ！","kind":"逆転","id":"expert-09"},{"title":"正直者は2人","icon":"🕵️","fact":"犯人はA・B・Cの1人。A『犯人はB』、B『犯人はC』、C『犯人はBではない』。本当を言う人は2人だけ。","who":"鑑識","parts":["3人のうち","犯人は","Bだと","分かります。"],"a":2,"why":"Cが犯人ならBとCの証言が本当。Bなら本当はAだけ！","kind":"論理","id":"expert-10"},{"title":"4人の座席","icon":"🪑","fact":"4席が左から一列。BはAのすぐ右、DはBのすぐ右、CはAのすぐ左。","who":"目撃者","parts":["Cは左端、","Aは2番目、","Dは3番目で","Bは3番目だ。"],"a":2,"why":"並びはC→A→B→D。Dは4番目！","kind":"配置","id":"expert-11"},{"title":"3桁の秘密","icon":"🔐","fact":"3桁の暗証番号。百の位は十の位の2倍。一の位は十の位＋4。3桁の和は12。","who":"技師","parts":["百の位4、","十の位2、","一の位7で","3桁とも異なる。"],"a":2,"why":"十の位をxとすると4x＋4＝12。番号は426！","kind":"論理","id":"expert-12"}]}];
+const cases=levels.flatMap(l=>l.items.map(p=>({...p,level:l.id,levelLabel:l.label})));
+const indexById=Object.fromEntries(cases.map(p=>[p.id,p]));
+const levelById=Object.fromEntries(levels.map(l=>[l.id,l]));
+const app=document.getElementById("app"),soundButton=document.getElementById("soundBtn"),archiveButton=document.getElementById("archiveBtn");
+const key="thirtysecond_detective_v8";
+let stored={};try{stored=JSON.parse(localStorage.getItem(key)||"{}")||{}}catch(e){}
+const data={sound:stored.sound!==false,pace:stored.pace==="read"?"read":"fast",sessions:stored.sessions&&typeof stored.sessions==="object"?stored.sessions:{},archive:stored.archive&&typeof stored.archive==="object"?stored.archive:{},bests:stored.bests&&typeof stored.bests==="object"?stored.bests:{},sprintNonce:Number.isInteger(stored.sprintNonce)?stored.sprintNonce:0,mode:stored.mode||null};
+let screen="home",currentId=null,wrongChoices=new Set(),timer=null,audio=null,mixer=null,motion=!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+function store(){try{localStorage.setItem(key,JSON.stringify(data))}catch(e){}}
+function today(){const parts=new Intl.DateTimeFormat("en",{timeZone:"Asia/Tokyo",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date());const obj=Object.fromEntries(parts.map(p=>[p.type,p.value]));return obj.year+"-"+obj.month+"-"+obj.day}
+function digest(str){let x=2166136261;for(let i=0;i<str.length;i++){x=Math.imul(x^str.charCodeAt(i),16777619)>>>0}return x>>>0}
+function makeRng(seed){let v=seed>>>0;return ()=>{v=(Math.imul(v,1664525)+1013904223)>>>0;return v/4294967296}}
+function shuffled(items,seed){const arr=items.slice(),random=makeRng(seed);for(let i=arr.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
+function dailyId(){return "daily:"+today()}
+function config(id){const clean=id==="daily"?dailyId():id;
+ if(clean.startsWith("daily:")){const seed=digest(clean),pick=(l,n)=>shuffled(levelById[l].items.map(p=>p.id),seed+digest(l)).slice(0,n);return {id:clean,title:"今日の5問",icon:"📅",description:"毎日0時に更新",ids:[...pick("easy",2),...pick("standard",2),...pick("expert",1)]}}
+ if(clean==="sprint"){const seed=digest("sprint:"+data.sprintNonce),pick=(l,n)=>shuffled(levelById[l].items.map(p=>p.id),seed+digest(l)).slice(0,n);return {id:clean,title:"5問ラッシュ",icon:"⚡",description:"サクッと1〜2分",ids:[...pick("easy",1),...pick("standard",2),...pick("expert",2)]}}
+ if(clean==="ideas")return{id:clean,title:"ひらめき12問",icon:"✨",description:"新作12問の特選パック",ids:["easy-09","easy-10","easy-11","easy-12","standard-09","standard-10","standard-11","standard-12","expert-09","expert-10","expert-11","expert-12"]};
+ if(clean==="all")return{id:clean,title:"全36問",icon:"🏆",description:"全問制覇に挑戦",ids:cases.map(p=>p.id)};
+ if(levelById[clean])return{id:clean,title:levelById[clean].label,icon:levelById[clean].icon,description:levelById[clean].desc,ids:levelById[clean].items.map(p=>p.id)};
+ return null}
+function session(id){
+ const c=config(id);if(!c)return null;
+ if(!data.sessions[c.id]||!Array.isArray(data.sessions[c.id].ids))data.sessions[c.id]={ids:c.ids.slice(),index:0,solved:0,skipped:0,errors:0,streak:0,bestStreak:0,firstTry:0,points:0,bad:[],history:[]};
+ const s=data.sessions[c.id];s.index=Math.min(Math.max(0,Number(s.index)||0),s.ids.length);if(!Array.isArray(s.bad))s.bad=[];if(!Array.isArray(s.history))s.history=[];
+ return s}
+function label(){soundButton.textContent=data.sound?"♪ ON":"♪ OFF";archiveButton.textContent="📂 "+Object.keys(data.archive).length+"/36"}
+function sound(kind,combo=0){
+ if(!data.sound)return;
+ try{if(!audio){audio=new(window.AudioContext||window.webkitAudioContext)();mixer=audio.createDynamicsCompressor();mixer.threshold.value=-27;mixer.ratio.value=5;mixer.connect(audio.destination)}if(audio.state==="suspended")audio.resume()}catch(e){return}
+ const tone=(start,delay,duration,type,vol,end)=>{const t=audio.currentTime+delay,o=audio.createOscillator(),g=audio.createGain();o.type=type;o.frequency.setValueAtTime(start,t);if(end)o.frequency.exponentialRampToValueAtTime(end,t+duration);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+.008);g.gain.exponentialRampToValueAtTime(.0001,t+duration);o.connect(g);g.connect(mixer);o.start(t);o.stop(t+duration+.03)};
+ if(kind==="win"){
+ tone(108,0,.28,"sawtooth",.17,37);tone(240,0,.15,"square",.07,70);tone(590,.09,.14,"triangle",.10,880);tone(770,.20,.16,"sine",.13,1000);tone(1040,.32,.22,"triangle",.12);if(combo>=3){tone(1320,.44,.18,"sine",.10);tone(1640,.55,.2,"sine",.10)} 
+ const size=Math.round(audio.sampleRate*.2),buff=audio.createBuffer(1,size,audio.sampleRate),samples=buff.getChannelData(0);for(let i=0;i<size;i++)samples[i]=(Math.random()*2-1)*(1-i/size);const n=audio.createBufferSource(),gain=audio.createGain();gain.gain.value=.15;n.buffer=buff;n.connect(gain);gain.connect(mixer);n.start()
+ }else if(kind==="wrong"){tone(220,0,.12,"triangle",.08,150);tone(150,.11,.14,"triangle",.07,100)}else tone(700,0,.065,"sine",.04)
+}
+function vibrate(pattern){try{navigator.vibrate&&navigator.vibrate(pattern)}catch(e){}}
+function stop(){if(timer!==null){clearTimeout(timer);timer=null}const el=document.getElementById("victoryOverlay");if(el)el.remove()}
+function goTop(){try{window.scrollTo(0,0)}catch(e){}}
+function home(){
+ stop();currentId=null;screen="home";label();goTop();
+ const daily=session("daily"),day=new Date(today()+"T00:00:00+09:00"),dayLabel=(day.getMonth()+1)+"/"+day.getDate();
+ const dailyDone=daily.index===daily.ids.length;
+ const card=(id,title,icon,desc)=>{const ss=session(id);const n=ss.ids.length;return '<button class="mode-card" data-act="choose" data-id="'+id+'"><b>'+icon+' '+title+'</b><span>'+desc+'</span><span style="color:#ffe19c;font-weight:850">'+(ss.index===n?"CLEAR ✓":ss.index+"/"+n+"問")+'</span></button>'};
+ const levelList=levels.map(l=>{const ss=session(l.id);return '<button class="level-row" data-act="choose" data-id="'+l.id+'"><span class="level-icon">'+l.icon+'</span><span class="level-content"><b>'+l.label+' · 全'+ss.ids.length+'問</b><small>'+l.desc+'</small></span><span class="level-progress">'+(ss.index===ss.ids.length?"✓":ss.index+"/"+ss.ids.length)+'</span></button>'}).join("");
+ app.innerHTML='<div class="version">LIE BREAKER · 30 SECOND DETECTIVE</div><div class="hero-title">嘘を暴く、<br><em>最高の一撃。</em></div><p class="hero-sub">短い手がかり × ひらめきの1タップ。<br>気づいた言葉をタップして、派手に粉砕。</p><section class="home-spot"><span class="mode-tag">📅 '+dayLabel+' のデイリーチャレンジ</span><div class="spot-title">今日の5問</div><p class="spot-sub">難易度ミックス。5問だけ、ひらめき勝負。</p><button class="spot-btn" data-act="choose" data-id="daily">'+(dailyDone?"もう一度挑戦 ⚡":daily.index>0?"続きをプレイ ⚡":"今日の挑戦を始める ⚡")+'</button></section><div class="home-row">'+card("sprint","5問ラッシュ","⚡","何度でも遊べる短期戦")+card("all","全問チャレンジ","🏆","やさしい→難問、36問")+'</div><section class="quality-spot"><span class="mode-tag">✨ NEW · SPECIAL PUZZLES</span><div class="spot-title" style="font-size:22px">ひらめき12問</div><p class="spot-sub" style="max-width:none">視点・順序・数字・論理。初めてのひらめきを試そう。</p><button class="spot-btn" data-act="choose" data-id="ideas">新作パックで遊ぶ →</button></section><div class="section-title">難易度を選ぶ <small>12問ずつ・いつでも変更OK</small></div><div class="level-list">'+levelList+'</div><p class="slim-footer">サーバー不要・記録はこの端末に保存</p>';
+}
+function choose(id){
+ const c=config(id);if(!c)return;
+ if(id==="sprint"){const prev=session("sprint");if(prev.index>=prev.ids.length){data.sprintNonce++;delete data.sessions.sprint}}
+ const cc=config(id),ss=session(cc.id);
+ if(ss.index>=ss.ids.length){const record=data.sessions[cc.id];record.index=0;record.solved=0;record.skipped=0;record.errors=0;record.streak=0;record.bestStreak=0;record.firstTry=0;record.points=0;record.bad=[];record.history=[]}
+ currentId=cc.id;data.mode=currentId;store();question()
+}
+function question(){
+ stop();const c=config(currentId),s=session(currentId);if(!c||!s){home();return}if(s.index>=s.ids.length){finish();return}
+ screen="question";label();goTop();const p=indexById[s.ids[s.index]],bad=new Set(s.bad);
+ const parts=p.parts.map((w,i)=>i===3?'<span class="speech-tail">'+w+'</span>':'<button class="tapword'+(bad.has(i)?" wrong":"")+'" data-act="answer" data-ans="'+i+'" type="button" '+(bad.has(i)?"disabled":"")+'>'+w+'</button>').join("");
+ const badge=p.level==="expert"?"🔥 難問":p.level==="standard"?"🔎 ふつう":"🌱 やさしい";
+ app.innerHTML='<div class="q-meta"><span class="n">'+badge+' · '+c.title+'</span><span>🔥 '+s.streak+' COMBO</span></div><div class="progress-track"><i style="width:'+(s.index/s.ids.length*100)+'%"></i></div><section class="caseboard"><div class="case-heading"><span class="picture">'+p.icon+'</span><span><small>CASE '+String(s.index+1).padStart(2,"0")+' / '+String(s.ids.length).padStart(2,"0")+'</small><b>'+p.title+'</b></span></div><div class="fact-label">確定した事実</div><div class="fact-line">'+p.fact+'</div><div class="person-label">🗣 '+p.who+'の証言</div><div class="speech">「'+parts+'」</div></section><div class="tap-instruction">☝ 矛盾する言葉をタップ！</div><div class="instruction-feedback" id="feedback" role="status">'+(s.bad.length?"違う！ まだ指摘できる。":"")+'</div><div class="game-footer"><span>🏅 一発正解でボーナス得点</span><button type="button" data-act="skip" class="small-link">スキップ ›</button></div>';
+}
+function answer(n){
+ if(screen!=="question")return;const ss=session(currentId),p=indexById[ss.ids[ss.index]];
+ if(n===p.a){
+  screen="win";const first=ss.bad.length===0;ss.streak++;ss.bestStreak=Math.max(ss.bestStreak,ss.streak);ss.solved++;if(first)ss.firstTry++;const gain=(first?100:45)+Math.min(125,Math.max(0,ss.streak-1)*25);ss.points+=gain;ss.index++;ss.history.push(p.id);data.archive[p.id]=true;ss.bad=[];store();sound("win",ss.streak);vibrate([45,18,65]);impact(p,gain,ss.streak);
+ }else{
+  if(ss.bad.includes(n))return;ss.bad.push(n);ss.errors++;ss.streak=0;store();sound("wrong");vibrate(30);
+  const b=app.querySelector('[data-ans="'+n+'"]');if(b){b.classList.add("wrong");b.disabled=true}
+  const card=app.querySelector(".caseboard");if(card){card.classList.remove("shake");void card.offsetWidth;card.classList.add("shake")}
+  const msg=document.getElementById("feedback");if(msg)msg.textContent="違う！ ほかの言葉に注目。";
+  const combo=app.querySelector(".q-meta span:last-child");if(combo)combo.textContent="🔥 0 COMBO";
+ }
+}
+function impact(p,gain,combo){
+ const layer=document.createElement("div");layer.id="victoryOverlay";layer.className="impact-overlay";layer.setAttribute("role","status");layer.setAttribute("aria-label","正解："+p.why);
+ let bits="";if(motion){for(let i=0;i<24;i++)bits+='<i class="impact-bit" style="--deg:'+(i*15)+'deg;--dist:'+(85+(i%5)*30)+'px;--d:'+(i%4*21)+'ms"></i>'}
+ layer.innerHTML='<div class="impact-rays"></div><div class="impact-ring"></div><div class="impact-light"></div>'+bits+'<div class="impact-inner"><div class="impact-kicker">CONTRADICTION BREAK</div><div class="impact-title">矛盾、<br>粉砕ッ！</div><div class="impact-word">「'+p.parts[p.a]+'」⚡</div><p class="impact-reason">'+p.why+'</p><div class="impact-bonus">+'+gain+' PT'+(combo>=2?"　🔥 "+combo+" COMBO":"")+'</div><div class="impact-foot">タップですぐ次へ ▶</div></div>';
+ layer.addEventListener("click",()=>{if(screen==="win"){stop();question()}});document.body.appendChild(layer);
+ timer=setTimeout(()=>{if(screen==="win"){stop();question()}},data.pace==="read"?3500:1450);
+}
+function skip(){if(screen!=="question")return;const ss=session(currentId);ss.skipped++;ss.index++;ss.streak=0;ss.bad=[];store();question()}
+function finish(){
+ stop();screen="finish";label();goTop();const c=config(currentId),ss=session(currentId);
+ const ratio=ss.ids.length?ss.firstTry/ss.ids.length:0;const grade=ratio===1?"S":ratio>=.8?"A":ratio>=.55?"B":"C";const flawless=grade==="S"&&ss.skipped===0;
+ const prev=data.bests[c.id];if(!prev||ss.points>prev.points){data.bests[c.id]={points:ss.points,grade,firstTry:ss.firstTry,date:today()};store()}
+ app.innerHTML='<div class="result-main"><div class="version">'+c.icon+' '+c.title+' COMPLETE</div><div class="result-seal">'+(flawless?"🏆":"🎖️")+'</div><div class="result-grade">RANK '+grade+'</div><h1 class="result-hero">'+(flawless?"パーフェクト！":"捜査完了！")+'</h1><p class="result-sub">いい推理だった。もう1ラウンドいこう。</p><div class="score-panels"><div class="score-panel"><b>'+ss.points+'</b><small>スコア</small></div><div class="score-panel"><b>'+ss.firstTry+'/'+ss.ids.length+'</b><small>一発正解</small></div><div class="score-panel"><b>'+ss.bestStreak+'</b><small>最大コンボ</small></div></div></div><button class="fill-btn" data-act="replay">同じコースをもう一度 ⚡</button><button class="fill-btn secondary" data-act="home">ほかのコースへ</button><button class="fill-btn secondary" data-act="archive">解いた事件の図鑑を見る</button><p class="slim-footer">最高記録は端末に保存。次はもっと速く、気持ちよく。</p>';
+}
+function replay(){
+ if(!currentId){home();return}let c=config(currentId);if(currentId==="sprint"){data.sprintNonce++;delete data.sessions.sprint;c=config(currentId)}else delete data.sessions[c.id];store();choose(c.id)
+}
+function archive(){
+ stop();screen="archive";label();goTop();const count=Object.keys(data.archive).length;
+ const sect=levels.map(l=>{const content=l.items.map((p,i)=>data.archive[p.id]?'<details class="archive-card"><summary><span class="id">'+String(i+1).padStart(2,"0")+'</span>'+p.icon+' '+p.title+'<span class="arrow">⌄</span></summary><div class="archive-detail"><b>証拠：</b>'+p.fact+'<br><b>指摘：</b>'+p.parts[p.a]+'<br><b>真相：</b>'+p.why+'</div></details>':'<div class="archive-locked">🔒 '+String(i+1).padStart(2,"0")+'　未解決の事件</div>').join("");return '<h3 class="archive-level">'+l.icon+' '+l.label+'</h3>'+content}).join("");
+ app.innerHTML='<div class="archive-head"><div><div class="version">EVIDENCE ARCHIVE</div><h1 style="font-size:26px;margin:10px 0 0">解決した事件</h1></div><b style="font-size:19px;color:#ffe29c">'+count+'/36</b></div><p style="color:#b7cbd0;font-size:12px">解いた謎の理由をいつでも読み返せる。</p>'+sect+'<button class="fill-btn secondary" data-act="home">コース選択へ戻る</button>';
+}
+app.addEventListener("click",e=>{const b=e.target.closest("button[data-act]");if(!b||b.disabled)return;switch(b.dataset.act){case "choose":choose(b.dataset.id);break;case "answer":answer(Number(b.dataset.ans));break;case "skip":skip();break;case "home":home();break;case "archive":archive();break;case "replay":replay();break;}});
+soundButton.addEventListener("click",()=>{data.sound=!data.sound;store();label();if(data.sound)sound("tap")});
+archiveButton.addEventListener("click",archive);
+const paceButton=document.getElementById("paceBtn");paceButton.addEventListener("click",()=>{data.pace=data.pace==="fast"?"read":"fast";paceButton.textContent=data.pace==="fast"?"⚡高速":"📖解説";store();});
+paceButton.textContent=data.pace==="fast"?"⚡高速":"📖解説";
+document.addEventListener("visibilitychange",()=>{if(document.hidden&&screen==="win"){stop();question()}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&screen==="archive")home()});
+home();
+})();
+</script><script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}))}</script></body></html>
