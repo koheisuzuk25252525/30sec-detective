@@ -1,7 +1,7 @@
 {
   "name": "30秒探偵 — LIE BREAKER",
   "short_name": "30秒探偵",
-  "description": "1タップで嘘を暴け。毎日の5問、難易度別推理、爽快な正解演出。",
+  "description": "1タップで嘘を暴け。全36問・新作ひらめき12問。毎日の5問、難易度別推理、爽快な正解演出。",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
