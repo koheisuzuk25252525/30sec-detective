@@ -182,11 +182,12 @@ const names={float:"浮く",hot:"熱い",roll:"転がる",magnet:"引きよせ�
 const app=document.getElementById("app"),soundEl=document.getElementById("sound");
 const storeKey="rule_thief_prototype_v1";
 let saved={};try{saved=JSON.parse(localStorage.getItem(storeKey)||"{}")||{}}catch(e){}
-let stage=Math.max(0,Math.min(5,Number(saved.stage)||0)),unlocked=Math.max(0,Math.min(5,Number(saved.unlocked)||0)),solved=saved.solved&&typeof saved.solved==="object"?saved.solved:{},discovered=saved.discovered&&typeof saved.discovered==="object"?saved.discovered:{},soundOn=saved.sound!==false;
+let stage=Math.max(0,Math.min(5,Number(saved.stage)||0)),unlocked=Math.max(0,Math.min(5,Number(saved.unlocked)||0)),solved=saved.solved&&typeof saved.solved==="object"?saved.solved:{},discovered=saved.discovered&&typeof saved.discovered==="object"?saved.discovered:{},soundOn=saved.sound!==false,tutorialSeen=saved.tutorialSeen===true;
 let toys=[],holding=null,undoStack=[],lastMoves={},moves=0,screen="home",notice="",fxTimer=null,fx=null,help=null,audio=null,stagesWon=new Set(Object.keys(solved)),hintOpen=false;
 let labShowAll=false,labFocusIds=["balloon","rock"];
+let tutorialStep=0,tutorialReturnStage=0,tutorialVictory=false;
 let bodies={},keyBody=null,keyAttached=false,keyPulling=false,frameId=null,motionLast=0,motionElapsed=0,goalTimer=null,goalResolved=false,worldGoal=false;
-function save(){try{localStorage.setItem(storeKey,JSON.stringify({stage,unlocked,solved,discovered,sound:soundOn}))}catch(e){}}
+function save(){try{localStorage.setItem(storeKey,JSON.stringify({stage,unlocked,solved,discovered,sound:soundOn,tutorialSeen}))}catch(e){}}
 function clone(objects){return objects.map(o=>({...o,traits:[...o.traits]}))}
 function source(){return levelDefs[stage]}
 function initStage(n){
@@ -198,6 +199,25 @@ function initStage(n){
  keyBody=stage===3?{x:source().key.x,y:source().key.y,vx:0,vy:0}:null;
  notice="ルールを盗むと、物の動きも変化する！";screen="level";hintOpen=false;save();render()
 }
+
+function beginTutorial(){
+ stopMotion();stopFx();if(help){help.remove();help=null}
+ tutorialReturnStage=stage;tutorialStep=0;tutorialVictory=false;screen="tutorialIntro";
+ app.innerHTML='<section class="lesson-intro"><div class="lesson-kicker">PLAY & LEARN · 体験チュートリアル</div><h1>「もの」ではなく、<br><em>「性質」を盗む。</em></h1><p>この世界では、物の持つ<strong>「浮く」「熱い」などの性質</strong>を、別の物へ移動させられる。</p><div class="lesson-demo"><div>'+glyph("balloon")+'<b>風船</b></div><div class="lesson-arrow"><b>浮く →</b><small>性質を移動</small></div><div>'+glyph("rock")+'<b>岩</b></div></div><div class="lesson-rule"><b>ここが大事！</b><span>コピーではない。風船から「浮く」を盗んだら風船は落ちる。岩に貼れば、岩が浮く。</span></div><button type="button" class="lesson-primary" data-act="lessonstart">自分で試してみる ▶</button><button type="button" class="lesson-skip" data-act="lessonskip">スキップして遊ぶ</button><div class="lesson-foot">説明を読むより実際に動かして覚えよう · 約30秒</div></section>'
+}
+function launchGame(){if(tutorialSeen)initStage(Math.min(stage,unlocked));else beginTutorial()}
+function skipLesson(){tutorialStep=0;tutorialVictory=false;tutorialSeen=true;save();initStage(Math.min(tutorialReturnStage,unlocked))}
+function lessonGuide(){
+ if(stage!==0||!tutorialStep)return "";
+ const steps={
+  1:["風船から「浮く」を盗もう","下の作業台にある「浮く」を押してね。風船が浮けなくなるよ。"],
+  2:["盗んだ力を岩に貼ろう","今度は「岩」をタップ。風船の力を岩に引っ越しさせよう。"],
+  3:["どうなるか、よく見て！","風船は落下して、岩は上昇するよ。スイッチに届くまで見守ろう。"]
+ };
+ const line=steps[tutorialStep];
+ return '<div class="lesson-guide" role="status" aria-live="polite"><div class="lesson-guide-top"><span>はじめてのルール泥棒</span><span>'+tutorialStep+' / 3</span></div><div class="lesson-guide-text"><span class="lesson-guide-number">'+tutorialStep+'</span><span><b>'+line[0]+'</b><small>'+line[1]+'</small></span></div><button type="button" class="lesson-mini-skip" data-act="lessonskip">スキップ ›</button></div>';
+}
+
 function isUp(o){return o.traits.includes("float")||(o.kind==="balloon"&&o.traits.includes("hot"))}
 function isHot(o){return o.traits.includes("hot")}
 function isGlow(o){return o.traits.includes("glow")}
@@ -359,12 +379,13 @@ function take(id,trait){
  if(screen!=="level"||holding||goalResolved)return;
  const o=get(id);if(!o||!has(o,trait))return;
  holding={from:id,trait,before:clone(toys)};
+ if(stage===0&&tutorialStep===1&&id==="balloon"&&trait==="float")tutorialStep=2;
  if(stage===5)labFocusIds=[id,...labFocusIds.filter(x=>x!==id)].slice(0,2);
  o.traits=o.traits.filter(t=>t!==trait);
  resetNotice("「"+names[trait]+"」を盗んだ！貼りたい物をタップ");
  sound("steal");vibrate(20);render();
 }
-function cancelHold(){if(!holding)return;toys=clone(holding.before);holding=null;resetNotice("盗んだルールを元の場所へ戻した");render()}
+function cancelHold(){if(!holding)return;if(stage===0&&tutorialStep===2)tutorialStep=1;toys=clone(holding.before);holding=null;resetNotice("盗んだルールを元の場所へ戻した");render()}
 function paste(id){
  if(screen!=="level"||goalResolved)return;const o=get(id);if(!o)return;
  if(!holding){resetNotice("まず下にある「ルール」をタップして盗もう");render();return}
@@ -372,6 +393,7 @@ function paste(id){
  if(has(o,holding.trait)){resetNotice(o.name+"はもう「"+names[holding.trait]+"」を持っている");sound("wrong");render();return}
  const old=holding,trait=old.trait;undoStack.push(clone(old.before));o.traits.push(trait);holding=null;moves++;
  if(stage===5)labFocusIds=[old.from,id];
+ if(stage===0&&tutorialStep===2&&old.from==="balloon"&&trait==="float"&&id==="rock")tutorialStep=3;
  let message=o.name+"に「"+names[trait]+"」を貼った！";
  if(o.kind==="ice"&&has(o,"hot"))message="ジュワッ！ 氷が溶けた！";
  else if(isUp(o)&&has(o,"glow"))message="空に浮かぶ光が生まれた！";
@@ -399,9 +421,9 @@ function checkDiscovery(){
  if(newBadges.length){for(const id of newBadges)discovered[id]=true;notice="✦ 新発見！ "+(badgeNames[newBadges[0]]||"未知の反応")+"！";sound("win");save()}
 }
 const badgeNames={hotice:"とける世界",lantern:"空飛ぶ灯り",skyMagnet:"浮遊磁石",hotBalloon:"熱気球",comet:"炎の転がり玉"};
-function undo(){if(holding){cancelHold();return}if(!undoStack.length)return;keyAttached=false;keyPulling=false;if(goalTimer!==null){clearTimeout(goalTimer);goalTimer=null}goalResolved=false;worldGoal=false;toys=undoStack.pop();moves=Math.max(0,moves-1);resetNotice("ひとつ前の世界に戻した。物が元の位置へ戻る");motionElapsed=0;render()}
-function complete(){if(screen!=="level"||!worldGoal)return;stopMotion();screen="win";solved[source().id]=Math.min(solved[source().id]??999,moves);unlocked=Math.max(unlocked,Math.min(stage+1,5));save();sound("win");vibrate([45,25,85,35,110]);showFx()}
-function next(){stopFx();if(stage===4){initStage(5)}else initStage(Math.min(stage+1,5))}
+function undo(){if(holding){cancelHold();return}if(!undoStack.length)return;if(stage===0&&tutorialStep===3)tutorialStep=1;keyAttached=false;keyPulling=false;if(goalTimer!==null){clearTimeout(goalTimer);goalTimer=null}goalResolved=false;worldGoal=false;toys=undoStack.pop();moves=Math.max(0,moves-1);resetNotice("ひとつ前の世界に戻した。物が元の位置へ戻る");motionElapsed=0;render()}
+function complete(){if(screen!=="level"||!worldGoal)return;if(stage===0&&tutorialStep===3){tutorialVictory=true;tutorialSeen=true;tutorialStep=0}stopMotion();screen="win";solved[source().id]=Math.min(solved[source().id]??999,moves);unlocked=Math.max(unlocked,Math.min(stage+1,5));save();sound("win");vibrate([45,25,85,35,110]);showFx()}
+function next(){stopFx();if(tutorialVictory){tutorialVictory=false;initStage(tutorialReturnStage>1?Math.min(tutorialReturnStage,unlocked):1);return}if(stage===4){initStage(5)}else initStage(Math.min(stage+1,5))}
 function stopFx(){if(fxTimer!==null){clearTimeout(fxTimer);fxTimer=null}if(fx){fx.remove();fx=null}}
 function showFx(){
  stopFx();const overlay=document.createElement("div");overlay.className="success-overlay";overlay.id="successOverlay";let bits="";for(let i=0;i<18;i++)bits+='<i class="spark" style="--rot:'+(i*20)+'deg;--delay:'+(i%5*17)+'ms"></i>';
@@ -413,7 +435,7 @@ function showFx(){
 function initial(){
  stopMotion();stopFx();screen="home";soundEl.textContent=soundOn?"♪ ON":"♪ OFF";
  const count=Object.keys(solved).length;
- app.innerHTML='<div class="home-kicker">RULE THIEF / INTERACTIVE LAB</div><h1 class="home-headline">ルールを盗め。<br><em>世界が動く。</em></h1><p class="home-lead">風船から「浮く」を取り出して、岩に貼る。<br>能力を交換すると、物体は本当に動き出す。</p><div class="home-demo"><div class="home-demo-step"><div class="home-demo-art">'+glyph("balloon")+'</div><span>風船</span></div><div class="home-demo-middle"><span>↗</span><b>浮く</b><small>盗む → 貼る</small></div><div class="home-demo-step"><div class="home-demo-art">'+glyph("rock")+'</div><span>岩</span></div></div><div class="home-featured"><b>次に何が起きる？</b><span>物理の動きで結果がわかる、発想パズル。</span></div><button class="primary home-play" type="button" data-act="start">'+(count?"続きから遊ぶ":"ステージを始める")+'　▶</button><button class="home-secondary" type="button" data-act="lab">自由実験室から試す　↗</button><div class="home-points"><span>✓ 全5ステージ</span><span>✓ 物理アニメーション</span><span>✓ 何度でもやり直せる</span></div><p class="smallhelp">ルールを盗まれた物も、その能力を失います。<br>法則の変化を目で確かめてください。</p>'
+ app.innerHTML='<div class="home-kicker">RULE THIEF / INTERACTIVE LAB</div><h1 class="home-headline">ルールを盗め。<br><em>世界が動く。</em></h1><p class="home-lead">風船から「浮く」を取り出して、岩に貼る。<br>能力を交換すると、物体は本当に動き出す。</p><div class="home-demo"><div class="home-demo-step"><div class="home-demo-art">'+glyph("balloon")+'</div><span>風船</span></div><div class="home-demo-middle"><span>↗</span><b>浮く</b><small>盗む → 貼る</small></div><div class="home-demo-step"><div class="home-demo-art">'+glyph("rock")+'</div><span>岩</span></div></div><div class="home-featured"><b>次に何が起きる？</b><span>物理の動きで結果がわかる、発想パズル。</span></div><button class="primary home-play" type="button" data-act="start">'+(!tutorialSeen?"チュートリアルから始める":count?"続きから遊ぶ":"ステージを始める")+'　▶</button><button class="home-secondary" type="button" data-act="lab">自由実験室から試す　↗</button><button class="home-textlink" type="button" data-act="lessonreplay">↻ チュートリアルを体験する</button><div class="home-points"><span>✓ 全5ステージ</span><span>✓ 物理アニメーション</span><span>✓ 何度でもやり直せる</span></div><p class="smallhelp">ルールを盗まれた物も、その能力を失います。<br>法則の変化を目で確かめてください。</p>'
 }
 function glyph(kind){
  const shapes={
