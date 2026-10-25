@@ -134,6 +134,13 @@ body{background:radial-gradient(ellipse at top,#1e4256 0%,#112a3b 40%,#081522 10
 .directory-copy{flex:1;display:grid;gap:5px}.directory-copy b{font-size:14px;font-weight:950}.directory-copy small{font-size:11px;color:#adc6cd}
 .directory-arrow{font-size:25px;color:#c5e2dd}.directory-row:disabled{opacity:.48}
 @media(max-width:390px){.home-demo{padding:12px 7px;gap:4px}.home-demo-art{width:78px;height:78px;padding:8px}.home-demo-middle>small{font-size:9px}}
+
+/* Sandbox camera: focus the active pair; optionally expand to the complete workshop */
+.world.focus-world{height:310px}
+.lab-view-toggle{background:#244e55;color:#baf2d5;border:1px solid #639c91;padding:7px 9px;border-radius:8px;font-size:10px;font-weight:900;white-space:nowrap}
+.focus-world .toy{filter:drop-shadow(0 5px 12px #0b182c70)}
+@media(max-width:400px){.world.focus-world{height:270px}}
+@media(min-width:560px){.world.focus-world{height:360px}}
 </style></head>
 <body><div class="shell"><header class="topbar"><div class="brand">✦ <span>ルール</span>泥棒</div><div class="mini-controls"><button class="minor" id="help" type="button">？ 遊び方</button><button class="minor" id="sound" type="button">♪ ON</button></div></header><main id="app"></main><footer class="footer">RULE THIEF · VISUAL WORKBENCH v4</footer></div>
 <script>
@@ -153,6 +160,7 @@ const storeKey="rule_thief_prototype_v1";
 let saved={};try{saved=JSON.parse(localStorage.getItem(storeKey)||"{}")||{}}catch(e){}
 let stage=Math.max(0,Math.min(5,Number(saved.stage)||0)),unlocked=Math.max(0,Math.min(5,Number(saved.unlocked)||0)),solved=saved.solved&&typeof saved.solved==="object"?saved.solved:{},discovered=saved.discovered&&typeof saved.discovered==="object"?saved.discovered:{},soundOn=saved.sound!==false;
 let toys=[],holding=null,undoStack=[],lastMoves={},moves=0,screen="home",notice="",fxTimer=null,fx=null,help=null,audio=null,stagesWon=new Set(Object.keys(solved)),hintOpen=false;
+let labShowAll=false,labFocusIds=["balloon","rock"];
 let bodies={},keyBody=null,keyAttached=false,keyPulling=false,frameId=null,motionLast=0,motionElapsed=0,goalTimer=null,goalResolved=false,worldGoal=false;
 function save(){try{localStorage.setItem(storeKey,JSON.stringify({stage,unlocked,solved,discovered,sound:soundOn}))}catch(e){}}
 function clone(objects){return objects.map(o=>({...o,traits:[...o.traits]}))}
@@ -160,7 +168,7 @@ function source(){return levelDefs[stage]}
 function initStage(n){
  stopMotion();stopFx();
  stage=Math.max(0,Math.min(levelDefs.length-1,n));
- toys=clone(source().items);holding=null;undoStack=[];lastMoves={};moves=0;
+ toys=clone(source().items);holding=null;undoStack=[];lastMoves={};moves=0;labShowAll=false;labFocusIds=["balloon","rock"];
  goalResolved=false;worldGoal=false;keyAttached=false;keyPulling=false;motionElapsed=0;
  bodies=Object.fromEntries(toys.map(o=>[o.id,{x:o.x,y:o.traits.includes("float")?Math.max(17,o.y-12):o.y,vx:0,vy:0,angle:0,melt:0}]));
  keyBody=stage===3?{x:source().key.x,y:source().key.y,vx:0,vy:0}:null;
@@ -327,6 +335,7 @@ function take(id,trait){
  if(screen!=="level"||holding||goalResolved)return;
  const o=get(id);if(!o||!has(o,trait))return;
  holding={from:id,trait,before:clone(toys)};
+ if(stage===5)labFocusIds=[id,...labFocusIds.filter(x=>x!==id)].slice(0,2);
  o.traits=o.traits.filter(t=>t!==trait);
  resetNotice("「"+names[trait]+"」を盗んだ！貼りたい物をタップ");
  sound("steal");vibrate(20);render();
@@ -338,6 +347,7 @@ function paste(id){
  if(id===holding.from){cancelHold();return}
  if(has(o,holding.trait)){resetNotice(o.name+"はもう「"+names[holding.trait]+"」を持っている");sound("wrong");render();return}
  const old=holding,trait=old.trait;undoStack.push(clone(old.before));o.traits.push(trait);holding=null;moves++;
+ if(stage===5)labFocusIds=[old.from,id];
  let message=o.name+"に「"+names[trait]+"」を貼った！";
  if(o.kind==="ice"&&has(o,"hot"))message="ジュワッ！ 氷が溶けた！";
  else if(isUp(o)&&has(o,"glow"))message="空に浮かぶ光が生まれた！";
@@ -430,7 +440,8 @@ function render(){
  soundEl.textContent=soundOn?"♪ ON":"♪ OFF";
  const def=source(),done=!!solved[def.id],progress=Math.min(stage,5)/5*100;
  const device=def.device?'<div class="device '+(status()?"success reached":"")+'" style="left:'+def.device.x+'%;top:'+def.device.y+'%"><span class="emoji">'+deviceArt(stage,status())+'</span><span class="caption">'+def.device.label+'</span></div>':'';
- const toyHTML=toys.map(o=>{
+ const stageToys=stage===5&&!labShowAll?toys.filter(o=>labFocusIds.includes(o.id)):toys;
+ const toyHTML=stageToys.map(o=>{
   const v=stateInfo(o);
   return '<button class="toy '+v.cls+(holding&&holding.from===o.id?" origin":"")+'" type="button" data-act="object" data-id="'+o.id+'" aria-label="'+o.name+'を操作" style="left:'+v.x+'%;top:'+v.y+'%;transform:translate(-50%,-50%) rotate('+v.angle+'deg) scale('+(1-v.melt*.82)+');opacity:'+(1-v.melt*.57)+'"><span class="sprite">'+glyph(o.kind)+'</span><span class="name">'+o.name+'</span></button>'
  }).join("");
@@ -446,7 +457,7 @@ function render(){
  const melt=stage===1&&has(get("ice"),"hot")?'<div class="steam" style="left:68%;top:62%">〰 〰 〰</div><div class="puddle" style="left:68%;top:76%"></div>':'';
  const tether=stage===3?'<div class="magnet-field" style="display:none"></div><div class="magnet-tether" style="display:none"></div><div class="key-token" style="left:'+(keyBody?keyBody.x:def.key.x)+'%;top:'+(keyBody?keyBody.y:def.key.y)+'%"><span class="key-symbol">'+keyArt()+'</span><span class="key-status">金属の鍵</span></div>':'';
  const hint=hintOpen?'<div class="hint-note">'+def.hint+'</div>':'';
- app.innerHTML='<div class="mission-top"><span class="mission-number">'+(stage===5?'FREE LAB':'STAGE '+String(stage+1).padStart(2,"0")+' / 05')+'</span><span class="mission-progress">'+moves+' MOVES'+(done?' · BEST '+solved[def.id]:'')+'</span></div><div class="mission-meter"><span style="width:'+progress+'%"></span></div><div class="mission-heading"><h1>'+def.title+'</h1><p>'+def.scene+'</p></div><div class="goal-strip"><span class="goal-icon">◎</span><span><b>ミッション</b><br>'+def.goal+'</span></div><section class="stage-panel"><div class="stage-topline"><span class="stage-label">FIELD / 実験フィールド</span><span class="stage-guide">'+(holding?'貼る相手をタップ':'物をタップして能力を盗む')+'</span></div><div class="world '+(stage===5?'lab-world':'')+'" role="group" aria-label="'+def.title+' のシミュレーション">'+(def.water?'<div class="pond"></div>':'')+'<div class="ground"></div>'+(stage===2?'<div class="ramp"></div>':'')+(stage===4?'<div class="beam" style="opacity:'+(worldGoal?1:0)+'"></div>':'')+tether+melt+device+toyHTML+'</div><div class="notice-strip" role="status" aria-live="polite"><span class="notice-dot"></span><span class="notice-copy">'+notice+'</span></div></section><section class="workbench"><div class="workbench-top"><div><div class="workbench-brow">RULE WORKBENCH</div><h2>'+(holding?'② 貼る物を選ぶ':'① 盗むルールを選ぶ')+'</h2></div><span class="work-step">'+(holding?'STEP 2 / 2':'STEP 1 / 2')+'</span></div>'+(holding?'<div class="held-banner"><span class="held-trait">'+traitChip(holding.trait)+'</span><span>を移動中</span><button data-act="cancel" class="held-cancel" type="button">取り消す ×</button></div>':'<p class="work-hint">物の能力をタップすると、貼り付け先を選べます。</p>')+'<div class="work-grid '+(holding?'target-mode':'')+'">'+workHTML+'</div></section><div class="toolbar"><button type="button" data-act="undo" '+(!holding&&!undoStack.length?'disabled':'')+'>↶ 1手戻す</button><button type="button" data-act="reset">↻ リセット</button><button type="button" data-act="levels">▦ ステージ</button></div>'+(hintOpen?hint:'<button type="button" class="hint-launch" data-act="hint">?　ヒントを表示する</button>')+badges;
+ app.innerHTML='<div class="mission-top"><span class="mission-number">'+(stage===5?'FREE LAB':'STAGE '+String(stage+1).padStart(2,"0")+' / 05')+'</span><span class="mission-progress">'+moves+' MOVES'+(done?' · BEST '+solved[def.id]:'')+'</span></div><div class="mission-meter"><span style="width:'+progress+'%"></span></div><div class="mission-heading"><h1>'+def.title+'</h1><p>'+def.scene+'</p></div><div class="goal-strip"><span class="goal-icon">◎</span><span><b>ミッション</b><br>'+def.goal+'</span></div><section class="stage-panel"><div class="stage-topline"><span class="stage-label">FIELD / 実験フィールド</span>'+(stage===5?'<button class="lab-view-toggle" type="button" data-act="labview">'+(labShowAll?'2つに絞る':'すべて表示')+'</button>':'<span class="stage-guide">'+(holding?'貼る相手をタップ':'物をタップして能力を盗む')+'</span>')+'</div><div class="world '+(stage===5?(labShowAll?'lab-world':'focus-world'):'')+'" role="group" aria-label="'+def.title+' のシミュレーション">'+(def.water?'<div class="pond"></div>':'')+'<div class="ground"></div>'+(stage===2?'<div class="ramp"></div>':'')+(stage===4?'<div class="beam" style="opacity:'+(worldGoal?1:0)+'"></div>':'')+tether+melt+device+toyHTML+'</div><div class="notice-strip" role="status" aria-live="polite"><span class="notice-dot"></span><span class="notice-copy">'+notice+'</span></div></section><section class="workbench"><div class="workbench-top"><div><div class="workbench-brow">RULE WORKBENCH</div><h2>'+(holding?'② 貼る物を選ぶ':'① 盗むルールを選ぶ')+'</h2></div><span class="work-step">'+(holding?'STEP 2 / 2':'STEP 1 / 2')+'</span></div>'+(holding?'<div class="held-banner"><span class="held-trait">'+traitChip(holding.trait)+'</span><span>を移動中</span><button data-act="cancel" class="held-cancel" type="button">取り消す ×</button></div>':'<p class="work-hint">物の能力をタップすると、貼り付け先を選べます。</p>')+'<div class="work-grid '+(holding?'target-mode':'')+'">'+workHTML+'</div></section><div class="toolbar"><button type="button" data-act="undo" '+(!holding&&!undoStack.length?'disabled':'')+'>↶ 1手戻す</button><button type="button" data-act="reset">↻ リセット</button><button type="button" data-act="levels">▦ ステージ</button></div>'+(hintOpen?hint:'<button type="button" class="hint-launch" data-act="hint">?　ヒントを表示する</button>')+badges;
  animateWorld();
 }
 function levelMenu(){
@@ -472,6 +483,7 @@ app.addEventListener("click",e=>{
  switch(b.dataset.act){
  case "start":initStage(Math.min(stage,unlocked));break;
  case "lab":initStage(5);break;
+ case "labview":labShowAll=!labShowAll;render();break;
  case "take":take(b.dataset.id,b.dataset.trait);break;
  case "object":tapObject(b.dataset.id);break;
  case "cancel":cancelHold();break;
