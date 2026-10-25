@@ -196,7 +196,7 @@ body{background:radial-gradient(ellipse at top,#1e4256 0%,#112a3b 40%,#081522 10
 @keyframes teach-pulse{from{box-shadow:0 0 0 3px #ffdc7520,0 0 10px #ffcd7c55}to{box-shadow:0 0 0 9px #ffdc7514,0 0 23px #ffcd7caa}}
 @media(max-width:430px){.lesson-guide{padding:10px;margin-bottom:8px}.lesson-guide-text b{font-size:13px}.lesson-guide-text small{font-size:11px}}
 @media(prefers-reduced-motion:reduce){.teach-glow,.teach-target{animation:none!important}}
-</style></head>
+.lesson-guide-actions{display:flex;align-items:center;justify-content:space-between;gap:7px;margin-top:10px}.lesson-guide-actions .lesson-mini-skip{margin:0}.lesson-jump{border:1px solid #ecd19a;border-radius:9px;background:#675a3e;color:#fff4d6;font-size:11px;font-weight:900;min-height:36px;padding:6px 11px}</style></head>
 <body><div class="shell"><header class="topbar"><div class="brand">✦ <span>ルール</span>泥棒</div><div class="mini-controls"><button class="minor" id="help" type="button">？ 遊び方</button><button class="minor" id="sound" type="button">♪ ON</button></div></header><main id="app"></main><footer class="footer">RULE THIEF · TUTORIAL v5</footer></div>
 <script>
 (()=>{
@@ -237,7 +237,7 @@ function beginTutorial(){
  app.innerHTML='<section class="lesson-intro"><div class="lesson-kicker">PLAY & LEARN · 体験チュートリアル</div><h1>「もの」ではなく、<br><em>「性質」を盗む。</em></h1><p>この世界では、物の持つ<strong>「浮く」「熱い」などの性質</strong>を、別の物へ移動させられる。</p><div class="lesson-demo"><div>'+glyph("balloon")+'<b>風船</b></div><div class="lesson-arrow"><b>浮く →</b><small>性質を移動</small></div><div>'+glyph("rock")+'<b>岩</b></div></div><div class="lesson-rule"><b>ここが大事！</b><span>コピーではない。風船から「浮く」を盗んだら風船は落ちる。岩に貼れば、岩が浮く。</span></div><button type="button" class="lesson-primary" data-act="lessonstart">自分で試してみる ▶</button><button type="button" class="lesson-skip" data-act="lessonskip">スキップして遊ぶ</button><div class="lesson-foot">説明を読むより実際に動かして覚えよう · 約30秒</div></section>'
 }
 function launchGame(){if(tutorialSeen)initStage(Math.min(stage,unlocked));else beginTutorial()}
-function skipLesson(){tutorialStep=0;tutorialVictory=false;tutorialSeen=true;save();initStage(Math.min(tutorialReturnStage,unlocked))}
+function skipLesson(){const destination=screen==="home"?stage:tutorialReturnStage;tutorialStep=0;tutorialVictory=false;tutorialSeen=true;save();initStage(Math.min(destination,unlocked))}
 function lessonGuide(){
  if(stage!==0||!tutorialStep)return "";
  const steps={
@@ -246,7 +246,7 @@ function lessonGuide(){
   3:["どうなるか、よく見て！","風船は落下して、岩は上昇するよ。スイッチに届くまで見守ろう。"]
  };
  const line=steps[tutorialStep];
- return '<div class="lesson-guide" role="status" aria-live="polite"><div class="lesson-guide-top"><span>はじめてのルール泥棒</span><span>'+tutorialStep+' / 3</span></div><div class="lesson-guide-text"><span class="lesson-guide-number">'+tutorialStep+'</span><span><b>'+line[0]+'</b><small>'+line[1]+'</small></span></div><button type="button" class="lesson-mini-skip" data-act="lessonskip">スキップ ›</button></div>';
+ return '<div class="lesson-guide" role="status" aria-live="polite"><div class="lesson-guide-top"><span>はじめてのルール泥棒</span><span>'+tutorialStep+' / 3</span></div><div class="lesson-guide-text"><span class="lesson-guide-number">'+tutorialStep+'</span><span><b>'+line[0]+'</b><small>'+line[1]+'</small></span></div><div class="lesson-guide-actions"><button type="button" class="lesson-jump" data-act="lessonjump">'+(tutorialStep===3?"↑ 動きを見る":"↓ 操作する場所を見る")+'</button><button type="button" class="lesson-mini-skip" data-act="lessonskip">スキップ ›</button></div></div>';
 }
 
 function isUp(o){return o.traits.includes("float")||(o.kind==="balloon"&&o.traits.includes("hot"))}
@@ -434,6 +434,7 @@ function paste(id){
  resetNotice(message);sound("paste");vibrate([20,20,25]);checkDiscovery();
  motionElapsed=0;
  render();
+ if(tutorialStep===3)setTimeout(()=>{if(screen!=="level"||tutorialStep!==3)return;const field=app.querySelector(".stage-panel");if(field&&field.scrollIntoView)field.scrollIntoView({behavior:"smooth",block:"center"})},100);
 }
 function labAchievements(){
  const all=toys;
@@ -564,6 +565,7 @@ app.addEventListener("click",e=>{
  case "start":launchGame();break;
  case "lessonreplay":beginTutorial();break;
  case "lessonstart":tutorialStep=1;initStage(0);break;
+ case "lessonjump":{const target=app.querySelector(tutorialStep===3?".stage-panel":".workbench");if(target&&target.scrollIntoView)target.scrollIntoView({behavior:"smooth",block:"center"});break}
  case "lessonskip":skipLesson();break;
  case "lab":initStage(5);break;
  case "labview":labShowAll=!labShowAll;render();break;
