@@ -32,7 +32,7 @@
 .world .key-token{position:absolute;z-index:6;display:flex;flex-direction:column;align-items:center;transform:translate(-50%,-50%);pointer-events:none;filter:drop-shadow(0 3px 3px #03080a);will-change:left,top}
 .world .key-symbol{font-size:32px;line-height:1;transform:rotate(-24deg)}.world .key-token.attached .key-symbol{transform:rotate(35deg);filter:drop-shadow(0 0 10px #ffe997)}
 .world .key-status{font-size:9px;font-weight:850;color:#fff0bc;white-space:nowrap;background:#142c40dc;border-radius:7px;padding:1px 4px}
-.world .magnet-field{position:absolute;z-index:1;border:2px dashed #f8df9e83;width:60%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%) scaleX(.82);pointer-events:none;background:radial-gradient(ellipse,#f2db7724,transparent 67%);box-shadow:0 0 14px #ecdc7b23;animation:fieldBreathe 1.4s ease-in-out infinite alternate}
+.world .magnet-field{position:absolute;z-index:1;border:2px dashed #f8df9e83;width:70%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%) scale(.92,.9);pointer-events:none;background:radial-gradient(ellipse,#f2db7724,transparent 67%);box-shadow:0 0 14px #ecdc7b23;animation:fieldBreathe 1.4s ease-in-out infinite alternate}
 .world .device{z-index:7}.world .pond{height:30%;bottom:0;background:linear-gradient(#297fa68c,#173e5abd);border-top:2px solid #9de5ed94;pointer-events:none}
 @keyframes fieldBreathe{to{opacity:.43;transform:translate(-50%,-50%) scale(.9,.83)}}@media(prefers-reduced-motion:reduce){.world .magnet-field{animation:none}}
 </style></head>
@@ -125,23 +125,51 @@ function stepMotion(timestamp){
    if(o.kind==="ice"){const sprite=elem.querySelector(".sprite");if(sprite)sprite.textContent=b.melt>.92?"💧":o.icon}
   }
  }
- if(keyBody&&stage===3){
-  const rock=get("rock"),rb=bodies.rock;
-  if(rock&&rb&&has(rock,"magnet")){
-   spring(keyBody,rb.x+7,rb.y+6,dt,16,6);
-  }else spring(keyBody,source().device.x,source().device.y,dt,20,8);
-  const keyElem=app.querySelector(".world .device");
-  if(keyElem){keyElem.style.left=keyBody.x+"%";keyElem.style.top=keyBody.y+"%"}
+ if(stage===3&&keyBody){
+  const rock=get("rock"),rb=bodies.rock,magnetic=!!(rock&&has(rock,"magnet"));
+  const distance=rb?Math.hypot((keyBody.x-rb.x)*1.3,keyBody.y-rb.y):999;
+  const withinRange=magnetic&&distance<43;
+  if(keyAttached&&!magnetic){
+   keyAttached=false;keyPulling=false;notice="磁力が消えた。鍵がゆっくり沈む…";updateWorldMessage(notice)
+  }
+  if(keyAttached&&rb){
+   // The key is carried by the rock, not teleported to the lock.
+   spring(keyBody,rb.x+3.5,rb.y+1,dt,33,9);
+   keyPulling=false;
+  }else if(withinRange&&rb){
+   // Water drag slows the key; attraction only occurs inside the field.
+   spring(keyBody,rb.x+3.5,rb.y+1,dt,13,4.4);
+   if(!keyPulling){
+    keyPulling=true;notice="ジジジ…磁力が届いた！ 鍵が少しずつ動いている";
+    updateWorldMessage(notice);sound("pull")
+   }
+   if(Math.hypot((keyBody.x-rb.x)*1.3,keyBody.y-rb.y)<7.5){
+    keyAttached=true;keyPulling=false;
+    notice="カチッ！ 鍵が岩に付いた。次は鍵穴へ運ぼう！";
+    updateWorldMessage(notice);sound("attach");vibrate([15,25,30])
+   }
+  }else{
+   // Without a magnetic force the metal key sinks to its resting position.
+   spring(keyBody,source().key.x,source().key.y,dt,11,4.8);
+   if(keyPulling){keyPulling=false;notice="距離が遠すぎて、磁力が届かない";updateWorldMessage(notice)}
+  }
+  const keyEl=app.querySelector(".key-token");
+  if(keyEl){
+   keyEl.style.left=keyBody.x+"%";keyEl.style.top=keyBody.y+"%";
+   keyEl.classList.toggle("attached",keyAttached);
+   const label=keyEl.querySelector(".key-status");
+   if(label)label.textContent=keyAttached?"回収中":withinRange?"吸い寄せ中":"金属の鍵";
+  }
+  const field=app.querySelector(".magnet-field");
+  if(field&&rb){field.style.display=magnetic?"block":"none";field.style.left=rb.x+"%";field.style.top=rb.y+"%"}
   const tether=app.querySelector(".magnet-tether");
   if(tether){
-   const active=rock&&has(rock,"magnet")&&rb&&rb.y<64;
-   tether.style.display=active?"block":"none";
+   const active=withinRange&&rb&&!keyAttached;tether.style.display=active?"block":"none";
    if(active){
     const world=app.querySelector(".world"),w=world?world.clientWidth:350,h=world?world.clientHeight:265;
     const dx=(keyBody.x-rb.x)*w/100,dy=(keyBody.y-rb.y)*h/100;
-    tether.style.left=rb.x*w/100+"px";tether.style.top=rb.y*h/100+"px";
-    tether.style.width=Math.hypot(dx,dy)+"px";
-    tether.style.transform="rotate("+Math.atan2(dy,dx)+"rad)";
+    tether.style.left=rb.x*w/100+"px";tether.style.top=rb.y*h/100+"px";tether.style.width=Math.hypot(dx,dy)+"px";
+    tether.style.transform="rotate("+Math.atan2(dy,dx)+"rad)"
    }
   }
  }
@@ -154,6 +182,7 @@ function stepMotion(timestamp){
  }
  if(screen==="level")frameId=requestAnimationFrame(stepMotion)
 }
+function updateWorldMessage(message){const label=app.querySelector(".world-message");if(label)label.textContent=message}
 function goalContact(){
  if(stage===0){
   const b=bodies.rock;return has(get("rock"),"float")&&b&&b.y<29&&Math.abs(b.x-62)<12
@@ -161,8 +190,8 @@ function goalContact(){
  if(stage===1){const b=bodies.ice;return has(get("ice"),"hot")&&b&&b.melt>.98}
  if(stage===2){const b=bodies.crate;return isRoll(get("crate"))&&b&&b.x>79}
  if(stage===3){
-  const b=bodies.rock;
-  return b&&keyBody&&isUp(get("rock"))&&has(get("rock"),"magnet")&&b.y<49&&Math.hypot(keyBody.x-b.x,keyBody.y-b.y)<17
+  const b=bodies.rock,lock=source().device;
+  return !!(b&&keyBody&&keyAttached&&isUp(get("rock"))&&has(get("rock"),"magnet")&&b.y<31&&Math.hypot((keyBody.x-lock.x)*1.3,keyBody.y-lock.y)<10)
  }
  if(stage===4)return toys.some(o=>{const b=bodies[o.id];return b&&isUp(o)&&isGlow(o)&&b.y<30&&Math.abs(b.x-50)<9});
  return false
