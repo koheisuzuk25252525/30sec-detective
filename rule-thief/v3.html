@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#111d35"><title>ルール泥棒 | 盗んで、貼って、世界を変えろ。</title>
+<style>
+:root{color-scheme:dark;--ink:#f5f8fb;--quiet:#b7cde0;--mint:#83f2cd;--gold:#ffd785;--blue:#141f38;--panel:#20354b;--border:#55758d}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100svh;background:radial-gradient(ellipse at 50% -9%,#365e71 0,#14243d 55%,#0a172a 100%);color:var(--ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;-webkit-font-smoothing:antialiased}button{font:inherit;touch-action:manipulation;cursor:pointer;-webkit-tap-highlight-color:transparent}button:focus-visible{outline:3px solid #fff59c;outline-offset:3px}button:disabled{opacity:.4;cursor:default} .shell{max-width:520px;margin:0 auto;padding:12px 14px max(30px,env(safe-area-inset-bottom));min-height:100svh}.topbar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:3px 0 11px;border-bottom:1px solid #4568819c}.brand{font-weight:1000;font-size:17px;letter-spacing:-.06em}.brand span{color:var(--mint)}.mini-controls{display:flex;align-items:center;gap:6px}.minor{color:#e3f1ed;background:#253d54;border:1px solid #56778a;border-radius:20px;padding:7px 10px;font-size:11px;font-weight:850;min-height:36px}.eyebrow{color:#8ff6d1;font-size:11px;font-weight:900;letter-spacing:.14em}.title{font-size:clamp(38px,10.3vw,54px);line-height:1.15;font-weight:1000;letter-spacing:-.075em;margin:16px 0 8px}.title em{font-style:normal;color:#ffd88d}.intro-lead{color:#d3e3e9;font-size:15px;line-height:1.75;margin:8px 0 14px}.hero-burst{border:1px solid #658f97;background:linear-gradient(135deg,#2d5563,#1b334b);border-radius:18px;margin:16px 0;padding:17px 16px;position:relative;overflow:hidden}.hero-burst .row{display:flex;align-items:center;justify-content:center;gap:13px;min-height:110px;font-size:53px}.hero-burst .arrow{font-size:28px;color:#ffd785}.hero-burst .hero-note{text-align:center;color:#d2e7e9;font-weight:800;font-size:12px}.pill-list{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 20px}.pill{color:#baf5e2;border:1px solid #518477;border-radius:20px;font-size:11px;font-weight:800;padding:5px 9px}.primary{display:block;width:100%;border:0;color:#193043;background:linear-gradient(105deg,#ffedbb,#ffd084);border-radius:13px;padding:15px;font-size:16px;font-weight:1000;box-shadow:0 4px 0 #a27042;min-height:53px}.primary:active{transform:translateY(3px);box-shadow:0 1px 0 #a27042}.textbutton{border:1px solid #597888;background:#1c364b;color:#e1ecec;border-radius:11px;padding:10px 13px;font-size:12px;font-weight:800}.smallhelp{font-size:11px;color:#a8c0cb;line-height:1.7;text-align:center;margin:13px 0}.topline{display:flex;align-items:center;justify-content:space-between;gap:5px;margin:13px 0 6px}.chapter{font-size:12px;font-weight:950;color:#8cf4d1;letter-spacing:.06em}.chapter-info{color:#b8d7e1;font-size:11px}.progress{height:5px;background:#2c4557;border-radius:7px;overflow:hidden;margin:10px 0 15px}.progress i{display:block;height:100%;background:linear-gradient(90deg,#87f2cd,#ffdb8e);transition:width .3s}.level-title{font-size:26px;line-height:1.3;letter-spacing:-.055em;margin:0 0 4px;font-weight:1000}.level-goal{font-size:13px;line-height:1.65;color:#dae7eb;margin:0 0 11px}.level-goal strong{color:#ffe69f}
+.world{position:relative;height:265px;border-radius:17px;overflow:hidden;background:linear-gradient(165deg,#244a65,#183851 60%,#1d3047);border:1px solid #61859e;isolation:isolate;box-shadow:inset 0 2px 0 #ffffff16,0 8px 26px #07112155}.world:before{content:"";position:absolute;inset:0;background-image:radial-gradient(#cfe6f22c 1px,transparent 1px);background-size:19px 19px;pointer-events:none}.world .ground{position:absolute;bottom:-1px;width:100%;height:21%;border-top:3px solid #95bea5;background:linear-gradient(#345e58,#274350);z-index:0}.world .pond{position:absolute;left:0;right:0;bottom:20%;height:18%;background:linear-gradient(#4aa9cb5a,#3174a97e);border-top:2px solid #7cd7e6;z-index:1}.world .device{position:absolute;z-index:2;text-align:center;transform:translate(-50%,-50%);pointer-events:none}.world .device .emoji{font-size:36px;display:block;filter:drop-shadow(0 5px 3px #0005)}.world .device .caption{display:block;font-weight:950;font-size:10px;color:#ffedb2;text-shadow:0 2px 3px #101a29}.world .device.success .emoji{filter:drop-shadow(0 0 12px #b0ffb1)}.world .beam{position:absolute;z-index:1;top:13%;left:49%;width:140px;height:190px;background:linear-gradient(#fff9ac78,transparent);clip-path:polygon(48% 0,52% 0,100% 100%,0 100%);transform:translateX(-50%);animation:beam 1.4s ease-in-out infinite alternate;pointer-events:none}.world .toy{position:absolute;z-index:3;width:84px;min-height:80px;padding:4px 2px 2px;border:1px solid transparent;background:transparent;color:#fff;text-align:center;display:flex;flex-direction:column;align-items:center;gap:0;transform:translate(-50%,-50%) var(--move,translateY(0));transition:transform .65s cubic-bezier(.25,1.3,.5,1),filter .5s,opacity .5s;filter:drop-shadow(0 6px 4px #02121d80)}.world .toy.selected{filter:drop-shadow(0 0 14px #ffe496);border:1px dashed #fff4b8;background:#cfc78a20;border-radius:14px}.world .toy.winner{filter:drop-shadow(0 0 20px #f8e57a)}.world .toy .sprite{font-size:40px;line-height:1.2;display:block;transition:transform .5s}.world .toy .name{font-size:11px;font-weight:950;color:#f8fcfc;text-shadow:0 2px 5px #0a1120;background:#16324bc9;border-radius:8px;padding:2px 7px;white-space:nowrap}.world .toy.floating .sprite{animation:bob 1.8s ease-in-out infinite alternate}.world .toy.hot .sprite{filter:drop-shadow(0 0 11px #ffb453)}.world .toy.glow .sprite{filter:drop-shadow(0 0 13px #faff99)}.world .toy.rolled .sprite{transform:rotate(24deg)}.world .toy.melted{opacity:.76}.world .toy .tiny-icon{font-size:11px;color:#ffe2a9}.world .world-message{position:absolute;z-index:7;bottom:11px;left:50%;transform:translateX(-50%);border-radius:12px;background:#0c253adf;color:#f4f4d6;padding:7px 11px;font-size:11px;font-weight:850;max-width:94%;text-align:center;white-space:normal;border:1px solid #608782;box-shadow:0 4px 15px #0005;pointer-events:none}.world .world-message.pop{animation:pop .32s ease}.world .sticker{position:absolute;top:7px;left:10px;z-index:5;font-size:10px;font-weight:950;color:#c8f2ee;border:1px solid #65a79d;background:#174b4cc9;border-radius:20px;padding:3px 7px}
+@keyframes bob{to{transform:translateY(-7px)}}@keyframes beam{to{opacity:.45}}@keyframes pop{from{transform:translate(-50%,10px) scale(.8);opacity:0}to{transform:translate(-50%,0) scale(1);opacity:1}}
+.holding{display:flex;align-items:center;gap:8px;margin:11px 0;min-height:49px;border:1px dashed #6a91a0;border-radius:12px;padding:8px 10px;background:#142e45;color:#bad6de;font-size:12px;font-weight:800}.holding.active{border-style:solid;border-color:#ffd47e;background:linear-gradient(100deg,#3c3d36,#253e49);color:#ffe8ae}.holding .chip{flex:none;color:#1c3844;background:#ffdc8d;border-radius:18px;padding:5px 10px;font-weight:1000}.holding .cancel{margin-left:auto;border:0;background:#274659;color:#dcecef;padding:6px 8px;border-radius:8px;font-size:11px}.holding .hint-pulse{animation:pulse 1s infinite alternate}@keyframes pulse{to{transform:scale(1.08)}}
+.panel-title{display:flex;justify-content:space-between;align-items:center;margin:12px 0 8px;color:#9bf2d5;font-size:11px;letter-spacing:.09em;font-weight:950}.panel-title .sub{color:#afc4d2;font-size:10px;letter-spacing:0}.object-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.object-card{border:1px solid #4f7286;border-radius:11px;background:#1a334a;padding:9px 10px;min-height:80px}.object-card .name-row{display:flex;justify-content:space-between;gap:6px;align-items:center;font-weight:900;font-size:12px}.object-card .name-row .emoji{font-size:18px}.properties{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px;min-height:28px}.trait{border:1px solid #77af9e;background:#295a5b;color:#e8fff3;font-size:12px;font-weight:950;border-radius:20px;padding:5px 9px;min-height:30px}.trait:active{transform:scale(.95)}.trait.empty{color:#7f9bac;border:1px dashed #3e5b75;background:transparent;font-size:11px;font-weight:650;cursor:default}.object-card.target{border-color:#f5cc81;background:#3a3e3b}.object-card .target-button{border:1px solid #e5cc92;background:#efe0b2;color:#193141;font-weight:950;font-size:11px;border-radius:9px;padding:6px 9px;margin-top:8px;width:100%}.object-card .target-button:disabled{display:none}.controls{display:flex;gap:8px;align-items:center;margin:13px 0}.controls button{flex:1}.tips{color:#b6d2d2;background:#183948;border-left:3px solid #75d5b5;border-radius:8px;font-size:12px;line-height:1.65;padding:10px 12px;margin:11px 0}.success-overlay{position:fixed;inset:0;z-index:50;background:radial-gradient(circle,#745c31,#172a3b 65%,#0b1729);display:flex;align-items:center;justify-content:center;padding:23px;text-align:center;animation:shake .45s ease-out;isolation:isolate}.success-overlay .flash{position:absolute;inset:0;background:#fbe4b9;animation:flash .65s ease-out forwards;pointer-events:none}.success-overlay .ring{position:absolute;border:9px solid #ffecaf;border-radius:50%;width:130px;height:130px;box-shadow:0 0 90px #ffe189;animation:ring .9s ease-out forwards;pointer-events:none}.success-overlay .inside{position:relative;z-index:3;animation:slam .35s cubic-bezier(.1,1.5,.4,1) both}.success-overlay .kicker{font-size:12px}.success-overlay h2{font-size:clamp(43px,13vw,68px);line-height:1.1;letter-spacing:-.08em;margin:12px 0;text-shadow:0 6px 0 #966b35,0 0 30px #ffbd69;color:#ffebaa}.success-overlay p{font-size:14px;line-height:1.75;color:#fff6d8;font-weight:800}.success-overlay .cta{margin:20px auto 0;padding:11px 18px;border:0;border-radius:14px;font-weight:950;background:#fbe0aa;color:#193144}.success-overlay .try-more{display:block;margin:15px auto;color:#d7e5e7;background:none;border:0;text-decoration:underline;font-size:12px}.success-overlay .spark{position:absolute;left:50%;top:47%;width:8px;height:33px;border-radius:7px;background:linear-gradient(#fff,#ffc976);transform-origin:50% 0;animation:spark .9s ease-out forwards;animation-delay:var(--delay)}@keyframes flash{0%{opacity:1}25%{opacity:.45}100%{opacity:0}}@keyframes ring{to{transform:scale(6);opacity:0}}@keyframes shake{0%{transform:scale(.96)}20%{transform:translate(6px,-7px)}45%{transform:translate(-4px,4px)}80%,100%{transform:none}}@keyframes slam{from{transform:scale(2.1) rotate(-9deg);opacity:0}to{transform:scale(1);opacity:1}}@keyframes spark{0%{transform:rotate(var(--rot)) translateY(0);opacity:1}100%{transform:rotate(var(--rot)) translateY(-220px);opacity:0}}
+.help-modal{position:fixed;inset:0;z-index:60;background:#0b1629d9;display:flex;align-items:center;justify-content:center;padding:20px}.help-body{width:min(100%,430px);background:#1d3b52;border:1px solid #7eb9b1;border-radius:17px;padding:20px}.help-body h2{margin:0 0 10px;color:#ffe09a}.help-body p{font-size:13px;line-height:1.8}.lab-badge{display:flex;justify-content:space-between;align-items:center;border:1px solid #4f7e7b;border-radius:10px;margin:7px 0;background:#1b3b47;padding:9px 12px;font-size:12px;color:#d9f1e5}.lab-badge.done{border-color:#f7d388;background:#464030}.lab-badge .symbol{font-size:18px}.footer{color:#8daab9;text-align:center;font-size:10px;margin:20px 0}
+@media(max-width:380px){.topbar{gap:3px}.brand{font-size:15px}.minor{padding:6px 8px}.world{height:245px}.world .toy{width:74px}.world .toy .sprite{font-size:35px}.level-title{font-size:24px}.object-card{padding:8px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}.success-overlay .flash,.success-overlay .ring,.success-overlay .spark{display:none}}
+
+/* PHYSICS LAB v2: real-time position + velocity simulation */
+.world .toy{transition:none;will-change:left,top,transform,opacity}
+.world .toy .sprite{transition:none}.world .toy.floating .sprite{animation:bob 1.4s ease-in-out infinite alternate}
+.world .toy.rolled .sprite{transform:none}.world .toy.melted .sprite{filter:drop-shadow(0 0 8px #9ef4ff)}
+.world .device{will-change:left,top;transition:none}
+.world .device.reached .emoji{animation:goalPulse .58s ease-out 2;filter:drop-shadow(0 0 17px #c6fcb2)}
+.world.goal-hit{box-shadow:inset 0 0 65px #adffba55,0 0 26px #a3ffdc56;border-color:#afffd8}
+.contact-ring{position:absolute;z-index:6;width:20px;height:20px;border:5px solid #c4ffb5;border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);animation:impactRing .8s ease-out forwards;box-shadow:0 0 22px #e6ff91}
+.world .magnet-tether{position:absolute;height:4px;border-top:2px dashed #ffde91;z-index:2;transform-origin:left center;filter:drop-shadow(0 0 7px #ffdd82);opacity:.9;pointer-events:none}
+.world .steam{position:absolute;z-index:4;transform:translate(-50%,-50%);font-size:21px;letter-spacing:4px;color:#c4f5ffcc;filter:drop-shadow(0 0 6px #8de3fa);animation:steamUp 1s ease-in-out infinite alternate;pointer-events:none}
+.world .puddle{position:absolute;z-index:2;transform:translate(-50%,-50%);height:14px;width:70px;border-radius:50%;background:#7acdec88;box-shadow:0 0 18px #96eaff73;animation:puddle 1.4s ease-in-out infinite alternate;pointer-events:none}
+.world .beam{transition:opacity .65s ease;filter:drop-shadow(0 0 16px #fff6ab);z-index:2}
+@keyframes goalPulse{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)}}
+@keyframes impactRing{from{width:10px;height:10px;opacity:1}to{width:155px;height:155px;opacity:0}}
+@keyframes steamUp{to{transform:translate(-50%,-100%);opacity:.4}}
+@keyframes puddle{to{transform:translate(-50%,-50%) scaleX(1.18);opacity:.7}}
+@media(prefers-reduced-motion:reduce){.world .toy,.world .toy .sprite,.world .device.reached .emoji,.contact-ring,.steam,.puddle{animation:none!important}.world .toy{transition:none!important}}
+
+.world .key-token{position:absolute;z-index:6;display:flex;flex-direction:column;align-items:center;transform:translate(-50%,-50%);pointer-events:none;filter:drop-shadow(0 3px 3px #03080a);will-change:left,top}
+.world .key-symbol{font-size:32px;line-height:1;transform:rotate(-24deg)}.world .key-token.attached .key-symbol{transform:rotate(35deg);filter:drop-shadow(0 0 10px #ffe997)}
+.world .key-status{font-size:9px;font-weight:850;color:#fff0bc;white-space:nowrap;background:#142c40dc;border-radius:7px;padding:1px 4px}
+.world .magnet-field{position:absolute;z-index:1;border:2px dashed #f8df9e83;width:60%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%) scaleX(.82);pointer-events:none;background:radial-gradient(ellipse,#f2db7724,transparent 67%);box-shadow:0 0 14px #ecdc7b23;animation:fieldBreathe 1.4s ease-in-out infinite alternate}
+.world .device{z-index:7}.world .pond{height:30%;bottom:0;background:linear-gradient(#297fa68c,#173e5abd);border-top:2px solid #9de5ed94;pointer-events:none}
+@keyframes fieldBreathe{to{opacity:.43;transform:translate(-50%,-50%) scale(.9,.83)}}@media(prefers-reduced-motion:reduce){.world .magnet-field{animation:none}}
+</style></head>
+<body><div class="shell"><header class="topbar"><div class="brand">✦ <span>ルール</span>泥棒</div><div class="mini-controls"><button class="minor" id="help" type="button">？ 遊び方</button><button class="minor" id="sound" type="button">♪ ON</button></div></header><main id="app"></main><footer class="footer">RULE THIEF · PHYSICS LAB v2 · NO SERVER REQUIRED</footer></div>
+<script>
+(()=>{
+"use strict";
+const levelDefs=[
+{id:"lift",title:"届かないスイッチ",scene:"高い位置のスイッチに届く物がない。",goal:"岩を浮かせて、上のスイッチを押そう",hint:"風船が持つ「浮く」は、風船専用じゃない。",device:{label:"スイッチ",icon:"🔴",on:"🟢",x:62,y:19},items:[{id:"balloon",name:"風船",icon:"🎈",x:19,y:70,kind:"balloon",traits:["float"]},{id:"rock",name:"岩",icon:"🪨",x:62,y:70,kind:"rock",traits:[]}]},
+{id:"ice",title:"氷の扉",scene:"氷に閉じ込められた通路。火は手の届かない場所にある。",goal:"氷を溶かして、出口を開けよう",hint:"火そのものは動かせなくても「熱い」は動かせる。",device:{label:"出口",icon:"🚪",on:"🚪✨",x:79,y:58},items:[{id:"fire",name:"たき火",icon:"🔥",x:22,y:66,kind:"fire",traits:["hot"]},{id:"ice",name:"氷",icon:"🧊",x:68,y:66,kind:"ice",traits:[]}]},
+{id:"roll",title:"動けない荷物",scene:"ボタンは遠くにある。箱は動かない。",goal:"箱を走らせて、遠くのボタンを押そう",hint:"車輪そのものを運ぶ必要はない。",device:{label:"ボタン",icon:"🔴",on:"🟢",x:84,y:68},items:[{id:"wheel",name:"車輪",icon:"🛞",x:23,y:70,kind:"wheel",traits:["roll"]},{id:"crate",name:"箱",icon:"📦",x:52,y:70,kind:"crate",traits:[]}]},
+{id:"key",title:"湖底の鍵",scene:"湖底には金属の鍵。扉の鍵穴は高い岸にあり、磁力が届く距離にも限界がある。",goal:"磁力で鍵を岩に付け、岩を浮かせて鍵穴へ運ぼう",hint:"岩に「引きよせる」と「浮く」を集める。鍵がくっついてから浮上する様子を見よう。",device:{label:"鍵穴",icon:"🔒",on:"🔓",x:54,y:21},key:{x:78,y:76},water:true,items:[{id:"balloon",name:"風船",icon:"🎈",x:16,y:62,kind:"balloon",traits:["float"]},{id:"magnet",name:"磁石",icon:"🧲",x:20,y:24,kind:"magnet",traits:["magnet"]},{id:"rock",name:"岩",icon:"🪨",x:48,y:78,kind:"rock",traits:[]}]},
+{id:"light",title:"暗闇の塔",scene:"塔の上に光を届けたい。風船は浮き、ランタンは光る。",goal:"「浮く」と「光る」を同じ物に集めよう",hint:"浮きをランタンに貼っても、光を風船に貼っても成功する。",device:{label:"灯台",icon:"🏰",on:"🏰✨",x:50,y:15},items:[{id:"balloon",name:"風船",icon:"🎈",x:30,y:72,kind:"balloon",traits:["float"]},{id:"lamp",name:"ランタン",icon:"🏮",x:70,y:72,kind:"lamp",traits:["glow"]}]},
+{id:"lab",title:"自由実験室",scene:"正解はない。能力を組み替えて、変な現象を発見しよう。",goal:"自由に実験して、5種類の「発見」を集めてみよう",hint:"「熱い＋転がる」「浮く＋光る」「浮く＋引きよせる」などを試そう。",water:true,items:[{id:"balloon",name:"風船",icon:"🎈",x:14,y:36,kind:"balloon",traits:["float"]},{id:"rock",name:"岩",icon:"🪨",x:45,y:68,kind:"rock",traits:[]},{id:"fire",name:"炎",icon:"🔥",x:79,y:36,kind:"fire",traits:["hot"]},{id:"wheel",name:"車輪",icon:"🛞",x:19,y:74,kind:"wheel",traits:["roll"]},{id:"magnet",name:"磁石",icon:"🧲",x:67,y:72,kind:"magnet",traits:["magnet"]},{id:"firefly",name:"蛍",icon:"✨",x:47,y:26,kind:"firefly",traits:["glow"]},{id:"ice",name:"氷",icon:"🧊",x:79,y:77,kind:"ice",traits:[]}]}
+];
+const names={float:"浮く",hot:"熱い",roll:"転がる",magnet:"引きよせる",glow:"光る"};
+const app=document.getElementById("app"),soundEl=document.getElementById("sound");
+const storeKey="rule_thief_prototype_v1";
+let saved={};try{saved=JSON.parse(localStorage.getItem(storeKey)||"{}")||{}}catch(e){}
+let stage=Math.max(0,Math.min(5,Number(saved.stage)||0)),unlocked=Math.max(0,Math.min(5,Number(saved.unlocked)||0)),solved=saved.solved&&typeof saved.solved==="object"?saved.solved:{},discovered=saved.discovered&&typeof saved.discovered==="object"?saved.discovered:{},soundOn=saved.sound!==false;
+let toys=[],holding=null,undoStack=[],lastMoves={},moves=0,screen="home",notice="",fxTimer=null,fx=null,help=null,audio=null,stagesWon=new Set(Object.keys(solved)),hintOpen=false;
+let bodies={},keyBody=null,keyAttached=false,keyPulling=false,frameId=null,motionLast=0,motionElapsed=0,goalTimer=null,goalResolved=false,worldGoal=false;
+function save(){try{localStorage.setItem(storeKey,JSON.stringify({stage,unlocked,solved,discovered,sound:soundOn}))}catch(e){}}
+function clone(objects){return objects.map(o=>({...o,traits:[...o.traits]}))}
+function source(){return levelDefs[stage]}
+function initStage(n){
+ stopMotion();stopFx();
+ stage=Math.max(0,Math.min(levelDefs.length-1,n));
+ toys=clone(source().items);holding=null;undoStack=[];lastMoves={};moves=0;
+ goalResolved=false;worldGoal=false;keyAttached=false;keyPulling=false;motionElapsed=0;
+ bodies=Object.fromEntries(toys.map(o=>[o.id,{x:o.x,y:o.traits.includes("float")?Math.max(17,o.y-12):o.y,vx:0,vy:0,angle:0,melt:0}]));
+ keyBody=stage===3?{x:source().key.x,y:source().key.y,vx:0,vy:0}:null;
+ notice="ルールを盗むと、物の動きも変化する！";screen="level";hintOpen=false;save();render()
+}
+function isUp(o){return o.traits.includes("float")||(o.kind==="balloon"&&o.traits.includes("hot"))}
+function isHot(o){return o.traits.includes("hot")}
+function isGlow(o){return o.traits.includes("glow")}
+function isRoll(o){return o.traits.includes("roll")&&!isUp(o)}
+function has(o,t){return o&&o.traits.includes(t)}
+function get(id){return toys.find(o=>o.id===id)}
+function status(){return worldGoal}
+function stopMotion(){
+ if(frameId!==null){if(typeof cancelAnimationFrame==="function")cancelAnimationFrame(frameId);frameId=null}
+ motionLast=0;
+ if(goalTimer!==null){clearTimeout(goalTimer);goalTimer=null}
+}
+function spring(b,tx,ty,dt,frequency=19,damping=6.6){
+ const d=Math.exp(-damping*dt);
+ b.vx=(b.vx+(tx-b.x)*frequency*dt)*d;
+ b.vy=(b.vy+(ty-b.y)*frequency*dt)*d;
+ b.x=Math.max(3,Math.min(97,b.x+b.vx*dt));
+ b.y=Math.max(8,Math.min(90,b.y+b.vy*dt));
+}
+function motionTarget(o){
+ let x=o.x,y=o.y;
+ if(isUp(o)){
+  if(stage===0&&o.id==="rock")y=22;
+  else if(stage===3&&o.id==="rock"){x=keyAttached?52:51;y=keyAttached?24:56}
+  else if(stage===4&&isGlow(o)){x=50;y=23}
+  else if(stage===5)y=Math.max(16,o.y-32);
+  else y=Math.max(18,o.y-27);
+ }else if(isRoll(o)){
+  if(stage===2&&o.id==="crate"){x=83;y=o.y}
+  else x=Math.min(88,o.x+26)
+ }
+ return {x,y};
+}
+function animateWorld(){
+ if(screen!=="level"||typeof requestAnimationFrame!=="function"||frameId!==null)return;
+ frameId=requestAnimationFrame(stepMotion)
+}
+function stepMotion(timestamp){
+ frameId=null;
+ if(screen!=="level")return;
+ const dt=motionLast?Math.min(.042,Math.max(.008,(timestamp-motionLast)/1000)):.016;
+ motionLast=timestamp;motionElapsed+=dt;
+ for(const o of toys){
+  const b=bodies[o.id];if(!b)continue;
+  const target=motionTarget(o),oldX=b.x;
+  spring(b,target.x,target.y,dt);
+  if(isRoll(o))b.angle+=(b.x-oldX)*7.5;
+  else b.angle+=(-b.angle)*Math.min(1,dt*6);
+  const melting=o.kind==="ice"&&isHot(o);
+  b.melt=Math.min(1,Math.max(0,b.melt+(melting?dt/1.85:-dt*1.8)));
+  const elem=app.querySelector('.world .toy[data-id="'+o.id+'"]');
+  if(elem){
+   elem.style.left=b.x+"%";elem.style.top=b.y+"%";
+   elem.style.transform="translate(-50%,-50%) rotate("+b.angle.toFixed(1)+"deg) scale("+(1-b.melt*.82).toFixed(3)+")";
+   elem.style.opacity=String(1-b.melt*.57);
+   if(o.kind==="ice"){const sprite=elem.querySelector(".sprite");if(sprite)sprite.textContent=b.melt>.92?"💧":o.icon}
+  }
+ }
+ if(keyBody&&stage===3){
+  const rock=get("rock"),rb=bodies.rock;
+  if(rock&&rb&&has(rock,"magnet")){
+   spring(keyBody,rb.x+7,rb.y+6,dt,16,6);
+  }else spring(keyBody,source().device.x,source().device.y,dt,20,8);
+  const keyElem=app.querySelector(".world .device");
+  if(keyElem){keyElem.style.left=keyBody.x+"%";keyElem.style.top=keyBody.y+"%"}
+  const tether=app.querySelector(".magnet-tether");
+  if(tether){
+   const active=rock&&has(rock,"magnet")&&rb&&rb.y<64;
+   tether.style.display=active?"block":"none";
+   if(active){
+    const world=app.querySelector(".world"),w=world?world.clientWidth:350,h=world?world.clientHeight:265;
+    const dx=(keyBody.x-rb.x)*w/100,dy=(keyBody.y-rb.y)*h/100;
+    tether.style.left=rb.x*w/100+"px";tether.style.top=rb.y*h/100+"px";
+    tether.style.width=Math.hypot(dx,dy)+"px";
+    tether.style.transform="rotate("+Math.atan2(dy,dx)+"rad)";
+   }
+  }
+ }
+ if(stage===4){
+  const beam=app.querySelector(".beam");
+  if(beam)beam.style.opacity=toys.some(o=>isUp(o)&&isGlow(o))?"1":"0";
+ }
+ if(!goalResolved&&motionElapsed>1.15&&goalContact()){
+  onGoalContact();
+ }
+ if(screen==="level")frameId=requestAnimationFrame(stepMotion)
+}
+function goalContact(){
+ if(stage===0){
+  const b=bodies.rock;return has(get("rock"),"float")&&b&&b.y<29&&Math.abs(b.x-62)<12
+ }
+ if(stage===1){const b=bodies.ice;return has(get("ice"),"hot")&&b&&b.melt>.98}
+ if(stage===2){const b=bodies.crate;return isRoll(get("crate"))&&b&&b.x>79}
+ if(stage===3){
+  const b=bodies.rock;
+  return b&&keyBody&&isUp(get("rock"))&&has(get("rock"),"magnet")&&b.y<49&&Math.hypot(keyBody.x-b.x,keyBody.y-b.y)<17
+ }
+ if(stage===4)return toys.some(o=>{const b=bodies[o.id];return b&&isUp(o)&&isGlow(o)&&b.y<30&&Math.abs(b.x-50)<9});
+ return false
+}
+const contactTexts=[
+ "カチン！ 岩がスイッチに接触。点灯！",
+ "ジュワァ…！ 氷が全部溶けて出口が開いた！",
+ "ゴロン、ガチャン！ 箱がボタンを押した！",
+ "カチャッ！ 鍵が鍵穴に届き、扉が開いた！",
+ "ピカッ！ 光が塔の頂上まで届いた！"
+];
+function onGoalContact(){
+ if(goalResolved||screen!=="level")return;
+ goalResolved=true;worldGoal=true;
+ const device=app.querySelector(".world .device");
+ if(device){
+  device.classList.add("success","reached");
+  const icon=device.querySelector(".emoji");if(icon)icon.textContent=source().device.on;
+ }
+ const world=app.querySelector(".world");
+ if(world){world.classList.add("goal-hit");const ring=document.createElement("span");ring.className="contact-ring";if(device){ring.style.left=device.style.left;ring.style.top=device.style.top}else{ring.style.left="50%";ring.style.top="50%"}world.appendChild(ring)}
+ const text=contactTexts[stage];notice=text;
+ const label=app.querySelector(".world-message");if(label)label.textContent=text;
+ sound("contact");vibrate([45,20,90]);
+ goalTimer=setTimeout(()=>{goalTimer=null;if(screen==="level"&&worldGoal)complete()},1100)
+}
+
+function audioTone(f,at,dur,type="sine",v=.10,end){if(!soundOn)return;try{if(!audio)audio=new(window.AudioContext||window.webkitAudioContext)();if(audio.state==="suspended")audio.resume();const t=audio.currentTime+at,o=audio.createOscillator(),g=audio.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(end)o.frequency.exponentialRampToValueAtTime(end,t+dur);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v,t+.009);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g);g.connect(audio.destination);o.start(t);o.stop(t+dur+.03)}catch(e){}}
+function sound(type){if(type==="pull"){audioTone(230,0,.22,"triangle",.04,480)}else if(type==="attach"){audioTone(680,0,.12,"triangle",.08,1040)}else if(type==="contact"){audioTone(550,0,.15,"triangle",.10,920);audioTone(1200,.13,.21,"sine",.08)}else if(type==="steal"){audioTone(720,0,.13,"sine",.05,380);audioTone(1150,.05,.11,"triangle",.035)}else if(type==="paste"){audioTone(330,0,.17,"triangle",.10,610);audioTone(620,.09,.15,"sine",.08,980)}else if(type==="win"){audioTone(95,0,.35,"sawtooth",.16,37);audioTone(200,0,.18,"square",.06,65);audioTone(620,.12,.17,"sine",.10);audioTone(920,.25,.16,"sine",.12);audioTone(1290,.39,.25,"triangle",.12)}else if(type==="wrong"){audioTone(150,0,.14,"sine",.05)}}
+function vibrate(x){try{navigator.vibrate&&navigator.vibrate(x)}catch(e){}}
+function resetNotice(s){notice=s}
+function take(id,trait){
+ if(screen!=="level"||holding||goalResolved)return;
+ const o=get(id);if(!o||!has(o,trait))return;
+ holding={from:id,trait,before:clone(toys)};
+ o.traits=o.traits.filter(t=>t!==trait);
+ resetNotice("「"+names[trait]+"」を盗んだ！貼りたい物をタップ");
+ sound("steal");vibrate(20);render();
+}
+function cancelHold(){if(!holding)return;toys=clone(holding.before);holding=null;resetNotice("盗んだルールを元の場所へ戻した");render()}
+function paste(id){
+ if(screen!=="level"||goalResolved)return;const o=get(id);if(!o)return;
+ if(!holding){resetNotice("まず下にある「ルール」をタップして盗もう");render();return}
+ if(id===holding.from){cancelHold();return}
+ if(has(o,holding.trait)){resetNotice(o.name+"はもう「"+names[holding.trait]+"」を持っている");sound("wrong");render();return}
+ const old=holding,trait=old.trait;undoStack.push(clone(old.before));o.traits.push(trait);holding=null;moves++;
+ let message=o.name+"に「"+names[trait]+"」を貼った！";
+ if(o.kind==="ice"&&has(o,"hot"))message="ジュワッ！ 氷が溶けた！";
+ else if(isUp(o)&&has(o,"glow"))message="空に浮かぶ光が生まれた！";
+ else if(o.kind==="balloon"&&has(o,"hot"))message="熱気球になった！ 熱だけで浮いた！";
+ else if(isUp(o)&&has(o,"magnet"))message="浮く磁石が金属を引き寄せた！";
+ else if(isRoll(o)&&has(o,"hot"))message="燃えながら転がり始めた！";
+ resetNotice(message);sound("paste");vibrate([20,20,25]);checkDiscovery();
+ motionElapsed=0;
+ render();
+}
+function labAchievements(){
+ const all=toys;
+ const hasBoth=(a,b)=>all.some(o=>has(o,a)&&has(o,b));
+ return {
+ hotice:all.some(o=>o.kind==="ice"&&has(o,"hot")),
+ lantern:hasBoth("float","glow"),
+ skyMagnet:all.some(o=>isUp(o)&&has(o,"magnet")),
+ hotBalloon:all.some(o=>o.kind==="balloon"&&has(o,"hot")),
+ comet:all.some(o=>isRoll(o)&&has(o,"hot"))
+ };
+}
+function checkDiscovery(){
+ if(stage!==5)return;
+ const found=labAchievements(),newBadges=Object.keys(found).filter(k=>found[k]&&!discovered[k]);
+ if(newBadges.length){for(const id of newBadges)discovered[id]=true;notice="✦ 新発見！ "+(badgeNames[newBadges[0]]||"未知の反応")+"！";sound("win");save()}
+}
+const badgeNames={hotice:"とける世界",lantern:"空飛ぶ灯り",skyMagnet:"浮遊磁石",hotBalloon:"熱気球",comet:"炎の転がり玉"};
+function undo(){if(holding){cancelHold();return}if(!undoStack.length)return;keyAttached=false;keyPulling=false;if(goalTimer!==null){clearTimeout(goalTimer);goalTimer=null}goalResolved=false;worldGoal=false;toys=undoStack.pop();moves=Math.max(0,moves-1);resetNotice("ひとつ前の世界に戻した。物が元の位置へ戻る");motionElapsed=0;render()}
+function complete(){if(screen!=="level"||!worldGoal)return;stopMotion();screen="win";solved[source().id]=Math.min(solved[source().id]??999,moves);unlocked=Math.max(unlocked,Math.min(stage+1,5));save();sound("win");vibrate([45,25,85,35,110]);showFx()}
+function next(){stopFx();if(stage===4){initStage(5)}else initStage(Math.min(stage+1,5))}
+function stopFx(){if(fxTimer!==null){clearTimeout(fxTimer);fxTimer=null}if(fx){fx.remove();fx=null}}
+function showFx(){
+ stopFx();const overlay=document.createElement("div");overlay.className="success-overlay";overlay.id="successOverlay";let bits="";for(let i=0;i<18;i++)bits+='<i class="spark" style="--rot:'+(i*20)+'deg;--delay:'+(i%5*17)+'ms"></i>';
+ overlay.innerHTML='<div class="flash"></div><div class="ring"></div>'+bits+'<div class="inside"><div class="eyebrow">WORLD CHANGED!</div><h2>ルール、<br>いただき！</h2><p>'+source().title+' を突破！<br>自分の手で法則を変えた！</p><p style="font-size:11px;color:#b9e5db">'+moves+' 回の移動でクリア</p><button class="cta" id="nextLevel" type="button">'+(stage===4?"自由実験室へ ⚗️":"次のステージ ▶")+'</button><button class="try-more" id="tryAgain" type="button">同じステージを別の方法で試す</button></div>';
+ document.body.appendChild(overlay);fx=overlay;
+ overlay.querySelector("#nextLevel").addEventListener("click",next);
+ overlay.querySelector("#tryAgain").addEventListener("click",()=>{stopFx();initStage(stage)});
+}
+function initial(){stopMotion();stopFx();screen="home";soundEl.textContent=soundOn?"♪ ON":"♪ OFF";const completed=Object.keys(solved).length;
+ app.innerHTML='<div class="eyebrow">RULE THIEF · INTERACTIVE PROTOTYPE</div><h1 class="title">盗んで、貼って、<br><em>世界を変えろ。</em></h1><p class="intro-lead">風船の「浮く」を岩に。炎の「熱い」を氷に。<br>ものが持つルールを引っ越しさせる、発想のパズル。</p><div class="hero-burst"><div class="row"><span>🎈</span><span class="arrow">「浮く」→</span><span>🪨</span></div><div class="hero-note">能力を盗まれた側は、ちゃんと能力を失う。</div></div><div class="pill-list"><span class="pill">👆 タップ2回で操作</span><span class="pill">🧩 全5ステージ</span><span class="pill">⚗️ 自由実験室</span></div><button class="primary" data-act="start">'+(completed?"続きから実験する ⚡":"実験をはじめる ⚡")+'</button><button class="textbutton" style="width:100%;margin-top:11px" data-act="lab">⚗️ 自由実験から遊ぶ</button><p class="smallhelp">失敗しても何度でもやり直せる。<br>時間制限なし。答えを暗記する必要なし。</p>';
+}
+function stateInfo(o){
+ const b=bodies[o.id]||{x:o.x,y:o.y,angle:0,melt:0};
+ let extra=[];
+ if(isUp(o))extra.push("floating");
+ if(isHot(o))extra.push("hot");
+ if(isGlow(o))extra.push("glow");
+ if(isRoll(o))extra.push("rolled");
+ if(o.kind==="ice"&&b.melt>.05)extra.push("melted");
+ const icon=o.kind==="ice"&&b.melt>.92?"💧":o.kind==="fire"&&!isHot(o)?"🪵":o.icon;
+ return {x:b.x,y:b.y,angle:b.angle||0,melt:b.melt||0,cls:extra.join(" "),icon}
+}
+function render(){
+ if(screen!=="level")return;
+ soundEl.textContent=soundOn?"♪ ON":"♪ OFF";
+ const def=source(),done=!!solved[def.id];const progress=Math.min(stage,5)/5*100;
+ const device=def.device?'<div class="device '+(status()?"success reached":"")+'" style="left:'+def.device.x+'%;top:'+def.device.y+'%"><span class="emoji">'+(status()?def.device.on:def.device.icon)+'</span><span class="caption">'+def.device.label+'</span></div>':'';
+ const toyHTML=toys.map(o=>{
+  const v=stateInfo(o);
+  return '<button class="toy '+v.cls+'" type="button" data-act="object" data-id="'+o.id+'" style="left:'+v.x+'%;top:'+v.y+'%;transform:translate(-50%,-50%) rotate('+v.angle+'deg) scale('+(1-v.melt*.82)+');opacity:'+(1-v.melt*.57)+'"><span class="sprite">'+v.icon+'</span><span class="name">'+o.name+'</span></button>'
+ }).join("");
+ const cards=toys.map(o=>'<section class="object-card '+(holding?"target":"")+'"><div class="name-row"><span><span class="emoji">'+o.icon+'</span> '+o.name+'</span><span style="color:#aec6d0;font-size:10px">'+(isUp(o)?"↑浮遊":"")+'</span></div><div class="properties">'+(o.traits.length?o.traits.map(t=>'<button class="trait" data-act="take" data-id="'+o.id+'" data-trait="'+t+'" type="button" '+(holding||goalResolved?"disabled":"")+'>'+names[t]+' ↗</button>').join(""):'<span class="trait empty">ルールなし</span>')+'</div>'+(holding?'<button class="target-button" data-act="object" data-id="'+o.id+'" type="button">ここに貼る ↓</button>':'')+'</section>').join("");
+ const badges=stage===5?'<div class="panel-title"><span>✦ 発見ノート</span><span class="sub">'+Object.keys(discovered).length+'/5</span></div>'+Object.entries(badgeNames).map(([id,label])=>'<div class="lab-badge '+(discovered[id]?"done":"")+'"><span>'+(discovered[id]?'✨ '+label:'🔒 ？？？')+'</span><span class="symbol">'+(discovered[id]?'✓':'')+'</span></div>').join(""):'';
+ const hold=holding?'<div class="holding active"><span class="chip">'+names[holding.trait]+'</span><span>貼り先を選ぼう！</span><button class="cancel" data-act="cancel">戻す ×</button></div>':'<div class="holding"><span>🧪</span><span>ルールを移すと、物が本当に動き出す！</span></div>';
+ const melt=stage===1&&has(get("ice"),"hot")?'<div class="steam" style="left:68%;top:62%">〰 〰 〰</div><div class="puddle" style="left:68%;top:76%"></div>':'';
+ const tether=stage===3?'<div class="magnet-field" style="display:none"></div><div class="magnet-tether" style="display:none"></div><div class="key-token" style="left:'+(keyBody?keyBody.x:def.key.x)+'%;top:'+(keyBody?keyBody.y:def.key.y)+'%"><span class="key-symbol">🗝️</span><span class="key-status">金属の鍵</span></div>':'';
+ app.innerHTML='<div class="topline"><span class="chapter">'+(stage===5?"⚗️ SANDBOX":"LEVEL "+(stage+1)+" / 5")+'</span><span class="chapter-info">'+moves+' MOVE'+(done?" · ✓ CLEAR":"")+'</span></div><div class="progress"><i style="width:'+progress+'%"></i></div><h1 class="level-title">'+def.title+'</h1><p class="level-goal">'+def.scene+'<br><strong>目標：'+def.goal+'</strong></p><div class="world">'+(def.water?'<div class="pond"></div>':'')+'<div class="ground"></div>'+(stage===4?'<div class="beam" style="opacity:'+(toys.some(o=>isUp(o)&&isGlow(o))?1:0)+'"></div>':'')+tether+melt+device+toyHTML+'<span class="sticker">✦ PHYSICS LAB</span><div class="world-message pop">'+notice+'</div></div>'+hold+'<div class="panel-title"><span>ルールを盗む</span><span class="sub">選ぶ → 貼る → 動きを観察</span></div><div class="object-grid">'+cards+'</div><div class="controls"><button class="textbutton" data-act="undo" '+(!holding&&!undoStack.length?"disabled":"")+'>↶ 1手戻す</button><button class="textbutton" data-act="reset">↻ やり直す</button><button class="textbutton" data-act="levels">☰ ステージ</button></div>'+(hintOpen?'<div class="tips">💡 '+def.hint+'</div>':'<button class="textbutton" style="width:100%" data-act="hint">💡 ヒントを見る</button>')+badges;
+ animateWorld();
+}
+function levelMenu(){
+ stopMotion();stopFx();screen="levels";let html='<div class="eyebrow">WORLD SELECT</div><h1 class="title" style="font-size:32px">実験する世界を選ぶ</h1><p class="intro-lead">いつでも前のステージに戻れます。</p>';
+ for(let i=0;i<levelDefs.length;i++){const d=levelDefs[i],isLocked=i>unlocked&&i!==5;
+ html+='<button class="textbutton" style="display:flex;align-items:center;gap:14px;width:100%;text-align:left;margin:8px 0;min-height:66px" data-act="choose" data-i="'+i+'" '+(isLocked?"disabled":"")+'> <span style="font-size:25px">'+(isLocked?'🔒':i===5?'⚗️':'🧩')+'</span><span style="flex:1"><b>'+(i===5?"自由実験室":"LEVEL "+(i+1))+'　'+d.title+'</b><br><small style="color:#b7cede">'+(isLocked?'前のステージをクリアで解放':solved[d.id]?'最少 '+solved[d.id]+' 手でクリア':'未クリア')+'</small></span></button>'}
+ html+='<button class="primary" style="margin-top:16px" data-act="back">今の実験に戻る</button>';
+ app.innerHTML=html;
+}
+function helpModal(){
+ if(help)return;
+ const n=document.createElement("div");n.className="help-modal";n.id="helpModal";n.innerHTML='<div class="help-body" role="dialog" aria-modal="true" aria-label="遊び方"><div class="eyebrow">HOW TO STEAL A RULE</div><h2>ルールは、持ち運べる。</h2><p>① 物の下にある「浮く」「熱い」などのタグをタップ。<br>② 能力がその物から消えて、手元に移ります。<br>③ 別の物をタップして貼り付け。世界の動きが変わります。</p><p style="color:#a3ddcd">💡 正解は1つとは限りません。「1手戻す」で気軽に実験できます。</p><button class="primary" id="closeHelp" type="button">分かった！</button></div>';
+ document.body.appendChild(n);help=n;n.querySelector("#closeHelp").addEventListener("click",()=>{n.remove();help=null});
+}
+app.addEventListener("click",e=>{
+ const b=e.target.closest("button[data-act]");if(!b||b.disabled)return;
+ switch(b.dataset.act){
+ case "start":initStage(Math.min(stage,unlocked));break;
+ case "lab":initStage(5);break;
+ case "take":take(b.dataset.id,b.dataset.trait);break;
+ case "object":paste(b.dataset.id);break;
+ case "cancel":cancelHold();break;
+ case "undo":undo();break;
+ case "reset":initStage(stage);break;
+ case "hint":hintOpen=true;render();break;
+ case "levels":levelMenu();break;
+ case "choose":initStage(Number(b.dataset.i));break;
+ case "back":initStage(stage);break;
+ }
+});
+soundEl.addEventListener("click",()=>{soundOn=!soundOn;soundEl.textContent=soundOn?"♪ ON":"♪ OFF";save();if(soundOn)sound("steal")});
+document.getElementById("help").addEventListener("click",helpModal);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){if(help){help.remove();help=null}else if(holding)cancelHold();else if(screen==="levels")initStage(stage)}});
+document.addEventListener("visibilitychange",()=>{if(document.hidden&&audio&&audio.state==="running")audio.suspend().catch(()=>{})});
+initial();
+})();
+</script></body></html>
