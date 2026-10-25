@@ -49,7 +49,7 @@ const levelDefs=[
 {id:"roll",title:"坂道の荷物",scene:"箱は坂の上。坂の下にはボタンがあるが、箱は角ばって動かない。",goal:"転がる力を箱に移し、坂道を転がしてボタンを押そう",hint:"斜面を転がりやすいものから「転がる」を盗もう。",device:{label:"ボタン",icon:"🔴",on:"🟢",x:84,y:78},items:[{id:"wheel",name:"車輪",icon:"🛞",x:23,y:70,kind:"wheel",traits:["roll"]},{id:"crate",name:"箱",icon:"📦",x:52,y:70,kind:"crate",traits:[]}]},
 {id:"key",title:"湖底の鍵",scene:"湖底には金属の鍵。扉の鍵穴は高い岸にあり、磁力が届く距離にも限界がある。",goal:"磁力で鍵を岩に付け、岩を浮かせて鍵穴へ運ぼう",hint:"岩に「引きよせる」と「浮く」を集める。鍵がくっついてから浮上する様子を見よう。",device:{label:"鍵穴",icon:"🔒",on:"🔓",x:54,y:21},key:{x:78,y:76},water:true,items:[{id:"balloon",name:"風船",icon:"🎈",x:16,y:62,kind:"balloon",traits:["float"]},{id:"magnet",name:"磁石",icon:"🧲",x:20,y:24,kind:"magnet",traits:["magnet"]},{id:"rock",name:"岩",icon:"🪨",x:48,y:78,kind:"rock",traits:[]}]},
 {id:"light",title:"暗闇の塔",scene:"塔の上に光を届けたい。風船は浮き、ランタンは光る。",goal:"「浮く」と「光る」を同じ物に集めよう",hint:"浮きをランタンに貼っても、光を風船に貼っても成功する。",device:{label:"灯台",icon:"🏰",on:"🏰✨",x:50,y:15},items:[{id:"balloon",name:"風船",icon:"🎈",x:30,y:72,kind:"balloon",traits:["float"]},{id:"lamp",name:"ランタン",icon:"🏮",x:70,y:72,kind:"lamp",traits:["glow"]}]},
-{id:"lab",title:"自由実験室",scene:"正解はない。能力を組み替えて、変な現象を発見しよう。",goal:"自由に実験して、5種類の「発見」を集めてみよう",hint:"「熱い＋転がる」「浮く＋光る」「浮く＋引きよせる」などを試そう。",water:true,items:[{id:"balloon",name:"風船",icon:"🎈",x:14,y:36,kind:"balloon",traits:["float"]},{id:"rock",name:"岩",icon:"🪨",x:45,y:68,kind:"rock",traits:[]},{id:"fire",name:"炎",icon:"🔥",x:79,y:36,kind:"fire",traits:["hot"]},{id:"wheel",name:"車輪",icon:"🛞",x:19,y:74,kind:"wheel",traits:["roll"]},{id:"magnet",name:"磁石",icon:"🧲",x:67,y:72,kind:"magnet",traits:["magnet"]},{id:"firefly",name:"蛍",icon:"✨",x:47,y:26,kind:"firefly",traits:["glow"]},{id:"ice",name:"氷",icon:"🧊",x:79,y:77,kind:"ice",traits:[]}]}
+{id:"lab",title:"自由実験室",scene:"正解はない。能力を組み替えて、変な現象を発見しよう。",goal:"自由に実験して、5種類の「発見」を集めてみよう",hint:"「熱い＋転がる」「浮く＋光る」「浮く＋引きよせる」などを試そう。",water:true,items:[{id:"balloon",name:"風船",icon:"🎈",x:18,y:23,kind:"balloon",traits:["float"]},{id:"rock",name:"岩",icon:"🪨",x:50,y:23,kind:"rock",traits:[]},{id:"fire",name:"炎",icon:"🔥",x:82,y:23,kind:"fire",traits:["hot"]},{id:"wheel",name:"車輪",icon:"🛞",x:18,y:52,kind:"wheel",traits:["roll"]},{id:"magnet",name:"磁石",icon:"🧲",x:50,y:52,kind:"magnet",traits:["magnet"]},{id:"firefly",name:"蛍",icon:"✨",x:82,y:52,kind:"firefly",traits:["glow"]},{id:"ice",name:"氷",icon:"🧊",x:50,y:81,kind:"ice",traits:[]}]}
 ];
 const names={float:"浮く",hot:"熱い",roll:"転がる",magnet:"引きよせる",glow:"光る"};
 const app=document.getElementById("app"),soundEl=document.getElementById("sound");
@@ -126,7 +126,7 @@ function stepMotion(timestamp){
    elem.style.left=b.x+"%";elem.style.top=b.y+"%";
    elem.style.transform="translate(-50%,-50%) rotate("+b.angle.toFixed(1)+"deg) scale("+(1-b.melt*.82).toFixed(3)+")";
    elem.style.opacity=String(1-b.melt*.57);
-   if(o.kind==="ice"){const sprite=elem.querySelector(".sprite");if(sprite)sprite.textContent=b.melt>.92?"💧":o.icon}
+   /* Vector illustration fades and scales while the ice melts. */
   }
  }
  if(stage===3&&keyBody){
@@ -186,7 +186,7 @@ function stepMotion(timestamp){
  }
  if(screen==="level")frameId=requestAnimationFrame(stepMotion)
 }
-function updateWorldMessage(message){const label=app.querySelector(".world-message");if(label)label.textContent=message}
+function updateWorldMessage(message){const label=app.querySelector(".notice-copy");if(label)label.textContent=message}
 function goalContact(){
  if(stage===0){
   const b=bodies.rock;return has(get("rock"),"float")&&b&&b.y<29&&Math.abs(b.x-62)<12
@@ -213,12 +213,12 @@ function onGoalContact(){
  const device=app.querySelector(".world .device");
  if(device){
   device.classList.add("success","reached");
-  const icon=device.querySelector(".emoji");if(icon)icon.textContent=source().device.on;
+  const icon=device.querySelector(".emoji");if(icon)icon.innerHTML=deviceArt(stage,true);
  }
  const world=app.querySelector(".world");
  if(world){world.classList.add("goal-hit");const ring=document.createElement("span");ring.className="contact-ring";if(device){ring.style.left=device.style.left;ring.style.top=device.style.top}else{ring.style.left="50%";ring.style.top="50%"}world.appendChild(ring)}
  const text=contactTexts[stage];notice=text;
- const label=app.querySelector(".world-message");if(label)label.textContent=text;
+ const label=app.querySelector(".notice-copy");if(label)label.textContent=text;
  sound("contact");vibrate([45,20,90]);
  goalTimer=setTimeout(()=>{goalTimer=null;if(screen==="level"&&worldGoal)complete()},1100)
 }
@@ -283,6 +283,40 @@ function showFx(){
 function initial(){stopMotion();stopFx();screen="home";soundEl.textContent=soundOn?"♪ ON":"♪ OFF";const completed=Object.keys(solved).length;
  app.innerHTML='<div class="eyebrow">RULE THIEF · INTERACTIVE PROTOTYPE</div><h1 class="title">盗んで、貼って、<br><em>世界を変えろ。</em></h1><p class="intro-lead">風船の「浮く」を岩に。炎の「熱い」を氷に。<br>ものが持つルールを引っ越しさせる、発想のパズル。</p><div class="hero-burst"><div class="row"><span>🎈</span><span class="arrow">「浮く」→</span><span>🪨</span></div><div class="hero-note">能力を盗まれた側は、ちゃんと能力を失う。</div></div><div class="pill-list"><span class="pill">👆 タップ2回で操作</span><span class="pill">🧩 全5ステージ</span><span class="pill">⚗️ 自由実験室</span></div><button class="primary" data-act="start">'+(completed?"続きから実験する ⚡":"実験をはじめる ⚡")+'</button><button class="textbutton" style="width:100%;margin-top:11px" data-act="lab">⚗️ 自由実験から遊ぶ</button><p class="smallhelp">失敗しても何度でもやり直せる。<br>時間制限なし。答えを暗記する必要なし。</p>';
 }
+
+function glyph(kind){
+ const shapes={
+ balloon:'<ellipse cx="32" cy="23" rx="16" ry="20" fill="#f2aaa2"/><path d="M19 12c2-8 11-11 17-10" stroke="#ffe1cf" stroke-width="4" fill="none" stroke-linecap="round"/><path d="m28 44 4 6 4-6M32 50q8 6 0 13" stroke="#f4d6a0" stroke-width="2.5" stroke-linecap="round" fill="none"/>',
+ rock:'<path d="M10 46 16 23 34 12 53 25 57 46 42 54 19 54Z" fill="#afb8c1" stroke="#75899d" stroke-width="2.5" stroke-linejoin="round"/><path d="m34 12-4 24 13 18M16 23l14 13 27 10" stroke="#dfe5e8" stroke-width="2" fill="none"/>',
+ fire:'<path d="M33 6c4 11-3 16 7 24 7 6 9 13 5 20-4 7-19 11-29 1-7-8-3-16 2-23 2 8 10 5 15-22Z" fill="#f7a45e"/><path d="M33 23c2 8-4 11 2 17 3 3 1 10-5 12-9-2-9-10-6-16 4 5 7-4 9-13Z" fill="#ffe8a8"/>',
+ wheel:'<circle cx="32" cy="32" r="23" fill="#344a5e" stroke="#a9c6c4" stroke-width="5"/><circle cx="32" cy="32" r="16" fill="#607d88"/><path d="M32 17v30M17 32h30M21 21l22 22M43 21 21 43" stroke="#bfdae1" stroke-width="3.5" stroke-linecap="round"/><circle cx="32" cy="32" r="6" fill="#e3bb72"/>',
+ crate:'<rect x="11" y="11" width="42" height="42" rx="4" fill="#d49f67" stroke="#885e47" stroke-width="2.5"/><path d="M12 18 52 45M52 18 12 45" stroke="#efc18b" stroke-width="5"/><path d="M12 11v42M52 11v42" stroke="#81563e" stroke-width="3"/>',
+ magnet:'<path d="M16 11v23c0 23 32 23 32 0V11" stroke="#df837d" stroke-width="12" fill="none" stroke-linecap="square"/><path d="M16 13v12M48 13v12" stroke="#84bff1" stroke-width="12"/>',
+ lamp:'<path d="M19 22h26l-6 25H25Z" fill="#f8dda0" stroke="#bb995e" stroke-width="3"/><path d="M23 22V13h18v9M31 10h2M22 49h20" stroke="#e2c0a0" stroke-width="4" stroke-linecap="round"/><path d="M31 26v15" stroke="#fff9c4" stroke-width="6"/><path d="M14 26 7 23M50 26l7-3" stroke="#ffe8a4" stroke-width="3" stroke-linecap="round"/>',
+ firefly:'<ellipse cx="23" cy="25" rx="11" ry="16" fill="#b1e4e8" opacity=".87" transform="rotate(-26 23 25)"/><ellipse cx="42" cy="25" rx="11" ry="16" fill="#b1e4e8" opacity=".87" transform="rotate(26 42 25)"/><ellipse cx="32" cy="40" rx="9" ry="15" fill="#a3f8c4"/><circle cx="32" cy="26" r="7" fill="#4f6976"/><path d="M28 19 25 12M36 19 39 12" stroke="#aecdd1" stroke-width="2" stroke-linecap="round"/>',
+ ice:'<path d="m11 20 19-12 22 12v25L30 57 11 45Z" fill="#82cced" stroke="#b5f1fa" stroke-width="3"/><path d="M30 8v49M11 20l19 13 22-13M11 45l19-12 22 12" stroke="#e5fcff" stroke-width="2" fill="none"/>'
+ };
+ return '<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false" class="vector-art vector-'+kind+'">'+(shapes[kind]||shapes.rock)+'</svg>';
+}
+function deviceArt(i,active){
+ const common='viewBox="0 0 64 64" aria-hidden="true" class="vector-art device-art"';
+ if(i===0||i===2)return '<svg '+common+'><rect x="11" y="15" width="42" height="35" rx="9" fill="#293c51" stroke="#9ab4c6" stroke-width="3"/><circle cx="32" cy="32" r="12" fill="'+(active?"#91e8ba":"#e98a80")+'" stroke="'+(active?"#ceffcf":"#ffd4bf")+'" stroke-width="3"/></svg>';
+ if(i===1)return '<svg '+common+'><path d="M13 55V14L32 5l19 9v41Z" fill="#6b8993" stroke="#b8d8cf" stroke-width="3"/><rect x="22" y="23" width="20" height="31" rx="2" fill="'+(active?"#89cbbb":"#394c64")+'"/><circle cx="37" cy="40" r="2.4" fill="#f0d88d"/></svg>';
+ if(i===3)return '<svg '+common+'><rect x="14" y="29" width="36" height="27" rx="6" fill="'+(active?"#9fdac3":"#c2a676")+'" stroke="#f1ddb2" stroke-width="3"/><path d="'+(active?"M22 31V20C22 3 48 5 45 19":"M22 30V21a10 10 0 0 1 20 0v9")+'" fill="none" stroke="#dce5e7" stroke-width="5"/><circle cx="32" cy="40" r="3" fill="#35495d"/></svg>';
+ return '<svg '+common+'><path d="M15 55 20 8h24l5 47Z" fill="'+(active?"#f4d48e":"#8ca8b2")+'" stroke="#dde8d6" stroke-width="3"/><rect x="24" y="17" width="16" height="13" rx="3" fill="'+(active?"#fffcac":"#24364c")+'"/></svg>';
+}
+function keyArt(){return '<svg class="vector-art key-art" viewBox="0 0 64 64" aria-hidden="true"><circle cx="20" cy="20" r="11" fill="none" stroke="#f9d890" stroke-width="7"/><path d="m29 29 21 21 8-1-1-8-6 1-2-8-8 1-12-12" fill="#f9d890" stroke="#d5a758" stroke-width="2"/></svg>'}
+const traitSymbol={float:"↟",hot:"♨",roll:"⟳",magnet:"⌁",glow:"✧"};
+function traitChip(t){return '<span class="trait-symbol">'+traitSymbol[t]+'</span>'+names[t]}
+function tapObject(id){
+ if(screen!=="level"||goalResolved)return;
+ if(holding){paste(id);return}
+ const o=get(id);
+ if(o&&o.traits.length===1){take(o.id,o.traits[0]);return}
+ notice=o&&o.traits.length>1?o.name+"の能力を、下の作業台から選ぼう":"この物には盗める能力がない。作業台を見てみよう";
+ updateWorldMessage(notice)
+}
+
 function stateInfo(o){
  const b=bodies[o.id]||{x:o.x,y:o.y,angle:0,melt:0};
  let extra=[];
@@ -330,7 +364,7 @@ app.addEventListener("click",e=>{
  case "start":initStage(Math.min(stage,unlocked));break;
  case "lab":initStage(5);break;
  case "take":take(b.dataset.id,b.dataset.trait);break;
- case "object":paste(b.dataset.id);break;
+ case "object":tapObject(b.dataset.id);break;
  case "cancel":cancelHold();break;
  case "undo":undo();break;
  case "reset":initStage(stage);break;
