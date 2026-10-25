@@ -28,6 +28,16 @@
 @keyframes steamUp{to{transform:translate(-50%,-100%);opacity:.4}}
 @keyframes puddle{to{transform:translate(-50%,-50%) scaleX(1.18);opacity:.7}}
 @media(prefers-reduced-motion:reduce){.world .toy,.world .toy .sprite,.world .device.reached .emoji,.contact-ring,.steam,.puddle{animation:none!important}.world .toy{transition:none!important}}
+
+.world .key-token{position:absolute;z-index:6;display:flex;flex-direction:column;align-items:center;transform:translate(-50%,-50%);pointer-events:none;filter:drop-shadow(0 3px 3px #03080a);will-change:left,top}
+.world .key-symbol{font-size:32px;line-height:1;transform:rotate(-24deg)}.world .key-token.attached .key-symbol{transform:rotate(35deg);filter:drop-shadow(0 0 10px #ffe997)}
+.world .key-status{font-size:9px;font-weight:850;color:#fff0bc;white-space:nowrap;background:#142c40dc;border-radius:7px;padding:1px 4px}
+.world .magnet-field{position:absolute;z-index:1;border:2px dashed #f8df9e83;width:70%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%) scale(.92,.9);pointer-events:none;background:radial-gradient(ellipse,#f2db7724,transparent 67%);box-shadow:0 0 14px #ecdc7b23;animation:fieldBreathe 1.4s ease-in-out infinite alternate}
+.world .device{z-index:7}.world .pond{height:30%;bottom:0;background:linear-gradient(#297fa68c,#173e5abd);border-top:2px solid #9de5ed94;pointer-events:none}
+@keyframes fieldBreathe{to{opacity:.43;transform:translate(-50%,-50%) scale(.9,.83)}}@media(prefers-reduced-motion:reduce){.world .magnet-field{animation:none}}
+
+.world .ramp{position:absolute;z-index:1;left:43%;top:71%;width:54%;height:19%;background:linear-gradient(150deg,#b19a71,#71684c);clip-path:polygon(0 0,100% 65%,100% 100%,0 23%);border-radius:4px;filter:drop-shadow(0 2px 3px #121d23);pointer-events:none}
+.world .key-path-label{position:absolute;z-index:5;top:7px;left:8px;right:8px;font-size:9px;color:#e0f9ef;text-align:center;background:#143c50c9;border:1px solid #60878c;border-radius:8px;padding:3px 4px;pointer-events:none}
 </style></head>
 <body><div class="shell"><header class="topbar"><div class="brand">✦ <span>ルール</span>泥棒</div><div class="mini-controls"><button class="minor" id="help" type="button">？ 遊び方</button><button class="minor" id="sound" type="button">♪ ON</button></div></header><main id="app"></main><footer class="footer">RULE THIEF · PHYSICS LAB v2 · NO SERVER REQUIRED</footer></div>
 <script>
@@ -36,8 +46,8 @@
 const levelDefs=[
 {id:"lift",title:"届かないスイッチ",scene:"高い位置のスイッチに届く物がない。",goal:"岩を浮かせて、上のスイッチを押そう",hint:"風船が持つ「浮く」は、風船専用じゃない。",device:{label:"スイッチ",icon:"🔴",on:"🟢",x:62,y:19},items:[{id:"balloon",name:"風船",icon:"🎈",x:19,y:70,kind:"balloon",traits:["float"]},{id:"rock",name:"岩",icon:"🪨",x:62,y:70,kind:"rock",traits:[]}]},
 {id:"ice",title:"氷の扉",scene:"氷に閉じ込められた通路。火は手の届かない場所にある。",goal:"氷を溶かして、出口を開けよう",hint:"火そのものは動かせなくても「熱い」は動かせる。",device:{label:"出口",icon:"🚪",on:"🚪✨",x:79,y:58},items:[{id:"fire",name:"たき火",icon:"🔥",x:22,y:66,kind:"fire",traits:["hot"]},{id:"ice",name:"氷",icon:"🧊",x:68,y:66,kind:"ice",traits:[]}]},
-{id:"roll",title:"動けない荷物",scene:"ボタンは遠くにある。箱は動かない。",goal:"箱を走らせて、遠くのボタンを押そう",hint:"車輪そのものを運ぶ必要はない。",device:{label:"ボタン",icon:"🔴",on:"🟢",x:84,y:68},items:[{id:"wheel",name:"車輪",icon:"🛞",x:23,y:70,kind:"wheel",traits:["roll"]},{id:"crate",name:"箱",icon:"📦",x:52,y:70,kind:"crate",traits:[]}]},
-{id:"key",title:"湖底の鍵",scene:"鍵は湖の向こう。岩は水中に沈み、磁石は岸にある。",goal:"浮く岩に磁力を持たせ、鍵を引き寄せよう",hint:"どの順番でもOK。岩に「浮く」と「引きよせる」を集めてみよう。",device:{label:"鍵",icon:"🗝️",on:"🔓",x:80,y:72},water:true,items:[{id:"balloon",name:"風船",icon:"🎈",x:18,y:54,kind:"balloon",traits:["float"]},{id:"magnet",name:"磁石",icon:"🧲",x:75,y:47,kind:"magnet",traits:["magnet"]},{id:"rock",name:"岩",icon:"🪨",x:47,y:75,kind:"rock",traits:[]}]},
+{id:"roll",title:"坂道の荷物",scene:"箱は坂の上。坂の下にはボタンがあるが、箱は角ばって動かない。",goal:"転がる力を箱に移し、坂道を転がしてボタンを押そう",hint:"斜面を転がりやすいものから「転がる」を盗もう。",device:{label:"ボタン",icon:"🔴",on:"🟢",x:84,y:78},items:[{id:"wheel",name:"車輪",icon:"🛞",x:23,y:70,kind:"wheel",traits:["roll"]},{id:"crate",name:"箱",icon:"📦",x:52,y:70,kind:"crate",traits:[]}]},
+{id:"key",title:"湖底の鍵",scene:"湖底には金属の鍵。扉の鍵穴は高い岸にあり、磁力が届く距離にも限界がある。",goal:"磁力で鍵を岩に付け、岩を浮かせて鍵穴へ運ぼう",hint:"岩に「引きよせる」と「浮く」を集める。鍵がくっついてから浮上する様子を見よう。",device:{label:"鍵穴",icon:"🔒",on:"🔓",x:54,y:21},key:{x:78,y:76},water:true,items:[{id:"balloon",name:"風船",icon:"🎈",x:16,y:62,kind:"balloon",traits:["float"]},{id:"magnet",name:"磁石",icon:"🧲",x:20,y:24,kind:"magnet",traits:["magnet"]},{id:"rock",name:"岩",icon:"🪨",x:48,y:78,kind:"rock",traits:[]}]},
 {id:"light",title:"暗闇の塔",scene:"塔の上に光を届けたい。風船は浮き、ランタンは光る。",goal:"「浮く」と「光る」を同じ物に集めよう",hint:"浮きをランタンに貼っても、光を風船に貼っても成功する。",device:{label:"灯台",icon:"🏰",on:"🏰✨",x:50,y:15},items:[{id:"balloon",name:"風船",icon:"🎈",x:30,y:72,kind:"balloon",traits:["float"]},{id:"lamp",name:"ランタン",icon:"🏮",x:70,y:72,kind:"lamp",traits:["glow"]}]},
 {id:"lab",title:"自由実験室",scene:"正解はない。能力を組み替えて、変な現象を発見しよう。",goal:"自由に実験して、5種類の「発見」を集めてみよう",hint:"「熱い＋転がる」「浮く＋光る」「浮く＋引きよせる」などを試そう。",water:true,items:[{id:"balloon",name:"風船",icon:"🎈",x:14,y:36,kind:"balloon",traits:["float"]},{id:"rock",name:"岩",icon:"🪨",x:45,y:68,kind:"rock",traits:[]},{id:"fire",name:"炎",icon:"🔥",x:79,y:36,kind:"fire",traits:["hot"]},{id:"wheel",name:"車輪",icon:"🛞",x:19,y:74,kind:"wheel",traits:["roll"]},{id:"magnet",name:"磁石",icon:"🧲",x:67,y:72,kind:"magnet",traits:["magnet"]},{id:"firefly",name:"蛍",icon:"✨",x:47,y:26,kind:"firefly",traits:["glow"]},{id:"ice",name:"氷",icon:"🧊",x:79,y:77,kind:"ice",traits:[]}]}
 ];
@@ -47,7 +57,7 @@ const storeKey="rule_thief_prototype_v1";
 let saved={};try{saved=JSON.parse(localStorage.getItem(storeKey)||"{}")||{}}catch(e){}
 let stage=Math.max(0,Math.min(5,Number(saved.stage)||0)),unlocked=Math.max(0,Math.min(5,Number(saved.unlocked)||0)),solved=saved.solved&&typeof saved.solved==="object"?saved.solved:{},discovered=saved.discovered&&typeof saved.discovered==="object"?saved.discovered:{},soundOn=saved.sound!==false;
 let toys=[],holding=null,undoStack=[],lastMoves={},moves=0,screen="home",notice="",fxTimer=null,fx=null,help=null,audio=null,stagesWon=new Set(Object.keys(solved)),hintOpen=false;
-let bodies={},keyBody=null,frameId=null,motionLast=0,motionElapsed=0,goalTimer=null,goalResolved=false,worldGoal=false;
+let bodies={},keyBody=null,keyAttached=false,keyPulling=false,frameId=null,motionLast=0,motionElapsed=0,goalTimer=null,goalResolved=false,worldGoal=false;
 function save(){try{localStorage.setItem(storeKey,JSON.stringify({stage,unlocked,solved,discovered,sound:soundOn}))}catch(e){}}
 function clone(objects){return objects.map(o=>({...o,traits:[...o.traits]}))}
 function source(){return levelDefs[stage]}
@@ -55,9 +65,9 @@ function initStage(n){
  stopMotion();stopFx();
  stage=Math.max(0,Math.min(levelDefs.length-1,n));
  toys=clone(source().items);holding=null;undoStack=[];lastMoves={};moves=0;
- goalResolved=false;worldGoal=false;motionElapsed=0;
+ goalResolved=false;worldGoal=false;keyAttached=false;keyPulling=false;motionElapsed=0;
  bodies=Object.fromEntries(toys.map(o=>[o.id,{x:o.x,y:o.traits.includes("float")?Math.max(17,o.y-12):o.y,vx:0,vy:0,angle:0,melt:0}]));
- keyBody=source().device&&stage===3?{x:source().device.x,y:source().device.y,vx:0,vy:0}:null;
+ keyBody=stage===3?{x:source().key.x,y:source().key.y,vx:0,vy:0}:null;
  notice="ルールを盗むと、物の動きも変化する！";screen="level";hintOpen=false;save();render()
 }
 function isUp(o){return o.traits.includes("float")||(o.kind==="balloon"&&o.traits.includes("hot"))}
@@ -83,12 +93,13 @@ function motionTarget(o){
  let x=o.x,y=o.y;
  if(isUp(o)){
   if(stage===0&&o.id==="rock")y=22;
-  else if(stage===3&&o.id==="rock")y=39;
+  else if(stage===3&&o.id==="rock"){x=keyAttached?52:51;y=keyAttached?24:56}
   else if(stage===4&&isGlow(o)){x=50;y=23}
   else if(stage===5)y=Math.max(16,o.y-32);
   else y=Math.max(18,o.y-27);
  }else if(isRoll(o)){
-  if(stage===2&&o.id==="crate"){x=83;y=o.y}
+  if(stage===2&&o.id==="crate"){x=83;y=78}
+  else if(stage===2&&o.id==="wheel"){x=o.x;y=o.y}
   else x=Math.min(88,o.x+26)
  }
  return {x,y};
@@ -118,44 +129,73 @@ function stepMotion(timestamp){
    if(o.kind==="ice"){const sprite=elem.querySelector(".sprite");if(sprite)sprite.textContent=b.melt>.92?"💧":o.icon}
   }
  }
- if(keyBody&&stage===3){
-  const rock=get("rock"),rb=bodies.rock;
-  if(rock&&rb&&has(rock,"magnet")){
-   spring(keyBody,rb.x+7,rb.y+6,dt,16,6);
-  }else spring(keyBody,source().device.x,source().device.y,dt,20,8);
-  const keyElem=app.querySelector(".world .device");
-  if(keyElem){keyElem.style.left=keyBody.x+"%";keyElem.style.top=keyBody.y+"%"}
+ if(stage===3&&keyBody){
+  const rock=get("rock"),rb=bodies.rock,magnetic=!!(rock&&has(rock,"magnet"));
+  const distance=rb?Math.hypot((keyBody.x-rb.x)*1.3,keyBody.y-rb.y):999;
+  const withinRange=magnetic&&distance<43;
+  if(keyAttached&&!magnetic){
+   keyAttached=false;keyPulling=false;notice="磁力が消えた。鍵がゆっくり沈む…";updateWorldMessage(notice)
+  }
+  if(keyAttached&&rb){
+   // The key is carried by the rock, not teleported to the lock.
+   spring(keyBody,rb.x+3.5,rb.y+1,dt,33,9);
+   keyPulling=false;
+  }else if(withinRange&&rb){
+   // Water drag slows the key; attraction only occurs inside the field.
+   spring(keyBody,rb.x+3.5,rb.y+1,dt,13,4.4);
+   if(!keyPulling){
+    keyPulling=true;notice="ジジジ…磁力が届いた！ 鍵が少しずつ動いている";
+    updateWorldMessage(notice);sound("pull")
+   }
+   if(Math.hypot((keyBody.x-rb.x)*1.3,keyBody.y-rb.y)<7.5){
+    keyAttached=true;keyPulling=false;
+    notice="カチッ！ 鍵が岩に付いた。次は鍵穴へ運ぼう！";
+    updateWorldMessage(notice);sound("attach");vibrate([15,25,30])
+   }
+  }else{
+   // Without a magnetic force the metal key sinks to its resting position.
+   spring(keyBody,source().key.x,source().key.y,dt,11,4.8);
+   if(keyPulling){keyPulling=false;notice="距離が遠すぎて、磁力が届かない";updateWorldMessage(notice)}
+  }
+  const keyEl=app.querySelector(".key-token");
+  if(keyEl){
+   keyEl.style.left=keyBody.x+"%";keyEl.style.top=keyBody.y+"%";
+   keyEl.classList.toggle("attached",keyAttached);
+   const label=keyEl.querySelector(".key-status");
+   if(label)label.textContent=keyAttached?"回収中":withinRange?"吸い寄せ中":"金属の鍵";
+  }
+  const field=app.querySelector(".magnet-field");
+  if(field&&rb){field.style.display=magnetic?"block":"none";field.style.left=rb.x+"%";field.style.top=rb.y+"%"}
   const tether=app.querySelector(".magnet-tether");
   if(tether){
-   const active=rock&&has(rock,"magnet")&&rb&&rb.y<64;
-   tether.style.display=active?"block":"none";
+   const active=withinRange&&rb&&!keyAttached;tether.style.display=active?"block":"none";
    if(active){
     const world=app.querySelector(".world"),w=world?world.clientWidth:350,h=world?world.clientHeight:265;
     const dx=(keyBody.x-rb.x)*w/100,dy=(keyBody.y-rb.y)*h/100;
-    tether.style.left=rb.x*w/100+"px";tether.style.top=rb.y*h/100+"px";
-    tether.style.width=Math.hypot(dx,dy)+"px";
-    tether.style.transform="rotate("+Math.atan2(dy,dx)+"rad)";
+    tether.style.left=rb.x*w/100+"px";tether.style.top=rb.y*h/100+"px";tether.style.width=Math.hypot(dx,dy)+"px";
+    tether.style.transform="rotate("+Math.atan2(dy,dx)+"rad)"
    }
   }
  }
  if(stage===4){
   const beam=app.querySelector(".beam");
-  if(beam)beam.style.opacity=toys.some(o=>isUp(o)&&isGlow(o))?"1":"0";
+  if(beam)beam.style.opacity=toys.some(o=>{const b=bodies[o.id];return b&&isUp(o)&&isGlow(o)&&b.y<30&&Math.abs(b.x-50)<9})?"1":"0";
  }
  if(!goalResolved&&motionElapsed>1.15&&goalContact()){
   onGoalContact();
  }
  if(screen==="level")frameId=requestAnimationFrame(stepMotion)
 }
+function updateWorldMessage(message){const label=app.querySelector(".world-message");if(label)label.textContent=message}
 function goalContact(){
  if(stage===0){
   const b=bodies.rock;return has(get("rock"),"float")&&b&&b.y<29&&Math.abs(b.x-62)<12
  }
  if(stage===1){const b=bodies.ice;return has(get("ice"),"hot")&&b&&b.melt>.98}
- if(stage===2){const b=bodies.crate;return isRoll(get("crate"))&&b&&b.x>79}
+ if(stage===2){const b=bodies.crate;return isRoll(get("crate"))&&b&&b.x>79&&Math.abs(b.y-source().device.y)<9}
  if(stage===3){
-  const b=bodies.rock;
-  return b&&keyBody&&isUp(get("rock"))&&has(get("rock"),"magnet")&&b.y<49&&Math.hypot(keyBody.x-b.x,keyBody.y-b.y)<17
+  const b=bodies.rock,lock=source().device;
+  return !!(b&&keyBody&&keyAttached&&isUp(get("rock"))&&has(get("rock"),"magnet")&&b.y<31&&Math.hypot((keyBody.x-lock.x)*1.3,keyBody.y-lock.y)<10)
  }
  if(stage===4)return toys.some(o=>{const b=bodies[o.id];return b&&isUp(o)&&isGlow(o)&&b.y<30&&Math.abs(b.x-50)<9});
  return false
@@ -164,7 +204,7 @@ const contactTexts=[
  "カチン！ 岩がスイッチに接触。点灯！",
  "ジュワァ…！ 氷が全部溶けて出口が開いた！",
  "ゴロン、ガチャン！ 箱がボタンを押した！",
- "シュン！ 鍵が磁力で飛んで、錠が開いた！",
+ "カチャッ！ 鍵が鍵穴に届き、扉が開いた！",
  "ピカッ！ 光が塔の頂上まで届いた！"
 ];
 function onGoalContact(){
@@ -184,7 +224,7 @@ function onGoalContact(){
 }
 
 function audioTone(f,at,dur,type="sine",v=.10,end){if(!soundOn)return;try{if(!audio)audio=new(window.AudioContext||window.webkitAudioContext)();if(audio.state==="suspended")audio.resume();const t=audio.currentTime+at,o=audio.createOscillator(),g=audio.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(end)o.frequency.exponentialRampToValueAtTime(end,t+dur);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v,t+.009);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g);g.connect(audio.destination);o.start(t);o.stop(t+dur+.03)}catch(e){}}
-function sound(type){if(type==="steal"){audioTone(720,0,.13,"sine",.05,380);audioTone(1150,.05,.11,"triangle",.035)}else if(type==="paste"){audioTone(330,0,.17,"triangle",.10,610);audioTone(620,.09,.15,"sine",.08,980)}else if(type==="win"){audioTone(95,0,.35,"sawtooth",.16,37);audioTone(200,0,.18,"square",.06,65);audioTone(620,.12,.17,"sine",.10);audioTone(920,.25,.16,"sine",.12);audioTone(1290,.39,.25,"triangle",.12)}else if(type==="wrong"){audioTone(150,0,.14,"sine",.05)}}
+function sound(type){if(type==="pull"){audioTone(230,0,.22,"triangle",.04,480)}else if(type==="attach"){audioTone(680,0,.12,"triangle",.08,1040)}else if(type==="contact"){audioTone(550,0,.15,"triangle",.10,920);audioTone(1200,.13,.21,"sine",.08)}else if(type==="steal"){audioTone(720,0,.13,"sine",.05,380);audioTone(1150,.05,.11,"triangle",.035)}else if(type==="paste"){audioTone(330,0,.17,"triangle",.10,610);audioTone(620,.09,.15,"sine",.08,980)}else if(type==="win"){audioTone(95,0,.35,"sawtooth",.16,37);audioTone(200,0,.18,"square",.06,65);audioTone(620,.12,.17,"sine",.10);audioTone(920,.25,.16,"sine",.12);audioTone(1290,.39,.25,"triangle",.12)}else if(type==="wrong"){audioTone(150,0,.14,"sine",.05)}}
 function vibrate(x){try{navigator.vibrate&&navigator.vibrate(x)}catch(e){}}
 function resetNotice(s){notice=s}
 function take(id,trait){
@@ -229,7 +269,7 @@ function checkDiscovery(){
  if(newBadges.length){for(const id of newBadges)discovered[id]=true;notice="✦ 新発見！ "+(badgeNames[newBadges[0]]||"未知の反応")+"！";sound("win");save()}
 }
 const badgeNames={hotice:"とける世界",lantern:"空飛ぶ灯り",skyMagnet:"浮遊磁石",hotBalloon:"熱気球",comet:"炎の転がり玉"};
-function undo(){if(holding){cancelHold();return}if(!undoStack.length)return;if(goalTimer!==null){clearTimeout(goalTimer);goalTimer=null}goalResolved=false;worldGoal=false;toys=undoStack.pop();moves=Math.max(0,moves-1);resetNotice("ひとつ前の世界に戻した。物が元の位置へ戻る");motionElapsed=0;render()}
+function undo(){if(holding){cancelHold();return}if(!undoStack.length)return;keyAttached=false;keyPulling=false;if(goalTimer!==null){clearTimeout(goalTimer);goalTimer=null}goalResolved=false;worldGoal=false;toys=undoStack.pop();moves=Math.max(0,moves-1);resetNotice("ひとつ前の世界に戻した。物が元の位置へ戻る");motionElapsed=0;render()}
 function complete(){if(screen!=="level"||!worldGoal)return;stopMotion();screen="win";solved[source().id]=Math.min(solved[source().id]??999,moves);unlocked=Math.max(unlocked,Math.min(stage+1,5));save();sound("win");vibrate([45,25,85,35,110]);showFx()}
 function next(){stopFx();if(stage===4){initStage(5)}else initStage(Math.min(stage+1,5))}
 function stopFx(){if(fxTimer!==null){clearTimeout(fxTimer);fxTimer=null}if(fx){fx.remove();fx=null}}
@@ -258,7 +298,7 @@ function render(){
  if(screen!=="level")return;
  soundEl.textContent=soundOn?"♪ ON":"♪ OFF";
  const def=source(),done=!!solved[def.id];const progress=Math.min(stage,5)/5*100;
- const device=def.device?'<div class="device '+(status()?"success reached":"")+'" style="left:'+(keyBody?keyBody.x:def.device.x)+'%;top:'+(keyBody?keyBody.y:def.device.y)+'%"><span class="emoji">'+(status()?def.device.on:def.device.icon)+'</span><span class="caption">'+def.device.label+'</span></div>':'';
+ const device=def.device?'<div class="device '+(status()?"success reached":"")+'" style="left:'+def.device.x+'%;top:'+def.device.y+'%"><span class="emoji">'+(status()?def.device.on:def.device.icon)+'</span><span class="caption">'+def.device.label+'</span></div>':'';
  const toyHTML=toys.map(o=>{
   const v=stateInfo(o);
   return '<button class="toy '+v.cls+'" type="button" data-act="object" data-id="'+o.id+'" style="left:'+v.x+'%;top:'+v.y+'%;transform:translate(-50%,-50%) rotate('+v.angle+'deg) scale('+(1-v.melt*.82)+');opacity:'+(1-v.melt*.57)+'"><span class="sprite">'+v.icon+'</span><span class="name">'+o.name+'</span></button>'
@@ -267,8 +307,9 @@ function render(){
  const badges=stage===5?'<div class="panel-title"><span>✦ 発見ノート</span><span class="sub">'+Object.keys(discovered).length+'/5</span></div>'+Object.entries(badgeNames).map(([id,label])=>'<div class="lab-badge '+(discovered[id]?"done":"")+'"><span>'+(discovered[id]?'✨ '+label:'🔒 ？？？')+'</span><span class="symbol">'+(discovered[id]?'✓':'')+'</span></div>').join(""):'';
  const hold=holding?'<div class="holding active"><span class="chip">'+names[holding.trait]+'</span><span>貼り先を選ぼう！</span><button class="cancel" data-act="cancel">戻す ×</button></div>':'<div class="holding"><span>🧪</span><span>ルールを移すと、物が本当に動き出す！</span></div>';
  const melt=stage===1&&has(get("ice"),"hot")?'<div class="steam" style="left:68%;top:62%">〰 〰 〰</div><div class="puddle" style="left:68%;top:76%"></div>':'';
- const tether=stage===3?'<div class="magnet-tether" style="display:none"></div>':'';
- app.innerHTML='<div class="topline"><span class="chapter">'+(stage===5?"⚗️ SANDBOX":"LEVEL "+(stage+1)+" / 5")+'</span><span class="chapter-info">'+moves+' MOVE'+(done?" · ✓ CLEAR":"")+'</span></div><div class="progress"><i style="width:'+progress+'%"></i></div><h1 class="level-title">'+def.title+'</h1><p class="level-goal">'+def.scene+'<br><strong>目標：'+def.goal+'</strong></p><div class="world">'+(def.water?'<div class="pond"></div>':'')+'<div class="ground"></div>'+(stage===4?'<div class="beam" style="opacity:'+(toys.some(o=>isUp(o)&&isGlow(o))?1:0)+'"></div>':'')+tether+melt+device+toyHTML+'<span class="sticker">✦ PHYSICS LAB</span><div class="world-message pop">'+notice+'</div></div>'+hold+'<div class="panel-title"><span>ルールを盗む</span><span class="sub">選ぶ → 貼る → 動きを観察</span></div><div class="object-grid">'+cards+'</div><div class="controls"><button class="textbutton" data-act="undo" '+(!holding&&!undoStack.length?"disabled":"")+'>↶ 1手戻す</button><button class="textbutton" data-act="reset">↻ やり直す</button><button class="textbutton" data-act="levels">☰ ステージ</button></div>'+(hintOpen?'<div class="tips">💡 '+def.hint+'</div>':'<button class="textbutton" style="width:100%" data-act="hint">💡 ヒントを見る</button>')+badges;
+ const keyPath=stage===3?'<div class="key-path-label">① 磁力を近づける　② 鍵を運ぶ　③ 鍵穴へ</div>':'';
+ const tether=stage===3?'<div class="magnet-field" style="display:none"></div><div class="magnet-tether" style="display:none"></div><div class="key-token" style="left:'+(keyBody?keyBody.x:def.key.x)+'%;top:'+(keyBody?keyBody.y:def.key.y)+'%"><span class="key-symbol">🗝️</span><span class="key-status">金属の鍵</span></div>':'';
+ app.innerHTML='<div class="topline"><span class="chapter">'+(stage===5?"⚗️ SANDBOX":"LEVEL "+(stage+1)+" / 5")+'</span><span class="chapter-info">'+moves+' MOVE'+(done?" · ✓ CLEAR":"")+'</span></div><div class="progress"><i style="width:'+progress+'%"></i></div><h1 class="level-title">'+def.title+'</h1><p class="level-goal">'+def.scene+'<br><strong>目標：'+def.goal+'</strong></p><div class="world">'+(def.water?'<div class="pond"></div>':'')+'<div class="ground"></div>'+(stage===2?'<div class="ramp"></div>':'')+(stage===4?'<div class="beam" style="opacity:'+(worldGoal?1:0)+'"></div>':'')+tether+keyPath+melt+device+toyHTML+'<span class="sticker">✦ PHYSICS LAB</span><div class="world-message pop">'+notice+'</div></div>'+hold+'<div class="panel-title"><span>ルールを盗む</span><span class="sub">選ぶ → 貼る → 動きを観察</span></div><div class="object-grid">'+cards+'</div><div class="controls"><button class="textbutton" data-act="undo" '+(!holding&&!undoStack.length?"disabled":"")+'>↶ 1手戻す</button><button class="textbutton" data-act="reset">↻ やり直す</button><button class="textbutton" data-act="levels">☰ ステージ</button></div>'+(hintOpen?'<div class="tips">💡 '+def.hint+'</div>':'<button class="textbutton" style="width:100%" data-act="hint">💡 ヒントを見る</button>')+badges;
  animateWorld();
 }
 function levelMenu(){
