@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#111d35"><title>ルール泥棒 | 盗んで、貼って、世界を変えろ。</title>
+<style>
+:root{color-scheme:dark;--ink:#f5f8fb;--quiet:#b7cde0;--mint:#83f2cd;--gold:#ffd785;--blue:#141f38;--panel:#20354b;--border:#55758d}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100svh;background:radial-gradient(ellipse at 50% -9%,#365e71 0,#14243d 55%,#0a172a 100%);color:var(--ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;-webkit-font-smoothing:antialiased}button{font:inherit;touch-action:manipulation;cursor:pointer;-webkit-tap-highlight-color:transparent}button:focus-visible{outline:3px solid #fff59c;outline-offset:3px}button:disabled{opacity:.4;cursor:default} .shell{max-width:520px;margin:0 auto;padding:12px 14px max(30px,env(safe-area-inset-bottom));min-height:100svh}.topbar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:3px 0 11px;border-bottom:1px solid #4568819c}.brand{font-weight:1000;font-size:17px;letter-spacing:-.06em}.brand span{color:var(--mint)}.mini-controls{display:flex;align-items:center;gap:6px}.minor{color:#e3f1ed;background:#253d54;border:1px solid #56778a;border-radius:20px;padding:7px 10px;font-size:11px;font-weight:850;min-height:36px}.eyebrow{color:#8ff6d1;font-size:11px;font-weight:900;letter-spacing:.14em}.title{font-size:clamp(38px,10.3vw,54px);line-height:1.15;font-weight:1000;letter-spacing:-.075em;margin:16px 0 8px}.title em{font-style:normal;color:#ffd88d}.intro-lead{color:#d3e3e9;font-size:15px;line-height:1.75;margin:8px 0 14px}.hero-burst{border:1px solid #658f97;background:linear-gradient(135deg,#2d5563,#1b334b);border-radius:18px;margin:16px 0;padding:17px 16px;position:relative;overflow:hidden}.hero-burst .row{display:flex;align-items:center;justify-content:center;gap:13px;min-height:110px;font-size:53px}.hero-burst .arrow{font-size:28px;color:#ffd785}.hero-burst .hero-note{text-align:center;color:#d2e7e9;font-weight:800;font-size:12px}.pill-list{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 20px}.pill{color:#baf5e2;border:1px solid #518477;border-radius:20px;font-size:11px;font-weight:800;padding:5px 9px}.primary{display:block;width:100%;border:0;color:#193043;background:linear-gradient(105deg,#ffedbb,#ffd084);border-radius:13px;padding:15px;font-size:16px;font-weight:1000;box-shadow:0 4px 0 #a27042;min-height:53px}.primary:active{transform:translateY(3px);box-shadow:0 1px 0 #a27042}.textbutton{border:1px solid #597888;background:#1c364b;color:#e1ecec;border-radius:11px;padding:10px 13px;font-size:12px;font-weight:800}.smallhelp{font-size:11px;color:#a8c0cb;line-height:1.7;text-align:center;margin:13px 0}.topline{display:flex;align-items:center;justify-content:space-between;gap:5px;margin:13px 0 6px}.chapter{font-size:12px;font-weight:950;color:#8cf4d1;letter-spacing:.06em}.chapter-info{color:#b8d7e1;font-size:11px}.progress{height:5px;background:#2c4557;border-radius:7px;overflow:hidden;margin:10px 0 15px}.progress i{display:block;height:100%;background:linear-gradient(90deg,#87f2cd,#ffdb8e);transition:width .3s}.level-title{font-size:26px;line-height:1.3;letter-spacing:-.055em;margin:0 0 4px;font-weight:1000}.level-goal{font-size:13px;line-height:1.65;color:#dae7eb;margin:0 0 11px}.level-goal strong{color:#ffe69f}
+.world{position:relative;height:265px;border-radius:17px;overflow:hidden;background:linear-gradient(165deg,#244a65,#183851 60%,#1d3047);border:1px solid #61859e;isolation:isolate;box-shadow:inset 0 2px 0 #ffffff16,0 8px 26px #07112155}.world:before{content:"";position:absolute;inset:0;background-image:radial-gradient(#cfe6f22c 1px,transparent 1px);background-size:19px 19px;pointer-events:none}.world .ground{position:absolute;bottom:-1px;width:100%;height:21%;border-top:3px solid #95bea5;background:linear-gradient(#345e58,#274350);z-index:0}.world .pond{position:absolute;left:0;right:0;bottom:20%;height:18%;background:linear-gradient(#4aa9cb5a,#3174a97e);border-top:2px solid #7cd7e6;z-index:1}.world .device{position:absolute;z-index:2;text-align:center;transform:translate(-50%,-50%);pointer-events:none}.world .device .emoji{font-size:36px;display:block;filter:drop-shadow(0 5px 3px #0005)}.world .device .caption{display:block;font-weight:950;font-size:10px;color:#ffedb2;text-shadow:0 2px 3px #101a29}.world .device.success .emoji{filter:drop-shadow(0 0 12px #b0ffb1)}.world .beam{position:absolute;z-index:1;top:13%;left:49%;width:140px;height:190px;background:linear-gradient(#fff9ac78,transparent);clip-path:polygon(48% 0,52% 0,100% 100%,0 100%);transform:translateX(-50%);animation:beam 1.4s ease-in-out infinite alternate;pointer-events:none}.world .toy{position:absolute;z-index:3;width:84px;min-height:80px;padding:4px 2px 2px;border:1px solid transparent;background:transparent;color:#fff;text-align:center;display:flex;flex-direction:column;align-items:center;gap:0;transform:translate(-50%,-50%) var(--move,translateY(0));transition:transform .65s cubic-bezier(.25,1.3,.5,1),filter .5s,opacity .5s;filter:drop-shadow(0 6px 4px #02121d80)}.world .toy.selected{filter:drop-shadow(0 0 14px #ffe496);border:1px dashed #fff4b8;background:#cfc78a20;border-radius:14px}.world .toy.winner{filter:drop-shadow(0 0 20px #f8e57a)}.world .toy .sprite{font-size:40px;line-height:1.2;display:block;transition:transform .5s}.world .toy .name{font-size:11px;font-weight:950;color:#f8fcfc;text-shadow:0 2px 5px #0a1120;background:#16324bc9;border-radius:8px;padding:2px 7px;white-space:nowrap}.world .toy.floating .sprite{animation:bob 1.8s ease-in-out infinite alternate}.world .toy.hot .sprite{filter:drop-shadow(0 0 11px #ffb453)}.world .toy.glow .sprite{filter:drop-shadow(0 0 13px #faff99)}.world .toy.rolled .sprite{transform:rotate(24deg)}.world .toy.melted{opacity:.76}.world .toy .tiny-icon{font-size:11px;color:#ffe2a9}.world .world-message{position:absolute;z-index:7;bottom:11px;left:50%;transform:translateX(-50%);border-radius:12px;background:#0c253adf;color:#f4f4d6;padding:7px 11px;font-size:11px;font-weight:850;max-width:94%;text-align:center;white-space:normal;border:1px solid #608782;box-shadow:0 4px 15px #0005;pointer-events:none}.world .world-message.pop{animation:pop .32s ease}.world .sticker{position:absolute;top:7px;left:10px;z-index:5;font-size:10px;font-weight:950;color:#c8f2ee;border:1px solid #65a79d;background:#174b4cc9;border-radius:20px;padding:3px 7px}
+@keyframes bob{to{transform:translateY(-7px)}}@keyframes beam{to{opacity:.45}}@keyframes pop{from{transform:translate(-50%,10px) scale(.8);opacity:0}to{transform:translate(-50%,0) scale(1);opacity:1}}
+.holding{display:flex;align-items:center;gap:8px;margin:11px 0;min-height:49px;border:1px dashed #6a91a0;border-radius:12px;padding:8px 10px;background:#142e45;color:#bad6de;font-size:12px;font-weight:800}.holding.active{border-style:solid;border-color:#ffd47e;background:linear-gradient(100deg,#3c3d36,#253e49);color:#ffe8ae}.holding .chip{flex:none;color:#1c3844;background:#ffdc8d;border-radius:18px;padding:5px 10px;font-weight:1000}.holding .cancel{margin-left:auto;border:0;background:#274659;color:#dcecef;padding:6px 8px;border-radius:8px;font-size:11px}.holding .hint-pulse{animation:pulse 1s infinite alternate}@keyframes pulse{to{transform:scale(1.08)}}
+.panel-title{display:flex;justify-content:space-between;align-items:center;margin:12px 0 8px;color:#9bf2d5;font-size:11px;letter-spacing:.09em;font-weight:950}.panel-title .sub{color:#afc4d2;font-size:10px;letter-spacing:0}.object-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.object-card{border:1px solid #4f7286;border-radius:11px;background:#1a334a;padding:9px 10px;min-height:80px}.object-card .name-row{display:flex;justify-content:space-between;gap:6px;align-items:center;font-weight:900;font-size:12px}.object-card .name-row .emoji{font-size:18px}.properties{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px;min-height:28px}.trait{border:1px solid #77af9e;background:#295a5b;color:#e8fff3;font-size:12px;font-weight:950;border-radius:20px;padding:5px 9px;min-height:30px}.trait:active{transform:scale(.95)}.trait.empty{color:#7f9bac;border:1px dashed #3e5b75;background:transparent;font-size:11px;font-weight:650;cursor:default}.object-card.target{border-color:#f5cc81;background:#3a3e3b}.object-card .target-button{border:1px solid #e5cc92;background:#efe0b2;color:#193141;font-weight:950;font-size:11px;border-radius:9px;padding:6px 9px;margin-top:8px;width:100%}.object-card .target-button:disabled{display:none}.controls{display:flex;gap:8px;align-items:center;margin:13px 0}.controls button{flex:1}.tips{color:#b6d2d2;background:#183948;border-left:3px solid #75d5b5;border-radius:8px;font-size:12px;line-height:1.65;padding:10px 12px;margin:11px 0}.success-overlay{position:fixed;inset:0;z-index:50;background:radial-gradient(circle,#745c31,#172a3b 65%,#0b1729);display:flex;align-items:center;justify-content:center;padding:23px;text-align:center;animation:shake .45s ease-out;isolation:isolate}.success-overlay .flash{position:absolute;inset:0;background:#fbe4b9;animation:flash .65s ease-out forwards;pointer-events:none}.success-overlay .ring{position:absolute;border:9px solid #ffecaf;border-radius:50%;width:130px;height:130px;box-shadow:0 0 90px #ffe189;animation:ring .9s ease-out forwards;pointer-events:none}.success-overlay .inside{position:relative;z-index:3;animation:slam .35s cubic-bezier(.1,1.5,.4,1) both}.success-overlay .kicker{font-size:12px}.success-overlay h2{font-size:clamp(43px,13vw,68px);line-height:1.1;letter-spacing:-.08em;margin:12px 0;text-shadow:0 6px 0 #966b35,0 0 30px #ffbd69;color:#ffebaa}.success-overlay p{font-size:14px;line-height:1.75;color:#fff6d8;font-weight:800}.success-overlay .cta{margin:20px auto 0;padding:11px 18px;border:0;border-radius:14px;font-weight:950;background:#fbe0aa;color:#193144}.success-overlay .try-more{display:block;margin:15px auto;color:#d7e5e7;background:none;border:0;text-decoration:underline;font-size:12px}.success-overlay .spark{position:absolute;left:50%;top:47%;width:8px;height:33px;border-radius:7px;background:linear-gradient(#fff,#ffc976);transform-origin:50% 0;animation:spark .9s ease-out forwards;animation-delay:var(--delay)}@keyframes flash{0%{opacity:1}25%{opacity:.45}100%{opacity:0}}@keyframes ring{to{transform:scale(6);opacity:0}}@keyframes shake{0%{transform:scale(.96)}20%{transform:translate(6px,-7px)}45%{transform:translate(-4px,4px)}80%,100%{transform:none}}@keyframes slam{from{transform:scale(2.1) rotate(-9deg);opacity:0}to{transform:scale(1);opacity:1}}@keyframes spark{0%{transform:rotate(var(--rot)) translateY(0);opacity:1}100%{transform:rotate(var(--rot)) translateY(-220px);opacity:0}}
+.help-modal{position:fixed;inset:0;z-index:60;background:#0b1629d9;display:flex;align-items:center;justify-content:center;padding:20px}.help-body{width:min(100%,430px);background:#1d3b52;border:1px solid #7eb9b1;border-radius:17px;padding:20px}.help-body h2{margin:0 0 10px;color:#ffe09a}.help-body p{font-size:13px;line-height:1.8}.lab-badge{display:flex;justify-content:space-between;align-items:center;border:1px solid #4f7e7b;border-radius:10px;margin:7px 0;background:#1b3b47;padding:9px 12px;font-size:12px;color:#d9f1e5}.lab-badge.done{border-color:#f7d388;background:#464030}.lab-badge .symbol{font-size:18px}.footer{color:#8daab9;text-align:center;font-size:10px;margin:20px 0}
+@media(max-width:380px){.topbar{gap:3px}.brand{font-size:15px}.minor{padding:6px 8px}.world{height:245px}.world .toy{width:74px}.world .toy .sprite{font-size:35px}.level-title{font-size:24px}.object-card{padding:8px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}.success-overlay .flash,.success-overlay .ring,.success-overlay .spark{display:none}}
+
+/* PHYSICS LAB v2: real-time position + velocity simulation */
+.world .toy{transition:none;will-change:left,top,transform,opacity}
+.world .toy .sprite{transition:none}.world .toy.floating .sprite{animation:bob 1.4s ease-in-out infinite alternate}
+.world .toy.rolled .sprite{transform:none}.world .toy.melted .sprite{filter:drop-shadow(0 0 8px #9ef4ff)}
+.world .device{will-change:left,top;transition:none}
+.world .device.reached .emoji{animation:goalPulse .58s ease-out 2;filter:drop-shadow(0 0 17px #c6fcb2)}
+.world.goal-hit{box-shadow:inset 0 0 65px #adffba55,0 0 26px #a3ffdc56;border-color:#afffd8}
+.contact-ring{position:absolute;z-index:6;width:20px;height:20px;border:5px solid #c4ffb5;border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);animation:impactRing .8s ease-out forwards;box-shadow:0 0 22px #e6ff91}
+.world .magnet-tether{position:absolute;height:4px;border-top:2px dashed #ffde91;z-index:2;transform-origin:left center;filter:drop-shadow(0 0 7px #ffdd82);opacity:.9;pointer-events:none}
+.world .steam{position:absolute;z-index:4;transform:translate(-50%,-50%);font-size:21px;letter-spacing:4px;color:#c4f5ffcc;filter:drop-shadow(0 0 6px #8de3fa);animation:steamUp 1s ease-in-out infinite alternate;pointer-events:none}
+.world .puddle{position:absolute;z-index:2;transform:translate(-50%,-50%);height:14px;width:70px;border-radius:50%;background:#7acdec88;box-shadow:0 0 18px #96eaff73;animation:puddle 1.4s ease-in-out infinite alternate;pointer-events:none}
+.world .beam{transition:opacity .65s ease;filter:drop-shadow(0 0 16px #fff6ab);z-index:2}
+@keyframes goalPulse{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)}}
+@keyframes impactRing{from{width:10px;height:10px;opacity:1}to{width:155px;height:155px;opacity:0}}
+@keyframes steamUp{to{transform:translate(-50%,-100%);opacity:.4}}
+@keyframes puddle{to{transform:translate(-50%,-50%) scaleX(1.18);opacity:.7}}
+@media(prefers-reduced-motion:reduce){.world .toy,.world .toy .sprite,.world .device.reached .emoji,.contact-ring,.steam,.puddle{animation:none!important}.world .toy{transition:none!important}}
+
+.world .key-token{position:absolute;z-index:6;display:flex;flex-direction:column;align-items:center;transform:translate(-50%,-50%);pointer-events:none;filter:drop-shadow(0 3px 3px #03080a);will-change:left,top}
+.world .key-symbol{font-size:32px;line-height:1;transform:rotate(-24deg)}.world .key-token.attached .key-symbol{transform:rotate(35deg);filter:drop-shadow(0 0 10px #ffe997)}
+.world .key-status{font-size:9px;font-weight:850;color:#fff0bc;white-space:nowrap;background:#142c40dc;border-radius:7px;padding:1px 4px}
+.world .magnet-field{position:absolute;z-index:1;border:2px dashed #f8df9e83;width:70%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%) scale(.92,.9);pointer-events:none;background:radial-gradient(ellipse,#f2db7724,transparent 67%);box-shadow:0 0 14px #ecdc7b23;animation:fieldBreathe 1.4s ease-in-out infinite alternate}
+.world .device{z-index:7}.world .pond{height:30%;bottom:0;background:linear-gradient(#297fa68c,#173e5abd);border-top:2px solid #9de5ed94;pointer-events:none}
+@keyframes fieldBreathe{to{opacity:.43;transform:translate(-50%,-50%) scale(.9,.83)}}@media(prefers-reduced-motion:reduce){.world .magnet-field{animation:none}}
+
+.world .ramp{position:absolute;z-index:1;left:43%;top:71%;width:54%;height:19%;background:linear-gradient(150deg,#b19a71,#71684c);clip-path:polygon(0 0,100% 65%,100% 100%,0 23%);border-radius:4px;filter:drop-shadow(0 2px 3px #121d23);pointer-events:none}
+.world .key-path-label{position:absolute;z-index:5;top:7px;left:8px;right:8px;font-size:9px;color:#e0f9ef;text-align:center;background:#143c50c9;border:1px solid #60878c;border-radius:8px;padding:3px 4px;pointer-events:none}
+
+/* RULE THIEF · ATELIER — separate physics stage from contextual workbench */
+:root{--ui-mint:#9ce7cf;--ui-line:#42627b;--ui-navy:#0c1b2d}
+body{background:radial-gradient(ellipse at top,#1e4256 0%,#112a3b 40%,#081522 100%)}
+.shell{max-width:620px;padding:12px 14px 34px}
+.topbar{border-color:#496a77;height:51px}.brand{font-size:19px;letter-spacing:-.055em}.brand span{color:#99e7c9}
+.mission-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:21px 1px 8px}.mission-number{color:#92ddc9;font-size:11px;font-weight:950;letter-spacing:.16em}.mission-progress{color:#d5cfb9;font-size:11px;font-weight:850}
+.mission-meter{height:4px;background:#254354;border-radius:8px;overflow:hidden;margin-bottom:14px}.mission-meter span{display:block;height:100%;background:#8de8c8;transition:width .2s}
+.mission-heading h1{font-size:30px;font-weight:1000;letter-spacing:-.065em;line-height:1.24;margin:0 0 7px}
+.mission-heading p{margin:0 0 13px;font-size:13px;line-height:1.65;color:#bdcfd7}
+.goal-strip{display:flex;gap:10px;align-items:center;background:#244255;border:1px solid #547d7e;border-radius:11px;color:#f1f4ea;padding:10px 13px;margin:0 0 15px;line-height:1.5;font-size:12px}
+.goal-strip b{font-size:10px;color:#a2efcd;font-weight:900;letter-spacing:.08em}
+.goal-icon{display:grid;place-items:center;width:33px;height:33px;min-width:33px;border:1px solid #81c6ba;border-radius:50%;color:#a9f2d6;font-size:23px;font-weight:400}
+.stage-panel{border:1px solid #57788a;border-radius:18px;overflow:hidden;background:#162e43;box-shadow:0 12px 32px #040f1955}
+.stage-topline{display:flex;align-items:center;justify-content:space-between;padding:11px 13px 9px;gap:8px;background:#192f42}
+.stage-label{font-size:10px;font-weight:950;letter-spacing:.13em;color:#a3e9d2}.stage-guide{font-size:10px;color:#b6d1d6;font-weight:700}
+.world{height:310px;border:0;border-radius:0;background:linear-gradient(160deg,#274c61,#1c3b50 65%,#183044);box-shadow:none}
+.world.lab-world{height:408px;background:linear-gradient(160deg,#27495b,#18354a)}
+.world:before{background-size:24px 24px;opacity:.48}.world .ground{height:15%;background:linear-gradient(#355852,#304950);border-top:2px solid #819e97}.world.lab-world .ground{height:7%}
+.world .pond{bottom:15%;height:28%;border-top-color:#74b9bf}
+.world .toy{width:83px;min-height:74px;border:1px solid transparent;background:transparent;padding:3px 2px;gap:2px;border-radius:11px;filter:drop-shadow(0 5px 4px #07121d50);z-index:3}
+.world .toy:active{background:#d8f6e914;border:1px solid #ffffff48}.world .toy.origin{border:1px dashed #ffdc9b;background:#ffe1ac18}
+.world .toy .sprite{display:grid;place-items:center;width:57px;height:56px;line-height:1}
+.world .toy .sprite .vector-art{width:54px;height:54px}
+.world .toy .name{font-size:10px;line-height:1.2;background:#122638c9;color:#e9f3f0;padding:3px 7px;border-radius:6px;max-width:85px;overflow:hidden;text-overflow:ellipsis}
+.world .toy.floating .sprite{animation:none}
+.world .toy.hot .sprite,.world .toy.glow .sprite{filter:none}
+.world.lab-world .toy{width:82px}
+.world .device{min-width:60px;z-index:5}.world .device .emoji{display:grid;place-items:center;width:57px;height:57px}.world .device .emoji svg{width:54px;height:54px}
+.world .device .caption{font-size:9px;background:#0e283ab5;border:1px solid #64888c;border-radius:6px;padding:2px 5px}
+.vector-art{width:100%;height:100%;display:block}
+.world .key-symbol{width:50px;height:48px;display:block}.world .key-symbol .vector-art{width:44px;height:44px}
+.world .key-status{background:#152d3c;color:#ffe6af}.world .key-token{z-index:6}.world .magnet-field{border-color:#e9d29392}.world .ramp{top:75%;height:15%}
+.world .world-message{display:none}
+.notice-strip{min-height:54px;display:flex;align-items:center;gap:10px;background:#12283b;padding:10px 13px;border-top:1px solid #385974}
+.notice-dot{width:9px;height:9px;min-width:9px;border-radius:50%;background:#84e4ca;box-shadow:0 0 0 4px #84e4ca17}
+.notice-copy{font-size:12px;color:#dce9e6;line-height:1.5;font-weight:800}
+.workbench{border:1px solid #526d80;border-radius:16px;background:#1a3448;margin:17px 0 11px;padding:15px 12px 14px}
+.workbench-top{display:flex;align-items:center;justify-content:space-between;gap:7px;margin-bottom:7px}
+.workbench-brow{font-size:9px;font-weight:900;letter-spacing:.17em;color:#9ce5c9}
+.workbench h2{font-size:19px;font-weight:1000;line-height:1.25;letter-spacing:-.04em;margin:5px 0}
+.work-step{background:#284e55;border:1px solid #547e75;color:#b9efcd;padding:5px 9px;border-radius:6px;font-weight:950;font-size:10px;white-space:nowrap}
+.work-hint{font-size:11px;color:#b9cfd4;margin:6px 0 11px}
+.work-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.work-item{border:1px solid #496a7d;background:#142c3f;border-radius:12px;padding:11px;min-height:104px}
+.work-item-head{display:flex;align-items:center;gap:8px}
+.mini-art{display:grid;place-items:center;flex:none;width:36px;height:36px}.mini-art .vector-art{width:34px;height:34px}
+.work-object-name{font-size:13px;font-weight:950;color:#f4f6ee;line-height:1.3}
+.work-traits{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px;min-height:32px}
+.new-trait{border:1px solid #77b9aa;border-radius:7px;padding:7px 8px;background:#315d5c;color:#edfff3;font-size:12px;line-height:1.1;font-weight:900;min-height:32px;display:flex;align-items:center;gap:6px}
+.new-trait:active{background:#468775}.new-trait.trait-hot{background:#64483d;border-color:#c38f72}.new-trait.trait-roll{background:#4a566c;border-color:#859dbd}.new-trait.trait-magnet{background:#41516f;border-color:#869fc9}.new-trait.trait-glow{background:#5b5542;border-color:#b4a36c}
+.trait-symbol{font-size:17px;line-height:.9}.no-trait{color:#8ea7b5;font-size:11px;align-self:center}
+.held-banner{display:flex;align-items:center;gap:7px;padding:10px 11px;margin:7px 0 12px;border:1px solid #d9b882;border-radius:11px;background:#544a39;color:#f7e6c3;font-size:12px;font-weight:800}
+.held-trait{display:flex;gap:7px;align-items:center;font-weight:950;font-size:14px;color:#fff3c7}
+.held-cancel{margin-left:auto;background:#675745;border:1px solid #92754d;border-radius:7px;color:#f7e8cb;font-size:11px;padding:6px;white-space:nowrap}
+.target-mode{grid-template-columns:repeat(2,minmax(0,1fr))}
+.work-object{border:1px solid #86baae;border-radius:12px;background:linear-gradient(120deg,#235f58,#24494f);min-height:96px;color:#f5fff4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:7px;position:relative}
+.work-object:active{transform:scale(.97)}.work-object .mini-art{width:37px;height:37px}.work-object .work-object-name{font-size:12px}
+.work-object .work-state{font-size:10px;color:#beeadd}.work-object.unavailable{background:#1b3143;border-color:#3e5569;opacity:.45}
+.toolbar{display:flex;gap:8px;margin:0 0 11px}.toolbar button{flex:1;background:#1c374b;border:1px solid #4e6d81;color:#d6e9e5;border-radius:10px;padding:11px 4px;min-height:43px;font-size:11px;font-weight:850}
+.toolbar button:disabled{opacity:.3}
+.hint-launch{display:block;border:1px dashed #54798a;background:#152a3d;color:#bfded8;width:100%;border-radius:9px;min-height:42px;padding:9px;font-size:12px;font-weight:850}
+.hint-note{background:#25463f;border-left:3px solid #a4e2c3;border-radius:8px;font-size:12px;color:#e9f8e9;line-height:1.6;padding:12px}
+.discovery-panel{border:1px solid #47677e;border-radius:13px;background:#163046;padding:13px;margin:15px 0}
+.panel-header{display:flex;justify-content:space-between;color:#e9f7e8;font-size:13px;font-weight:950;margin-bottom:9px}
+.discovery-list{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.discovery-row{display:flex;justify-content:space-between;gap:6px;padding:8px;border-radius:8px;background:#1c3a4e;color:#97adb8;font-size:11px}
+.discovery-row.done{color:#c5f6d8;background:#25534d}
+@media(max-width:400px){.world{height:270px}.world.lab-world{height:350px}.world .toy{width:74px}.world.lab-world .toy{width:70px}.world .toy .sprite{width:50px;height:49px}.world .toy .sprite .vector-art{width:47px;height:47px}.work-grid{gap:7px}.work-item{padding:9px}.mission-heading h1{font-size:27px}.stage-label{letter-spacing:0}.stage-guide{font-size:9px}}
+@media(min-width:560px){.world{height:360px}.world.lab-world{height:450px}.world .toy{width:92px}.world .toy .sprite .vector-art{width:61px;height:61px}}
+@media(prefers-reduced-motion:reduce){.world .toy,.world .device,.notice-dot{animation:none!important}}
+
+/* Home and world-directory refinements */
+.home-kicker{color:#9ae6cc;font-size:10px;font-weight:950;letter-spacing:.17em;margin:22px 0 9px}
+.home-headline{font-size:clamp(42px,11vw,63px);line-height:1.16;letter-spacing:-.075em;margin:9px 0 15px}
+.home-headline em{font-style:normal;color:#ffdb96}
+.home-lead{font-size:14px;color:#cee0e0;line-height:1.75;margin:0 0 17px}
+.home-demo{display:flex;align-items:center;justify-content:space-around;gap:13px;background:linear-gradient(135deg,#274958,#19354a);border:1px solid #678b8c;border-radius:18px;padding:18px 16px;margin:18px 0}
+.home-demo-step{display:grid;justify-items:center;gap:6px;font-size:12px;font-weight:950}
+.home-demo-art{width:93px;height:93px;padding:13px;background:#183244;border:1px solid #466d7a;border-radius:19px}
+.home-demo-art svg{width:100%;height:100%}
+.home-demo-middle{display:grid;justify-items:center;gap:4px;color:#e4f4d4}
+.home-demo-middle>span{font-size:22px;color:#ffe2a2}
+.home-demo-middle>b{border:1px solid #8bddb9;background:#285d51;border-radius:9px;padding:5px 15px;color:#c9f7df;font-size:14px}
+.home-demo-middle>small{font-size:10px;color:#bad4d6;white-space:nowrap}
+.home-featured{display:flex;flex-direction:column;gap:3px;margin:13px 0 19px;padding:0 5px}.home-featured>b{font-size:15px;color:#e9f5f1}.home-featured>span{color:#b2cbd4;font-size:12px}
+.home-play{margin:0 0 10px}
+.home-secondary{display:block;width:100%;text-align:center;border:1px solid #668d96;background:#1b394b;color:#ddf2e8;padding:13px 9px;font-size:13px;font-weight:900;border-radius:13px;min-height:48px}
+.home-points{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:19px 0 8px;font-size:10px;color:#b2d2cc;font-weight:800}
+.world-select-title{font-size:30px;font-weight:950;letter-spacing:-.05em;margin:5px 0 11px}
+.level-directory{display:grid;gap:9px;margin:17px 0}
+.directory-row{display:flex;align-items:center;gap:12px;width:100%;background:#1c394c;border:1px solid #557388;color:#f1f6f2;border-radius:13px;padding:13px 11px;min-height:72px;text-align:left}
+.directory-index{display:grid;place-items:center;width:39px;height:39px;min-width:39px;border-radius:11px;background:#2c5b56;border:1px solid #6caa9c;color:#c7fce1;font-size:15px;font-weight:1000}
+.directory-copy{flex:1;display:grid;gap:5px}.directory-copy b{font-size:14px;font-weight:950}.directory-copy small{font-size:11px;color:#adc6cd}
+.directory-arrow{font-size:25px;color:#c5e2dd}.directory-row:disabled{opacity:.48}
+@media(max-width:390px){.home-demo{padding:12px 7px;gap:4px}.home-demo-art{width:78px;height:78px;padding:8px}.home-demo-middle>small{font-size:9px}}
+
+/* Sandbox camera: focus the active pair; optionally expand to the complete workshop */
+.world.focus-world{height:310px}
+.lab-view-toggle{background:#244e55;color:#baf2d5;border:1px solid #639c91;padding:7px 9px;border-radius:8px;font-size:10px;font-weight:900;white-space:nowrap}
+.focus-world .toy{filter:drop-shadow(0 5px 12px #0b182c70)}
+@media(max-width:400px){.world.focus-world{height:270px}}
+@media(min-width:560px){.world.focus-world{height:360px}}
+
+/* Keep the animated field visible while browsing a large, scrollable workbench */
+.work-grid.lab-grid{display:flex;grid-template-columns:none;gap:9px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;padding-bottom:9px;scrollbar-width:thin;scrollbar-color:#648e88 #183142}
+.work-grid.lab-grid .work-item,.work-grid.lab-grid .work-object{flex:0 0 132px;min-width:132px;max-width:132px;scroll-snap-align:start}
+.lab-scroll-help{color:#b5d4cf;font-size:10px;text-align:right;padding-top:4px}
+@media(max-width:430px){
+ .mission-top{margin-top:12px;margin-bottom:6px}
+ .mission-meter{margin-bottom:9px}
+ .mission-heading h1{font-size:25px;margin-bottom:3px}
+ .mission-heading p{font-size:12px;line-height:1.42;margin-bottom:9px}
+ .goal-strip{padding:8px 10px;margin-bottom:9px;font-size:11px}
+ .goal-icon{width:27px;height:27px;min-width:27px;font-size:19px}
+ .stage-topline{padding:8px 11px}
+ .world{height:245px}
+ .world.focus-world{height:245px}
+ .world.lab-world{height:350px}
+ .notice-strip{min-height:44px;padding:7px 10px}
+ .workbench{padding:10px;margin:9px 0 8px}
+ .workbench h2{font-size:17px;margin:3px 0}
+ .work-item{min-height:91px;padding:8px}
+ .work-hint{margin:3px 0 7px}
+ .work-object{min-height:88px}
+ .toolbar button{min-height:38px;padding:8px}
+}
+</style></head>
+<body><div class="shell"><header class="topbar"><div class="brand">✦ <span>ルール</span>泥棒</div><div class="mini-controls"><button class="minor" id="help" type="button">？ 遊び方</button><button class="minor" id="sound" type="button">♪ ON</button></div></header><main id="app"></main><footer class="footer">RULE THIEF · VISUAL WORKBENCH v4</footer></div>
+<script>
+(()=>{
+"use strict";
+const levelDefs=[
+{id:"lift",title:"届かないスイッチ",scene:"高い位置のスイッチに届く物がない。",goal:"岩を浮かせて、上のスイッチを押そう",hint:"風船が持つ「浮く」は、風船専用じゃない。",device:{label:"スイッチ",icon:"🔴",on:"🟢",x:62,y:19},items:[{id:"balloon",name:"風船",icon:"🎈",x:19,y:70,kind:"balloon",traits:["float"]},{id:"rock",name:"岩",icon:"🪨",x:62,y:70,kind:"rock",traits:[]}]},
+{id:"ice",title:"氷の扉",scene:"氷に閉じ込められた通路。火は手の届かない場所にある。",goal:"氷を溶かして、出口を開けよう",hint:"火そのものは動かせなくても「熱い」は動かせる。",device:{label:"出口",icon:"🚪",on:"🚪✨",x:79,y:58},items:[{id:"fire",name:"たき火",icon:"🔥",x:22,y:66,kind:"fire",traits:["hot"]},{id:"ice",name:"氷",icon:"🧊",x:68,y:66,kind:"ice",traits:[]}]},
+{id:"roll",title:"坂道の荷物",scene:"箱は坂の上。坂の下にはボタンがあるが、箱は角ばって動かない。",goal:"転がる力を箱に移し、坂道を転がしてボタンを押そう",hint:"斜面を転がりやすいものから「転がる」を盗もう。",device:{label:"ボタン",icon:"🔴",on:"🟢",x:84,y:78},items:[{id:"wheel",name:"車輪",icon:"🛞",x:23,y:70,kind:"wheel",traits:["roll"]},{id:"crate",name:"箱",icon:"📦",x:52,y:70,kind:"crate",traits:[]}]},
+{id:"key",title:"湖底の鍵",scene:"湖底には金属の鍵。扉の鍵穴は高い岸にあり、磁力が届く距離にも限界がある。",goal:"磁力で鍵を岩に付け、岩を浮かせて鍵穴へ運ぼう",hint:"岩に「引きよせる」と「浮く」を集める。鍵がくっついてから浮上する様子を見よう。",device:{label:"鍵穴",icon:"🔒",on:"🔓",x:54,y:21},key:{x:78,y:76},water:true,items:[{id:"balloon",name:"風船",icon:"🎈",x:16,y:62,kind:"balloon",traits:["float"]},{id:"magnet",name:"磁石",icon:"🧲",x:20,y:24,kind:"magnet",traits:["magnet"]},{id:"rock",name:"岩",icon:"🪨",x:48,y:78,kind:"rock",traits:[]}]},
+{id:"light",title:"暗闇の塔",scene:"塔の上に光を届けたい。風船は浮き、ランタンは光る。",goal:"「浮く」と「光る」を同じ物に集めよう",hint:"浮きをランタンに貼っても、光を風船に貼っても成功する。",device:{label:"灯台",icon:"🏰",on:"🏰✨",x:50,y:15},items:[{id:"balloon",name:"風船",icon:"🎈",x:30,y:72,kind:"balloon",traits:["float"]},{id:"lamp",name:"ランタン",icon:"🏮",x:70,y:72,kind:"lamp",traits:["glow"]}]},
+{id:"lab",title:"自由実験室",scene:"正解はない。能力を組み替えて、変な現象を発見しよう。",goal:"自由に実験して、5種類の「発見」を集めてみよう",hint:"「熱い＋転がる」「浮く＋光る」「浮く＋引きよせる」などを試そう。",water:true,items:[{id:"balloon",name:"風船",icon:"🎈",x:18,y:23,kind:"balloon",traits:["float"]},{id:"rock",name:"岩",icon:"🪨",x:50,y:23,kind:"rock",traits:[]},{id:"fire",name:"炎",icon:"🔥",x:82,y:23,kind:"fire",traits:["hot"]},{id:"wheel",name:"車輪",icon:"🛞",x:18,y:52,kind:"wheel",traits:["roll"]},{id:"magnet",name:"磁石",icon:"🧲",x:50,y:52,kind:"magnet",traits:["magnet"]},{id:"firefly",name:"蛍",icon:"✨",x:82,y:52,kind:"firefly",traits:["glow"]},{id:"ice",name:"氷",icon:"🧊",x:50,y:81,kind:"ice",traits:[]}]}
+];
+const names={float:"浮く",hot:"熱い",roll:"転がる",magnet:"引きよせる",glow:"光る"};
+const app=document.getElementById("app"),soundEl=document.getElementById("sound");
+const storeKey="rule_thief_prototype_v1";
+let saved={};try{saved=JSON.parse(localStorage.getItem(storeKey)||"{}")||{}}catch(e){}
+let stage=Math.max(0,Math.min(5,Number(saved.stage)||0)),unlocked=Math.max(0,Math.min(5,Number(saved.unlocked)||0)),solved=saved.solved&&typeof saved.solved==="object"?saved.solved:{},discovered=saved.discovered&&typeof saved.discovered==="object"?saved.discovered:{},soundOn=saved.sound!==false;
+let toys=[],holding=null,undoStack=[],lastMoves={},moves=0,screen="home",notice="",fxTimer=null,fx=null,help=null,audio=null,stagesWon=new Set(Object.keys(solved)),hintOpen=false;
+let labShowAll=false,labFocusIds=["balloon","rock"];
+let bodies={},keyBody=null,keyAttached=false,keyPulling=false,frameId=null,motionLast=0,motionElapsed=0,goalTimer=null,goalResolved=false,worldGoal=false;
+function save(){try{localStorage.setItem(storeKey,JSON.stringify({stage,unlocked,solved,discovered,sound:soundOn}))}catch(e){}}
+function clone(objects){return objects.map(o=>({...o,traits:[...o.traits]}))}
+function source(){return levelDefs[stage]}
+function initStage(n){
+ stopMotion();stopFx();
+ stage=Math.max(0,Math.min(levelDefs.length-1,n));
+ toys=clone(source().items);holding=null;undoStack=[];lastMoves={};moves=0;labShowAll=false;labFocusIds=["balloon","rock"];
+ goalResolved=false;worldGoal=false;keyAttached=false;keyPulling=false;motionElapsed=0;
+ bodies=Object.fromEntries(toys.map(o=>[o.id,{x:o.x,y:o.traits.includes("float")?Math.max(17,o.y-12):o.y,vx:0,vy:0,angle:0,melt:0}]));
+ keyBody=stage===3?{x:source().key.x,y:source().key.y,vx:0,vy:0}:null;
+ notice="ルールを盗むと、物の動きも変化する！";screen="level";hintOpen=false;save();render()
+}
+function isUp(o){return o.traits.includes("float")||(o.kind==="balloon"&&o.traits.includes("hot"))}
+function isHot(o){return o.traits.includes("hot")}
+function isGlow(o){return o.traits.includes("glow")}
+function isRoll(o){return o.traits.includes("roll")&&!isUp(o)}
+function has(o,t){return o&&o.traits.includes(t)}
+function get(id){return toys.find(o=>o.id===id)}
+function status(){return worldGoal}
+function stopMotion(){
+ if(frameId!==null){if(typeof cancelAnimationFrame==="function")cancelAnimationFrame(frameId);frameId=null}
+ motionLast=0;
+ if(goalTimer!==null){clearTimeout(goalTimer);goalTimer=null}
+}
+function spring(b,tx,ty,dt,frequency=19,damping=6.6){
+ const d=Math.exp(-damping*dt);
+ b.vx=(b.vx+(tx-b.x)*frequency*dt)*d;
+ b.vy=(b.vy+(ty-b.y)*frequency*dt)*d;
+ b.x=Math.max(3,Math.min(97,b.x+b.vx*dt));
+ b.y=Math.max(8,Math.min(90,b.y+b.vy*dt));
+}
+function motionTarget(o){
+ let x=o.x,y=o.y;
+ if(isUp(o)){
+  if(stage===0&&o.id==="rock")y=22;
+  else if(stage===3&&o.id==="rock"){x=keyAttached?52:51;y=keyAttached?24:56}
+  else if(stage===4&&isGlow(o)){x=50;y=23}
+  else if(stage===5)y=Math.max(16,o.y-32);
+  else y=Math.max(18,o.y-27);
+ }else if(isRoll(o)){
+  if(stage===2&&o.id==="crate"){x=83;y=78}
+  else if(stage===2&&o.id==="wheel"){x=o.x;y=o.y}
+  else x=Math.min(88,o.x+26)
+ }
+ return {x,y};
+}
+function animateWorld(){
+ if(screen!=="level"||typeof requestAnimationFrame!=="function"||frameId!==null)return;
+ frameId=requestAnimationFrame(stepMotion)
+}
+function stepMotion(timestamp){
+ frameId=null;
+ if(screen!=="level")return;
+ const dt=motionLast?Math.min(.042,Math.max(.008,(timestamp-motionLast)/1000)):.016;
+ motionLast=timestamp;motionElapsed+=dt;
+ for(const o of toys){
+  const b=bodies[o.id];if(!b)continue;
+  const target=motionTarget(o),oldX=b.x;
+  spring(b,target.x,target.y,dt);
+  if(isRoll(o))b.angle+=(b.x-oldX)*7.5;
+  else b.angle+=(-b.angle)*Math.min(1,dt*6);
+  const melting=o.kind==="ice"&&isHot(o);
+  b.melt=Math.min(1,Math.max(0,b.melt+(melting?dt/1.85:-dt*1.8)));
+  const elem=app.querySelector('.world .toy[data-id="'+o.id+'"]');
+  if(elem){
+   elem.style.left=b.x+"%";elem.style.top=b.y+"%";
+   elem.style.transform="translate(-50%,-50%) rotate("+b.angle.toFixed(1)+"deg) scale("+(1-b.melt*.82).toFixed(3)+")";
+   elem.style.opacity=String(1-b.melt*.57);
+   /* Vector illustration fades and scales while the ice melts. */
+  }
+ }
+ if(stage===3&&keyBody){
+  const rock=get("rock"),rb=bodies.rock,magnetic=!!(rock&&has(rock,"magnet"));
+  const distance=rb?Math.hypot((keyBody.x-rb.x)*1.3,keyBody.y-rb.y):999;
+  const withinRange=magnetic&&distance<43;
+  if(keyAttached&&!magnetic){
+   keyAttached=false;keyPulling=false;notice="磁力が消えた。鍵がゆっくり沈む…";updateWorldMessage(notice)
+  }
+  if(keyAttached&&rb){
+   // The key is carried by the rock, not teleported to the lock.
+   spring(keyBody,rb.x+3.5,rb.y+1,dt,33,9);
+   keyPulling=false;
+  }else if(withinRange&&rb){
+   // Water drag slows the key; attraction only occurs inside the field.
+   spring(keyBody,rb.x+3.5,rb.y+1,dt,13,4.4);
+   if(!keyPulling){
+    keyPulling=true;notice="ジジジ…磁力が届いた！ 鍵が少しずつ動いている";
+    updateWorldMessage(notice);sound("pull")
+   }
+   if(Math.hypot((keyBody.x-rb.x)*1.3,keyBody.y-rb.y)<7.5){
+    keyAttached=true;keyPulling=false;
+    notice="カチッ！ 鍵が岩に付いた。次は鍵穴へ運ぼう！";
+    updateWorldMessage(notice);sound("attach");vibrate([15,25,30])
+   }
+  }else{
+   // Without a magnetic force the metal key sinks to its resting position.
+   spring(keyBody,source().key.x,source().key.y,dt,11,4.8);
+   if(keyPulling){keyPulling=false;notice="距離が遠すぎて、磁力が届かない";updateWorldMessage(notice)}
+  }
+  const keyEl=app.querySelector(".key-token");
+  if(keyEl){
+   keyEl.style.left=keyBody.x+"%";keyEl.style.top=keyBody.y+"%";
+   keyEl.classList.toggle("attached",keyAttached);
+   const label=keyEl.querySelector(".key-status");
+   if(label)label.textContent=keyAttached?"回収中":withinRange?"吸い寄せ中":"金属の鍵";
+  }
+  const field=app.querySelector(".magnet-field");
+  if(field&&rb){field.style.display=magnetic?"block":"none";field.style.left=rb.x+"%";field.style.top=rb.y+"%"}
+  const tether=app.querySelector(".magnet-tether");
+  if(tether){
+   const active=withinRange&&rb&&!keyAttached;tether.style.display=active?"block":"none";
+   if(active){
+    const world=app.querySelector(".world"),w=world?world.clientWidth:350,h=world?world.clientHeight:265;
+    const dx=(keyBody.x-rb.x)*w/100,dy=(keyBody.y-rb.y)*h/100;
+    tether.style.left=rb.x*w/100+"px";tether.style.top=rb.y*h/100+"px";tether.style.width=Math.hypot(dx,dy)+"px";
+    tether.style.transform="rotate("+Math.atan2(dy,dx)+"rad)"
+   }
+  }
+ }
+ if(stage===4){
+  const beam=app.querySelector(".beam");
+  if(beam)beam.style.opacity=toys.some(o=>{const b=bodies[o.id];return b&&isUp(o)&&isGlow(o)&&b.y<30&&Math.abs(b.x-50)<9})?"1":"0";
+ }
+ if(!goalResolved&&motionElapsed>1.15&&goalContact()){
+  onGoalContact();
+ }
+ if(screen==="level")frameId=requestAnimationFrame(stepMotion)
+}
+function updateWorldMessage(message){const label=app.querySelector(".notice-copy");if(label)label.textContent=message}
+function goalContact(){
+ if(stage===0){
+  const b=bodies.rock;return has(get("rock"),"float")&&b&&b.y<29&&Math.abs(b.x-62)<12
+ }
+ if(stage===1){const b=bodies.ice;return has(get("ice"),"hot")&&b&&b.melt>.98}
+ if(stage===2){const b=bodies.crate;return isRoll(get("crate"))&&b&&b.x>79&&Math.abs(b.y-source().device.y)<9}
+ if(stage===3){
+  const b=bodies.rock,lock=source().device;
+  return !!(b&&keyBody&&keyAttached&&isUp(get("rock"))&&has(get("rock"),"magnet")&&b.y<31&&Math.hypot((keyBody.x-lock.x)*1.3,keyBody.y-lock.y)<10)
+ }
+ if(stage===4)return toys.some(o=>{const b=bodies[o.id];return b&&isUp(o)&&isGlow(o)&&b.y<30&&Math.abs(b.x-50)<9});
+ return false
+}
+const contactTexts=[
+ "カチン！ 岩がスイッチに接触。点灯！",
+ "ジュワァ…！ 氷が全部溶けて出口が開いた！",
+ "ゴロン、ガチャン！ 箱がボタンを押した！",
+ "カチャッ！ 鍵が鍵穴に届き、扉が開いた！",
+ "ピカッ！ 光が塔の頂上まで届いた！"
+];
+function onGoalContact(){
+ if(goalResolved||screen!=="level")return;
+ goalResolved=true;worldGoal=true;
+ const device=app.querySelector(".world .device");
+ if(device){
+  device.classList.add("success","reached");
+  const icon=device.querySelector(".emoji");if(icon)icon.innerHTML=deviceArt(stage,true);
+ }
+ const world=app.querySelector(".world");
+ if(world){world.classList.add("goal-hit");const ring=document.createElement("span");ring.className="contact-ring";if(device){ring.style.left=device.style.left;ring.style.top=device.style.top}else{ring.style.left="50%";ring.style.top="50%"}world.appendChild(ring)}
+ const text=contactTexts[stage];notice=text;
+ const label=app.querySelector(".notice-copy");if(label)label.textContent=text;
+ sound("contact");vibrate([45,20,90]);
+ goalTimer=setTimeout(()=>{goalTimer=null;if(screen==="level"&&worldGoal)complete()},1100)
+}
+
+function audioTone(f,at,dur,type="sine",v=.10,end){if(!soundOn)return;try{if(!audio)audio=new(window.AudioContext||window.webkitAudioContext)();if(audio.state==="suspended")audio.resume();const t=audio.currentTime+at,o=audio.createOscillator(),g=audio.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(end)o.frequency.exponentialRampToValueAtTime(end,t+dur);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v,t+.009);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g);g.connect(audio.destination);o.start(t);o.stop(t+dur+.03)}catch(e){}}
+function sound(type){if(type==="pull"){audioTone(230,0,.22,"triangle",.04,480)}else if(type==="attach"){audioTone(680,0,.12,"triangle",.08,1040)}else if(type==="contact"){audioTone(550,0,.15,"triangle",.10,920);audioTone(1200,.13,.21,"sine",.08)}else if(type==="steal"){audioTone(720,0,.13,"sine",.05,380);audioTone(1150,.05,.11,"triangle",.035)}else if(type==="paste"){audioTone(330,0,.17,"triangle",.10,610);audioTone(620,.09,.15,"sine",.08,980)}else if(type==="win"){audioTone(95,0,.35,"sawtooth",.16,37);audioTone(200,0,.18,"square",.06,65);audioTone(620,.12,.17,"sine",.10);audioTone(920,.25,.16,"sine",.12);audioTone(1290,.39,.25,"triangle",.12)}else if(type==="wrong"){audioTone(150,0,.14,"sine",.05)}}
+function vibrate(x){try{navigator.vibrate&&navigator.vibrate(x)}catch(e){}}
+function resetNotice(s){notice=s}
+function take(id,trait){
+ if(screen!=="level"||holding||goalResolved)return;
+ const o=get(id);if(!o||!has(o,trait))return;
+ holding={from:id,trait,before:clone(toys)};
+ if(stage===5)labFocusIds=[id,...labFocusIds.filter(x=>x!==id)].slice(0,2);
+ o.traits=o.traits.filter(t=>t!==trait);
+ resetNotice("「"+names[trait]+"」を盗んだ！貼りたい物をタップ");
+ sound("steal");vibrate(20);render();
+}
+function cancelHold(){if(!holding)return;toys=clone(holding.before);holding=null;resetNotice("盗んだルールを元の場所へ戻した");render()}
+function paste(id){
+ if(screen!=="level"||goalResolved)return;const o=get(id);if(!o)return;
+ if(!holding){resetNotice("まず下にある「ルール」をタップして盗もう");render();return}
+ if(id===holding.from){cancelHold();return}
+ if(has(o,holding.trait)){resetNotice(o.name+"はもう「"+names[holding.trait]+"」を持っている");sound("wrong");render();return}
+ const old=holding,trait=old.trait;undoStack.push(clone(old.before));o.traits.push(trait);holding=null;moves++;
+ if(stage===5)labFocusIds=[old.from,id];
+ let message=o.name+"に「"+names[trait]+"」を貼った！";
+ if(o.kind==="ice"&&has(o,"hot"))message="ジュワッ！ 氷が溶けた！";
+ else if(isUp(o)&&has(o,"glow"))message="空に浮かぶ光が生まれた！";
+ else if(o.kind==="balloon"&&has(o,"hot"))message="熱気球になった！ 熱だけで浮いた！";
+ else if(isUp(o)&&has(o,"magnet"))message="浮く磁石が金属を引き寄せた！";
+ else if(isRoll(o)&&has(o,"hot"))message="燃えながら転がり始めた！";
+ resetNotice(message);sound("paste");vibrate([20,20,25]);checkDiscovery();
+ motionElapsed=0;
+ render();
+}
+function labAchievements(){
+ const all=toys;
+ const hasBoth=(a,b)=>all.some(o=>has(o,a)&&has(o,b));
+ return {
+ hotice:all.some(o=>o.kind==="ice"&&has(o,"hot")),
+ lantern:hasBoth("float","glow"),
+ skyMagnet:all.some(o=>isUp(o)&&has(o,"magnet")),
+ hotBalloon:all.some(o=>o.kind==="balloon"&&has(o,"hot")),
+ comet:all.some(o=>isRoll(o)&&has(o,"hot"))
+ };
+}
+function checkDiscovery(){
+ if(stage!==5)return;
+ const found=labAchievements(),newBadges=Object.keys(found).filter(k=>found[k]&&!discovered[k]);
+ if(newBadges.length){for(const id of newBadges)discovered[id]=true;notice="✦ 新発見！ "+(badgeNames[newBadges[0]]||"未知の反応")+"！";sound("win");save()}
+}
+const badgeNames={hotice:"とける世界",lantern:"空飛ぶ灯り",skyMagnet:"浮遊磁石",hotBalloon:"熱気球",comet:"炎の転がり玉"};
+function undo(){if(holding){cancelHold();return}if(!undoStack.length)return;keyAttached=false;keyPulling=false;if(goalTimer!==null){clearTimeout(goalTimer);goalTimer=null}goalResolved=false;worldGoal=false;toys=undoStack.pop();moves=Math.max(0,moves-1);resetNotice("ひとつ前の世界に戻した。物が元の位置へ戻る");motionElapsed=0;render()}
+function complete(){if(screen!=="level"||!worldGoal)return;stopMotion();screen="win";solved[source().id]=Math.min(solved[source().id]??999,moves);unlocked=Math.max(unlocked,Math.min(stage+1,5));save();sound("win");vibrate([45,25,85,35,110]);showFx()}
+function next(){stopFx();if(stage===4){initStage(5)}else initStage(Math.min(stage+1,5))}
+function stopFx(){if(fxTimer!==null){clearTimeout(fxTimer);fxTimer=null}if(fx){fx.remove();fx=null}}
+function showFx(){
+ stopFx();const overlay=document.createElement("div");overlay.className="success-overlay";overlay.id="successOverlay";let bits="";for(let i=0;i<18;i++)bits+='<i class="spark" style="--rot:'+(i*20)+'deg;--delay:'+(i%5*17)+'ms"></i>';
+ overlay.innerHTML='<div class="flash"></div><div class="ring"></div>'+bits+'<div class="inside"><div class="eyebrow">WORLD CHANGED!</div><h2>ルール、<br>いただき！</h2><p>'+source().title+' を突破！<br>自分の手で法則を変えた！</p><p style="font-size:11px;color:#b9e5db">'+moves+' 回の移動でクリア</p><button class="cta" id="nextLevel" type="button">'+(stage===4?"自由実験室へ ⚗️":"次のステージ ▶")+'</button><button class="try-more" id="tryAgain" type="button">同じステージを別の方法で試す</button></div>';
+ document.body.appendChild(overlay);fx=overlay;
+ overlay.querySelector("#nextLevel").addEventListener("click",next);
+ overlay.querySelector("#tryAgain").addEventListener("click",()=>{stopFx();initStage(stage)});
+}
+function initial(){
+ stopMotion();stopFx();screen="home";soundEl.textContent=soundOn?"♪ ON":"♪ OFF";
+ const count=Object.keys(solved).length;
+ app.innerHTML='<div class="home-kicker">RULE THIEF / INTERACTIVE LAB</div><h1 class="home-headline">ルールを盗め。<br><em>世界が動く。</em></h1><p class="home-lead">風船から「浮く」を取り出して、岩に貼る。<br>能力を交換すると、物体は本当に動き出す。</p><div class="home-demo"><div class="home-demo-step"><div class="home-demo-art">'+glyph("balloon")+'</div><span>風船</span></div><div class="home-demo-middle"><span>↗</span><b>浮く</b><small>盗む → 貼る</small></div><div class="home-demo-step"><div class="home-demo-art">'+glyph("rock")+'</div><span>岩</span></div></div><div class="home-featured"><b>次に何が起きる？</b><span>物理の動きで結果がわかる、発想パズル。</span></div><button class="primary home-play" type="button" data-act="start">'+(count?"続きから遊ぶ":"ステージを始める")+'　▶</button><button class="home-secondary" type="button" data-act="lab">自由実験室から試す　↗</button><div class="home-points"><span>✓ 全5ステージ</span><span>✓ 物理アニメーション</span><span>✓ 何度でもやり直せる</span></div><p class="smallhelp">ルールを盗まれた物も、その能力を失います。<br>法則の変化を目で確かめてください。</p>'
+}
+function glyph(kind){
+ const shapes={
+ balloon:'<ellipse cx="32" cy="23" rx="16" ry="20" fill="#f2aaa2"/><path d="M19 12c2-8 11-11 17-10" stroke="#ffe1cf" stroke-width="4" fill="none" stroke-linecap="round"/><path d="m28 44 4 6 4-6M32 50q8 6 0 13" stroke="#f4d6a0" stroke-width="2.5" stroke-linecap="round" fill="none"/>',
+ rock:'<path d="M10 46 16 23 34 12 53 25 57 46 42 54 19 54Z" fill="#afb8c1" stroke="#75899d" stroke-width="2.5" stroke-linejoin="round"/><path d="m34 12-4 24 13 18M16 23l14 13 27 10" stroke="#dfe5e8" stroke-width="2" fill="none"/>',
+ fire:'<path d="M33 6c4 11-3 16 7 24 7 6 9 13 5 20-4 7-19 11-29 1-7-8-3-16 2-23 2 8 10 5 15-22Z" fill="#f7a45e"/><path d="M33 23c2 8-4 11 2 17 3 3 1 10-5 12-9-2-9-10-6-16 4 5 7-4 9-13Z" fill="#ffe8a8"/>',
+ wheel:'<circle cx="32" cy="32" r="23" fill="#344a5e" stroke="#a9c6c4" stroke-width="5"/><circle cx="32" cy="32" r="16" fill="#607d88"/><path d="M32 17v30M17 32h30M21 21l22 22M43 21 21 43" stroke="#bfdae1" stroke-width="3.5" stroke-linecap="round"/><circle cx="32" cy="32" r="6" fill="#e3bb72"/>',
+ crate:'<rect x="11" y="11" width="42" height="42" rx="4" fill="#d49f67" stroke="#885e47" stroke-width="2.5"/><path d="M12 18 52 45M52 18 12 45" stroke="#efc18b" stroke-width="5"/><path d="M12 11v42M52 11v42" stroke="#81563e" stroke-width="3"/>',
+ magnet:'<path d="M16 11v23c0 23 32 23 32 0V11" stroke="#df837d" stroke-width="12" fill="none" stroke-linecap="square"/><path d="M16 13v12M48 13v12" stroke="#84bff1" stroke-width="12"/>',
+ lamp:'<path d="M19 22h26l-6 25H25Z" fill="#f8dda0" stroke="#bb995e" stroke-width="3"/><path d="M23 22V13h18v9M31 10h2M22 49h20" stroke="#e2c0a0" stroke-width="4" stroke-linecap="round"/><path d="M31 26v15" stroke="#fff9c4" stroke-width="6"/><path d="M14 26 7 23M50 26l7-3" stroke="#ffe8a4" stroke-width="3" stroke-linecap="round"/>',
+ firefly:'<ellipse cx="23" cy="25" rx="11" ry="16" fill="#b1e4e8" opacity=".87" transform="rotate(-26 23 25)"/><ellipse cx="42" cy="25" rx="11" ry="16" fill="#b1e4e8" opacity=".87" transform="rotate(26 42 25)"/><ellipse cx="32" cy="40" rx="9" ry="15" fill="#a3f8c4"/><circle cx="32" cy="26" r="7" fill="#4f6976"/><path d="M28 19 25 12M36 19 39 12" stroke="#aecdd1" stroke-width="2" stroke-linecap="round"/>',
+ ice:'<path d="m11 20 19-12 22 12v25L30 57 11 45Z" fill="#82cced" stroke="#b5f1fa" stroke-width="3"/><path d="M30 8v49M11 20l19 13 22-13M11 45l19-12 22 12" stroke="#e5fcff" stroke-width="2" fill="none"/>'
+ };
+ return '<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false" class="vector-art vector-'+kind+'">'+(shapes[kind]||shapes.rock)+'</svg>';
+}
+function deviceArt(i,active){
+ const common='viewBox="0 0 64 64" aria-hidden="true" class="vector-art device-art"';
+ if(i===0||i===2)return '<svg '+common+'><rect x="11" y="15" width="42" height="35" rx="9" fill="#293c51" stroke="#9ab4c6" stroke-width="3"/><circle cx="32" cy="32" r="12" fill="'+(active?"#91e8ba":"#e98a80")+'" stroke="'+(active?"#ceffcf":"#ffd4bf")+'" stroke-width="3"/></svg>';
+ if(i===1)return '<svg '+common+'><path d="M13 55V14L32 5l19 9v41Z" fill="#6b8993" stroke="#b8d8cf" stroke-width="3"/><rect x="22" y="23" width="20" height="31" rx="2" fill="'+(active?"#89cbbb":"#394c64")+'"/><circle cx="37" cy="40" r="2.4" fill="#f0d88d"/></svg>';
+ if(i===3)return '<svg '+common+'><rect x="14" y="29" width="36" height="27" rx="6" fill="'+(active?"#9fdac3":"#c2a676")+'" stroke="#f1ddb2" stroke-width="3"/><path d="'+(active?"M22 31V20C22 3 48 5 45 19":"M22 30V21a10 10 0 0 1 20 0v9")+'" fill="none" stroke="#dce5e7" stroke-width="5"/><circle cx="32" cy="40" r="3" fill="#35495d"/></svg>';
+ return '<svg '+common+'><path d="M15 55 20 8h24l5 47Z" fill="'+(active?"#f4d48e":"#8ca8b2")+'" stroke="#dde8d6" stroke-width="3"/><rect x="24" y="17" width="16" height="13" rx="3" fill="'+(active?"#fffcac":"#24364c")+'"/></svg>';
+}
+function keyArt(){return '<svg class="vector-art key-art" viewBox="0 0 64 64" aria-hidden="true"><circle cx="20" cy="20" r="11" fill="none" stroke="#f9d890" stroke-width="7"/><path d="m29 29 21 21 8-1-1-8-6 1-2-8-8 1-12-12" fill="#f9d890" stroke="#d5a758" stroke-width="2"/></svg>'}
+const traitSymbol={float:"↟",hot:"♨",roll:"⟳",magnet:"⌁",glow:"✧"};
+function traitChip(t){return '<span class="trait-symbol">'+traitSymbol[t]+'</span>'+names[t]}
+function tapObject(id){
+ if(screen!=="level"||goalResolved)return;
+ if(holding){paste(id);return}
+ const o=get(id);
+ if(o&&o.traits.length===1){take(o.id,o.traits[0]);return}
+ notice=o&&o.traits.length>1?o.name+"の能力を、下の作業台から選ぼう":"この物には盗める能力がない。作業台を見てみよう";
+ updateWorldMessage(notice)
+}
+
+function stateInfo(o){
+ const b=bodies[o.id]||{x:o.x,y:o.y,angle:0,melt:0};
+ let extra=[];
+ if(isUp(o))extra.push("floating");
+ if(isHot(o))extra.push("hot");
+ if(isGlow(o))extra.push("glow");
+ if(isRoll(o))extra.push("rolled");
+ if(o.kind==="ice"&&b.melt>.05)extra.push("melted");
+ const icon=o.kind==="ice"&&b.melt>.92?"💧":o.kind==="fire"&&!isHot(o)?"🪵":o.icon;
+ return {x:b.x,y:b.y,angle:b.angle||0,melt:b.melt||0,cls:extra.join(" "),icon}
+}
+function render(){
+ if(screen!=="level")return;
+ soundEl.textContent=soundOn?"♪ ON":"♪ OFF";
+ const def=source(),done=!!solved[def.id],progress=Math.min(stage,5)/5*100;
+ const oldGrid=app.querySelector(".work-grid"),previousScroll=oldGrid?oldGrid.scrollLeft:0;
+ const device=def.device?'<div class="device '+(status()?"success reached":"")+'" style="left:'+def.device.x+'%;top:'+def.device.y+'%"><span class="emoji">'+deviceArt(stage,status())+'</span><span class="caption">'+def.device.label+'</span></div>':'';
+ const stageToys=stage===5&&!labShowAll?toys.filter(o=>labFocusIds.includes(o.id)):toys;
+ const toyHTML=stageToys.map(o=>{
+  const v=stateInfo(o);
+  return '<button class="toy '+v.cls+(holding&&holding.from===o.id?" origin":"")+'" type="button" data-act="object" data-id="'+o.id+'" aria-label="'+o.name+'を操作" style="left:'+v.x+'%;top:'+v.y+'%;transform:translate(-50%,-50%) rotate('+v.angle+'deg) scale('+(1-v.melt*.82)+');opacity:'+(1-v.melt*.57)+'"><span class="sprite">'+glyph(o.kind)+'</span><span class="name">'+o.name+'</span></button>'
+ }).join("");
+ const itemCard=o=>{
+  if(holding){
+   const isFrom=holding.from===o.id,hasTrait=has(o,holding.trait);
+   return '<button class="work-object'+(isFrom||hasTrait?' unavailable':'')+'" type="button" data-act="object" data-id="'+o.id+'" '+(isFrom||hasTrait||goalResolved?'disabled':'')+'><span class="mini-art">'+glyph(o.kind)+'</span><span class="work-object-name">'+o.name+'</span><span class="work-state">'+(isFrom?'盗んだ物':hasTrait?'同じ能力あり':'ここへ貼る ↘')+'</span></button>'
+  }
+  return '<section class="work-item"><div class="work-item-head"><span class="mini-art">'+glyph(o.kind)+'</span><span class="work-object-name">'+o.name+'</span></div><div class="work-traits">'+(o.traits.length?o.traits.map(t=>'<button class="new-trait trait-'+t+'" data-act="take" data-id="'+o.id+'" data-trait="'+t+'" type="button" '+(goalResolved?'disabled':'')+'>'+traitChip(t)+' <span aria-hidden="true">↗</span></button>').join(""):'<span class="no-trait">能力なし</span>')+'</div></section>'
+ };
+ const workHTML=toys.map(itemCard).join("");
+ const badges=stage===5?'<section class="discovery-panel"><div class="panel-header"><b>発見ノート</b><span>'+Object.keys(discovered).length+'/5</span></div><div class="discovery-list">'+Object.entries(badgeNames).map(([id,label])=>'<div class="discovery-row '+(discovered[id]?'done':'')+'"><span>'+(discovered[id]?'✦ '+label:'◇ 未発見')+'</span><span>'+(discovered[id]?'✓':'')+'</span></div>').join("")+'</div></section>':'';
+ const melt=stage===1&&has(get("ice"),"hot")?'<div class="steam" style="left:68%;top:62%">〰 〰 〰</div><div class="puddle" style="left:68%;top:76%"></div>':'';
+ const tether=stage===3?'<div class="magnet-field" style="display:none"></div><div class="magnet-tether" style="display:none"></div><div class="key-token" style="left:'+(keyBody?keyBody.x:def.key.x)+'%;top:'+(keyBody?keyBody.y:def.key.y)+'%"><span class="key-symbol">'+keyArt()+'</span><span class="key-status">金属の鍵</span></div>':'';
+ const hint=hintOpen?'<div class="hint-note">'+def.hint+'</div>':'';
+ app.innerHTML='<div class="mission-top"><span class="mission-number">'+(stage===5?'FREE LAB':'STAGE '+String(stage+1).padStart(2,"0")+' / 05')+'</span><span class="mission-progress">'+moves+' MOVES'+(done?' · BEST '+solved[def.id]:'')+'</span></div><div class="mission-meter"><span style="width:'+progress+'%"></span></div><div class="mission-heading"><h1>'+def.title+'</h1><p>'+def.scene+'</p></div><div class="goal-strip"><span class="goal-icon">◎</span><span><b>ミッション</b><br>'+def.goal+'</span></div><section class="stage-panel"><div class="stage-topline"><span class="stage-label">FIELD / 実験フィールド</span>'+(stage===5?'<button class="lab-view-toggle" type="button" data-act="labview">'+(labShowAll?'2つに絞る':'すべて表示')+'</button>':'<span class="stage-guide">'+(holding?'貼る相手をタップ':'物をタップして能力を盗む')+'</span>')+'</div><div class="world '+(stage===5?(labShowAll?'lab-world':'focus-world'):'')+'" role="group" aria-label="'+def.title+' のシミュレーション">'+(def.water?'<div class="pond"></div>':'')+'<div class="ground"></div>'+(stage===2?'<div class="ramp"></div>':'')+(stage===4?'<div class="beam" style="opacity:'+(worldGoal?1:0)+'"></div>':'')+tether+melt+device+toyHTML+'</div><div class="notice-strip" role="status" aria-live="polite"><span class="notice-dot"></span><span class="notice-copy">'+notice+'</span></div></section><section class="workbench"><div class="workbench-top"><div><div class="workbench-brow">RULE WORKBENCH</div><h2>'+(holding?'② 貼る物を選ぶ':'① 盗むルールを選ぶ')+'</h2></div><span class="work-step">'+(holding?'STEP 2 / 2':'STEP 1 / 2')+'</span></div>'+(holding?'<div class="held-banner"><span class="held-trait">'+traitChip(holding.trait)+'</span><span>を移動中</span><button data-act="cancel" class="held-cancel" type="button">取り消す ×</button></div>':'<p class="work-hint">物の能力をタップすると、貼り付け先を選べます。</p>')+'<div class="work-grid '+(holding?'target-mode':'')+(stage===5?' lab-grid':'')+'">'+workHTML+'</div>'+(stage===5?'<div class="lab-scroll-help">↔ 横にスワイプして、ほかの物も選べます</div>':'')+'</section><div class="toolbar"><button type="button" data-act="undo" '+(!holding&&!undoStack.length?'disabled':'')+'>↶ 1手戻す</button><button type="button" data-act="reset">↻ リセット</button><button type="button" data-act="levels">▦ ステージ</button></div>'+(hintOpen?hint:'<button type="button" class="hint-launch" data-act="hint">?　ヒントを表示する</button>')+badges;
+ if(stage===5){const grid=app.querySelector(".work-grid");if(grid)grid.scrollLeft=previousScroll}
+ animateWorld();
+}
+function levelMenu(){
+ stopMotion();stopFx();screen="levels";
+ let html='<div class="home-kicker">WORLD DIRECTORY</div><h1 class="world-select-title">ステージを選ぶ</h1><p class="home-lead">好きな世界でルールを実験できます。クリア済みの世界は何度でも挑戦可能。</p><div class="level-directory">';
+ for(let i=0;i<levelDefs.length;i++){
+  const d=levelDefs[i],locked=i>unlocked&&i!==5;
+  const mark=locked?"🔒":solved[d.id]!==undefined?"✓":String(i+1).padStart(2,"0");
+  html+='<button class="directory-row" type="button" data-act="choose" data-i="'+i+'" '+(locked?"disabled":"")+'><span class="directory-index">'+mark+'</span><span class="directory-copy"><b>'+d.title+'</b><small>'+(locked?'前のステージをクリアすると解放':solved[d.id]!==undefined?'ベスト '+solved[d.id]+'手':'まだ挑戦していない世界')+'</small></span><span class="directory-arrow">›</span></button>'
+ }
+ html+='</div><button class="home-secondary" type="button" data-act="back">実験フィールドに戻る</button>';
+ app.innerHTML=html
+}
+function helpModal(){
+ if(help)return;
+ const n=document.createElement("div");n.className="help-modal";n.id="helpModal";
+ n.innerHTML='<div class="help-body" role="dialog" aria-modal="true" aria-label="遊び方"><div class="eyebrow">HOW IT WORKS</div><h2>能力を引っ越しさせよう。</h2><p><b>① 盗む</b><br>下の作業台から「浮く」「熱い」などの能力を選びます。フィールドの物を直接タップしてもOK。</p><p><b>② 貼る</b><br>作業台が貼り付けモードに切り替わったら、相手の物を選びます。</p><p><b>③ 観察する</b><br>物が落ちる・浮く・動く様子を見届けます。ゴールに本当に到達するとクリアです。</p><p style="color:#a3ddcd">↶ 間違えても「1手戻す」「リセット」で再挑戦できます。</p><button class="primary" id="closeHelp" type="button">さあ、試してみよう</button></div>';
+ document.body.appendChild(n);help=n;
+ n.querySelector("#closeHelp").addEventListener("click",()=>{n.remove();help=null})
+}
+app.addEventListener("click",e=>{
+ const b=e.target.closest("button[data-act]");if(!b||b.disabled)return;
+ switch(b.dataset.act){
+ case "start":initStage(Math.min(stage,unlocked));break;
+ case "lab":initStage(5);break;
+ case "labview":labShowAll=!labShowAll;render();break;
+ case "take":take(b.dataset.id,b.dataset.trait);break;
+ case "object":tapObject(b.dataset.id);break;
+ case "cancel":cancelHold();break;
+ case "undo":undo();break;
+ case "reset":initStage(stage);break;
+ case "hint":hintOpen=true;render();break;
+ case "levels":levelMenu();break;
+ case "choose":initStage(Number(b.dataset.i));break;
+ case "back":initStage(stage);break;
+ }
+});
+soundEl.addEventListener("click",()=>{soundOn=!soundOn;soundEl.textContent=soundOn?"♪ ON":"♪ OFF";save();if(soundOn)sound("steal")});
+document.getElementById("help").addEventListener("click",helpModal);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){if(help){help.remove();help=null}else if(holding)cancelHold();else if(screen==="levels")initStage(stage)}});
+document.addEventListener("visibilitychange",()=>{if(document.hidden&&audio&&audio.state==="running")audio.suspend().catch(()=>{})});
+initial();
+})();
+</script></body></html>
