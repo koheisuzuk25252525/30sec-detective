@@ -427,10 +427,10 @@ function next(){stopFx();if(tutorialVictory){tutorialVictory=false;initStage(tut
 function stopFx(){if(fxTimer!==null){clearTimeout(fxTimer);fxTimer=null}if(fx){fx.remove();fx=null}}
 function showFx(){
  stopFx();const overlay=document.createElement("div");overlay.className="success-overlay";overlay.id="successOverlay";let bits="";for(let i=0;i<18;i++)bits+='<i class="spark" style="--rot:'+(i*20)+'deg;--delay:'+(i%5*17)+'ms"></i>';
- overlay.innerHTML='<div class="flash"></div><div class="ring"></div>'+bits+'<div class="inside"><div class="eyebrow">WORLD CHANGED!</div><h2>ルール、<br>いただき！</h2><p>'+source().title+' を突破！<br>自分の手で法則を変えた！</p><p style="font-size:11px;color:#b9e5db">'+moves+' 回の移動でクリア</p><button class="cta" id="nextLevel" type="button">'+(stage===4?"自由実験室へ ⚗️":"次のステージ ▶")+'</button><button class="try-more" id="tryAgain" type="button">同じステージを別の方法で試す</button></div>';
+ overlay.innerHTML='<div class="flash"></div><div class="ring"></div>'+bits+'<div class="inside"><div class="eyebrow">'+(tutorialVictory?"TUTORIAL COMPLETE!":"WORLD CHANGED!")+'</div><h2>'+(tutorialVictory?"大成功！<br>ルールが動いた！":"ルール、<br>いただき！")+'</h2><p>'+(tutorialVictory?"風船は落ちて、岩が浮いた。<br>これがルール泥棒の基本！":source().title+" を突破！<br>自分の手で法則を変えた！")+'</p><p style="font-size:11px;color:#b9e5db">'+moves+' 回の移動でクリア</p><button class="cta" id="nextLevel" type="button">'+(tutorialVictory?"次の世界へ ▶":stage===4?"自由実験室へ ⚗️":"次のステージ ▶")+'</button><button class="try-more" id="tryAgain" type="button">同じステージを別の方法で試す</button></div>';
  document.body.appendChild(overlay);fx=overlay;
  overlay.querySelector("#nextLevel").addEventListener("click",next);
- overlay.querySelector("#tryAgain").addEventListener("click",()=>{stopFx();initStage(stage)});
+ overlay.querySelector("#tryAgain").addEventListener("click",()=>{tutorialVictory=false;stopFx();initStage(stage)});
 }
 function initial(){
  stopMotion();stopFx();screen="home";soundEl.textContent=soundOn?"♪ ON":"♪ OFF";
@@ -490,21 +490,21 @@ function render(){
  const stageToys=stage===5&&!labShowAll?toys.filter(o=>labFocusIds.includes(o.id)):toys;
  const toyHTML=stageToys.map(o=>{
   const v=stateInfo(o);
-  return '<button class="toy '+v.cls+(holding&&holding.from===o.id?" origin":"")+'" type="button" data-act="object" data-id="'+o.id+'" aria-label="'+o.name+'を操作" style="left:'+v.x+'%;top:'+v.y+'%;transform:translate(-50%,-50%) rotate('+v.angle+'deg) scale('+(1-v.melt*.82)+');opacity:'+(1-v.melt*.57)+'"><span class="sprite">'+glyph(o.kind)+'</span><span class="name">'+o.name+'</span></button>'
+  return '<button class="toy '+v.cls+(holding&&holding.from===o.id?" origin":"")+(tutorialStep===2&&stage===0&&o.id==="rock"?" teach-target":"")+'" type="button" data-act="object" data-id="'+o.id+'" aria-label="'+o.name+'を操作" style="left:'+v.x+'%;top:'+v.y+'%;transform:translate(-50%,-50%) rotate('+v.angle+'deg) scale('+(1-v.melt*.82)+');opacity:'+(1-v.melt*.57)+'"><span class="sprite">'+glyph(o.kind)+'</span><span class="name">'+o.name+'</span></button>'
  }).join("");
  const itemCard=o=>{
   if(holding){
    const isFrom=holding.from===o.id,hasTrait=has(o,holding.trait);
-   return '<button class="work-object'+(isFrom||hasTrait?' unavailable':'')+'" type="button" data-act="object" data-id="'+o.id+'" '+(isFrom||hasTrait||goalResolved?'disabled':'')+'><span class="mini-art">'+glyph(o.kind)+'</span><span class="work-object-name">'+o.name+'</span><span class="work-state">'+(isFrom?'盗んだ物':hasTrait?'同じ能力あり':'ここへ貼る ↘')+'</span></button>'
+   return '<button class="work-object'+(isFrom||hasTrait?' unavailable':'')+(tutorialStep===2&&stage===0&&o.id==='rock'?' teach-target':'')+'" type="button" data-act="object" data-id="'+o.id+'" '+(isFrom||hasTrait||goalResolved?'disabled':'')+'><span class="mini-art">'+glyph(o.kind)+'</span><span class="work-object-name">'+o.name+'</span><span class="work-state">'+(isFrom?'盗んだ物':hasTrait?'同じ能力あり':'ここへ貼る ↘')+'</span></button>'
   }
-  return '<section class="work-item"><div class="work-item-head"><span class="mini-art">'+glyph(o.kind)+'</span><span class="work-object-name">'+o.name+'</span></div><div class="work-traits">'+(o.traits.length?o.traits.map(t=>'<button class="new-trait trait-'+t+'" data-act="take" data-id="'+o.id+'" data-trait="'+t+'" type="button" '+(goalResolved?'disabled':'')+'>'+traitChip(t)+' <span aria-hidden="true">↗</span></button>').join(""):'<span class="no-trait">能力なし</span>')+'</div></section>'
+  return '<section class="work-item"><div class="work-item-head"><span class="mini-art">'+glyph(o.kind)+'</span><span class="work-object-name">'+o.name+'</span></div><div class="work-traits">'+(o.traits.length?o.traits.map(t=>'<button class="new-trait trait-'+t+(tutorialStep===1&&stage===0&&o.id==='balloon'&&t==='float'?' teach-glow':'')+'" data-act="take" data-id="'+o.id+'" data-trait="'+t+'" type="button" '+(goalResolved?'disabled':'')+'>'+traitChip(t)+' <span aria-hidden="true">↗</span></button>').join(""):'<span class="no-trait">能力なし</span>')+'</div></section>'
  };
  const workHTML=toys.map(itemCard).join("");
  const badges=stage===5?'<section class="discovery-panel"><div class="panel-header"><b>発見ノート</b><span>'+Object.keys(discovered).length+'/5</span></div><div class="discovery-list">'+Object.entries(badgeNames).map(([id,label])=>'<div class="discovery-row '+(discovered[id]?'done':'')+'"><span>'+(discovered[id]?'✦ '+label:'◇ 未発見')+'</span><span>'+(discovered[id]?'✓':'')+'</span></div>').join("")+'</div></section>':'';
  const melt=stage===1&&has(get("ice"),"hot")?'<div class="steam" style="left:68%;top:62%">〰 〰 〰</div><div class="puddle" style="left:68%;top:76%"></div>':'';
  const tether=stage===3?'<div class="magnet-field" style="display:none"></div><div class="magnet-tether" style="display:none"></div><div class="key-token" style="left:'+(keyBody?keyBody.x:def.key.x)+'%;top:'+(keyBody?keyBody.y:def.key.y)+'%"><span class="key-symbol">'+keyArt()+'</span><span class="key-status">金属の鍵</span></div>':'';
  const hint=hintOpen?'<div class="hint-note">'+def.hint+'</div>':'';
- app.innerHTML='<div class="mission-top"><span class="mission-number">'+(stage===5?'FREE LAB':'STAGE '+String(stage+1).padStart(2,"0")+' / 05')+'</span><span class="mission-progress">'+moves+' MOVES'+(done?' · BEST '+solved[def.id]:'')+'</span></div><div class="mission-meter"><span style="width:'+progress+'%"></span></div><div class="mission-heading"><h1>'+def.title+'</h1><p>'+def.scene+'</p></div><div class="goal-strip"><span class="goal-icon">◎</span><span><b>ミッション</b><br>'+def.goal+'</span></div><section class="stage-panel"><div class="stage-topline"><span class="stage-label">FIELD / 実験フィールド</span>'+(stage===5?'<button class="lab-view-toggle" type="button" data-act="labview">'+(labShowAll?'2つに絞る':'すべて表示')+'</button>':'<span class="stage-guide">'+(holding?'貼る相手をタップ':'物をタップして能力を盗む')+'</span>')+'</div><div class="world '+(stage===5?(labShowAll?'lab-world':'focus-world'):'')+'" role="group" aria-label="'+def.title+' のシミュレーション">'+(def.water?'<div class="pond"></div>':'')+'<div class="ground"></div>'+(stage===2?'<div class="ramp"></div>':'')+(stage===4?'<div class="beam" style="opacity:'+(worldGoal?1:0)+'"></div>':'')+tether+melt+device+toyHTML+'</div><div class="notice-strip" role="status" aria-live="polite"><span class="notice-dot"></span><span class="notice-copy">'+notice+'</span></div></section><section class="workbench"><div class="workbench-top"><div><div class="workbench-brow">RULE WORKBENCH</div><h2>'+(holding?'② 貼る物を選ぶ':'① 盗むルールを選ぶ')+'</h2></div><span class="work-step">'+(holding?'STEP 2 / 2':'STEP 1 / 2')+'</span></div>'+(holding?'<div class="held-banner"><span class="held-trait">'+traitChip(holding.trait)+'</span><span>を移動中</span><button data-act="cancel" class="held-cancel" type="button">取り消す ×</button></div>':'<p class="work-hint">物の能力をタップすると、貼り付け先を選べます。</p>')+'<div class="work-grid '+(holding?'target-mode':'')+(stage===5?' lab-grid':'')+'">'+workHTML+'</div>'+(stage===5?'<div class="lab-scroll-help">↔ 横にスワイプして、ほかの物も選べます</div>':'')+'</section><div class="toolbar"><button type="button" data-act="undo" '+(!holding&&!undoStack.length?'disabled':'')+'>↶ 1手戻す</button><button type="button" data-act="reset">↻ リセット</button><button type="button" data-act="levels">▦ ステージ</button></div>'+(hintOpen?hint:'<button type="button" class="hint-launch" data-act="hint">?　ヒントを表示する</button>')+badges;
+ app.innerHTML='<div class="mission-top"><span class="mission-number">'+(stage===5?'FREE LAB':'STAGE '+String(stage+1).padStart(2,"0")+' / 05')+'</span><span class="mission-progress">'+moves+' MOVES'+(done?' · BEST '+solved[def.id]:'')+'</span></div><div class="mission-meter"><span style="width:'+progress+'%"></span></div><div class="mission-heading"><h1>'+def.title+'</h1><p>'+def.scene+'</p></div><div class="goal-strip"><span class="goal-icon">◎</span><span><b>ミッション</b><br>'+def.goal+'</span></div>'+lessonGuide()+'<section class="stage-panel"><div class="stage-topline"><span class="stage-label">FIELD / 実験フィールド</span>'+(stage===5?'<button class="lab-view-toggle" type="button" data-act="labview">'+(labShowAll?'2つに絞る':'すべて表示')+'</button>':'<span class="stage-guide">'+(holding?'貼る相手をタップ':'物をタップして能力を盗む')+'</span>')+'</div><div class="world '+(stage===5?(labShowAll?'lab-world':'focus-world'):'')+'" role="group" aria-label="'+def.title+' のシミュレーション">'+(def.water?'<div class="pond"></div>':'')+'<div class="ground"></div>'+(stage===2?'<div class="ramp"></div>':'')+(stage===4?'<div class="beam" style="opacity:'+(worldGoal?1:0)+'"></div>':'')+tether+melt+device+toyHTML+'</div><div class="notice-strip" role="status" aria-live="polite"><span class="notice-dot"></span><span class="notice-copy">'+notice+'</span></div></section><section class="workbench"><div class="workbench-top"><div><div class="workbench-brow">RULE WORKBENCH</div><h2>'+(holding?'② 貼る物を選ぶ':'① 盗むルールを選ぶ')+'</h2></div><span class="work-step">'+(holding?'STEP 2 / 2':'STEP 1 / 2')+'</span></div>'+(holding?'<div class="held-banner"><span class="held-trait">'+traitChip(holding.trait)+'</span><span>を移動中</span><button data-act="cancel" class="held-cancel" type="button">取り消す ×</button></div>':'<p class="work-hint">物の能力をタップすると、貼り付け先を選べます。</p>')+'<div class="work-grid '+(holding?'target-mode':'')+(stage===5?' lab-grid':'')+'">'+workHTML+'</div>'+(stage===5?'<div class="lab-scroll-help">↔ 横にスワイプして、ほかの物も選べます</div>':'')+'</section><div class="toolbar"><button type="button" data-act="undo" '+(!holding&&!undoStack.length?'disabled':'')+'>↶ 1手戻す</button><button type="button" data-act="reset">↻ リセット</button><button type="button" data-act="levels">▦ ステージ</button></div>'+(hintOpen?hint:'<button type="button" class="hint-launch" data-act="hint">?　ヒントを表示する</button>')+badges;
  if(stage===5){const grid=app.querySelector(".work-grid");if(grid)grid.scrollLeft=previousScroll}
  animateWorld();
 }
@@ -522,23 +522,27 @@ function levelMenu(){
 function helpModal(){
  if(help)return;
  const n=document.createElement("div");n.className="help-modal";n.id="helpModal";
- n.innerHTML='<div class="help-body" role="dialog" aria-modal="true" aria-label="遊び方"><div class="eyebrow">HOW IT WORKS</div><h2>能力を引っ越しさせよう。</h2><p><b>① 盗む</b><br>下の作業台から「浮く」「熱い」などの能力を選びます。フィールドの物を直接タップしてもOK。</p><p><b>② 貼る</b><br>作業台が貼り付けモードに切り替わったら、相手の物を選びます。</p><p><b>③ 観察する</b><br>物が落ちる・浮く・動く様子を見届けます。ゴールに本当に到達するとクリアです。</p><p style="color:#a3ddcd">↶ 間違えても「1手戻す」「リセット」で再挑戦できます。</p><button class="primary" id="closeHelp" type="button">さあ、試してみよう</button></div>';
+ n.innerHTML='<div class="help-body" role="dialog" aria-modal="true" aria-label="遊び方"><div class="eyebrow">HOW TO PLAY</div><h2>物の「性質」を引っ越し。</h2><p>風船から「浮く」を盗むと、風船は落ちる。岩に貼ると岩が浮く。<br><strong>① 盗む → ② 貼る → ③ 動きを観察</strong>が基本ルールです。</p><button class="primary" id="startTutorial" type="button">さわって覚えるチュートリアル ▶</button><button class="home-secondary" style="margin-top:10px" id="closeHelp" type="button">閉じる</button></div>';
  document.body.appendChild(n);help=n;
+ n.querySelector("#startTutorial").addEventListener("click",()=>{n.remove();help=null;beginTutorial()});
  n.querySelector("#closeHelp").addEventListener("click",()=>{n.remove();help=null})
 }
 app.addEventListener("click",e=>{
  const b=e.target.closest("button[data-act]");if(!b||b.disabled)return;
  switch(b.dataset.act){
- case "start":initStage(Math.min(stage,unlocked));break;
+ case "start":launchGame();break;
+ case "lessonreplay":beginTutorial();break;
+ case "lessonstart":tutorialStep=1;initStage(0);break;
+ case "lessonskip":skipLesson();break;
  case "lab":initStage(5);break;
  case "labview":labShowAll=!labShowAll;render();break;
  case "take":take(b.dataset.id,b.dataset.trait);break;
  case "object":tapObject(b.dataset.id);break;
  case "cancel":cancelHold();break;
  case "undo":undo();break;
- case "reset":initStage(stage);break;
+ case "reset":if(tutorialStep&&stage===0)tutorialStep=1;initStage(stage);break;
  case "hint":hintOpen=true;render();break;
- case "levels":levelMenu();break;
+ case "levels":if(tutorialStep){tutorialSeen=true;tutorialStep=0;save()}levelMenu();break;
  case "choose":initStage(Number(b.dataset.i));break;
  case "back":initStage(stage);break;
  }
